@@ -7,6 +7,9 @@ use App\Http\Requests\Auth\LoginRequest;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Models\Role;
+use App\Models\MapUserRole;
+use App\Models\User;
 
 class AuthenticatedSessionController extends Controller
 {
@@ -17,7 +20,7 @@ class AuthenticatedSessionController extends Controller
      */
     public function create()
     {
-        return view('auth.login');
+        return view('authentication.login');
     }
 
     /**
@@ -28,11 +31,36 @@ class AuthenticatedSessionController extends Controller
      */
     public function store(LoginRequest $request)
     {
-        $request->authenticate();
+        // $request->authenticate();
 
-        $request->session()->regenerate();
+        $validated = $request->validated();
+        $user = User::where('email', $request->email)->first();
+        if(!$user){
+            return redirect()->route('login')->with('message', "Your E-mail Address Hasn't Been Registered");
+        }
 
-        return redirect()->intended(RouteServiceProvider::HOME);
+        if(auth()->attempt($validated)){
+            $user = auth()->user()->userRole()->first()->user_id;
+            $userRole = MapUserRole::where('user_id', $user)->first()->role_id;
+            $role = Role::where('id', $userRole)->first()->role;
+
+            if($role == 'financedivision'){
+                return redirect()->route('findiv.dashboard');
+                // return view('test1');
+            }
+            elseif($role == 'financedirector'){
+                return view('test2');
+            }
+            elseif($role == 'executivedirector'){
+                return view('test3');
+            }
+        }
+        else{
+            return redirect()->route('login')->with('error', 'Your Email Address or Password Are Wrong');
+        }
+
+        // $request->session()->regenerate();
+        // return redirect()->intended(RouteServiceProvider::HOME);
     }
 
     /**
@@ -49,6 +77,6 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerateToken();
 
-        return redirect('/');
+        return redirect('/login');
     }
 }
