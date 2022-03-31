@@ -14,7 +14,7 @@ class FilterIndexProject extends Component
 
     public $status = "";
     public $search = "";
-    public $pagesize = "";
+    public $pagesize = "5";
 
     public function render()
     {
