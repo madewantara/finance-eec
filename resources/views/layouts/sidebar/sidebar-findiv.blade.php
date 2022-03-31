@@ -54,7 +54,7 @@
                             </div>
                         </div>
                         <div class="menu-item">
-                            <a class="menu-link" href="../../demo6/dist/apps/customers/getting-started.html">
+                            <a class="menu-link" href="{{ route('findiv.cash-index') }}">
                                 <span class="menu-bullet">
                                     <span class="bullet bullet-dot"></span>
                                 </span>

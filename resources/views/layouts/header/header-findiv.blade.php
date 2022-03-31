@@ -53,20 +53,24 @@
                                 <span class="menu-title">Accounts</span>
                             </a>
                         </div>
-                        <div class="menu-item menu-lg-down-accordion me-lg-1">
-                            <a class="menu-link py-3" href="{{ route('findiv.project-index') }}">
-                                <span class="menu-title">Projects</span>
-                            </a>
-                        </div>
                         <div data-kt-menu-trigger="click" data-kt-menu-placement="bottom-start"
                             class="menu-item menu-lg-down-accordion me-lg-1">
                             <span class="menu-link py-3">
-                                <span class="menu-title">Resources</span>
+                                <span class="menu-title">Journals</span>
                                 <span class="menu-arrow d-lg-none"></span>
                             </span>
                             <div
                                 class="menu-sub menu-sub-lg-down-accordion menu-sub-lg-dropdown menu-rounded-0 py-lg-4 w-lg-225px">
                                 <div class="menu-item">
+                                    <a class="menu-link py-3" href="{{ route('findiv.cash-index') }}"
+                                        title="Check out over 200 in-house components, plugins and ready for use solutions"
+                                        data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-dismiss="click"
+                                        data-bs-placement="right">
+                                        <span class="menu-icon">
+                                            <i class="bi bi-grid fs-3"></i>
+                                        </span>
+                                        <span class="menu-title">Cash</span>
+                                    </a>
                                     <a class="menu-link py-3" href="../../demo6/dist/documentation/base/utilities.html"
                                         title="Check out over 200 in-house components, plugins and ready for use solutions"
                                         data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-dismiss="click"
@@ -74,10 +78,24 @@
                                         <span class="menu-icon">
                                             <i class="bi bi-grid fs-3"></i>
                                         </span>
-                                        <span class="menu-title">Components</span>
+                                        <span class="menu-title">Mandiri Operational</span>
+                                    </a>
+                                    <a class="menu-link py-3" href="../../demo6/dist/documentation/base/utilities.html"
+                                        title="Check out over 200 in-house components, plugins and ready for use solutions"
+                                        data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-dismiss="click"
+                                        data-bs-placement="right">
+                                        <span class="menu-icon">
+                                            <i class="bi bi-grid fs-3"></i>
+                                        </span>
+                                        <span class="menu-title">Mandiri Escrow</span>
                                     </a>
                                 </div>
                             </div>
+                        </div>
+                        <div class="menu-item menu-lg-down-accordion me-lg-1">
+                            <a class="menu-link py-3" href="{{ route('findiv.project-index') }}">
+                                <span class="menu-title">Projects</span>
+                            </a>
                         </div>
                     </div>
                     <!--end::Menu-->
