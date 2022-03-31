@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Transaction;
 
 class Account extends Model
 {
@@ -16,4 +17,12 @@ class Account extends Model
         'category',
         'is_active',
     ];
+
+    /**
+     * Get the transaction that owns the account.
+     */
+    public function accountTransaction()
+    {
+        return $this->belongsTo(Transaction::class, 'id', 'referral_id');
+    }
 }

@@ -28,7 +28,8 @@ class FilterIndexAccount extends Component
 
     public function render()
     {
-        $category = Account::where('is_active', 1)->distinct()->get();
+        $allAccount = Account::where('is_active', 1)->get();
+        $category = Account::select('category')->where('is_active', 1)->distinct()->get();
         if($this->filtercategory){
             $account = Account::where('is_active', 1)->where('category', $this->filtercategory)->where(function($query){
                 $query->where('referral', 'like', '%'.$this->search.'%')
@@ -43,6 +44,6 @@ class FilterIndexAccount extends Component
             })->paginate($this->pagesize);
         }
 
-        return view('livewire.filter-index-account', ['account' => $account, 'category' => $category]);
+        return view('livewire.filter-index-account', ['account' => $account, 'category' => $category, 'allAccount' => $allAccount]);
     }
 }

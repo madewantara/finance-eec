@@ -80,7 +80,6 @@
                                     <option value="" class="form-control form-select form-select-solid fw-bolder"
                                         selected>All</option>
                                     @foreach ($category as $c)
-                                        {{-- @foreach ($account as $a) --}}
                                         <option value="{{ $c->category }}"
                                             class="form-control form-select form-select-solid fw-bolder">
                                             {{ $c->category }}
@@ -262,7 +261,15 @@
             <!--end::Table body-->
         </table>
         <!--end::Table-->
-        {{ $account->links() }}
+        <div class="d-flex flex-stack flex-wrap pt-10">
+            <div class="fs-6 fw-bold text-gray-700">Showing {{ count($account) }} of
+                {{ count($allAccount) }}
+                entries
+            </div>
+            <!--begin::Pages-->
+            {{ $account->links() }}
+            <!--end::Pages-->
+        </div>
     </div>
     <!--end::Card body-->
 </div>
