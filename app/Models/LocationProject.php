@@ -22,6 +22,6 @@ class LocationProject extends Model
      */
     public function locationProject()
     {
-        return $this->belongsTo(Project::class, 'location_id');
+        return $this->belongsTo(Project::class, 'id', 'location_id');
     }
 }

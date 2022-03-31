@@ -20,6 +20,6 @@ class CategoryProject extends Model
      */
     public function categoryProject()
     {
-        return $this->belongsTo(Project::class, 'category_id');
+        return $this->belongsTo(Project::class, 'id', 'category_id');
     }
 }
