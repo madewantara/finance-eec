@@ -78,10 +78,10 @@
                 <select name="pagesize" id="pagesize"
                     class="form-select form-select-sm bg-body border-body fw-bolder w-125px" wire:model="pagesize"
                     style="margin-top: 3px; height: 43px;">
-                    <option value="10" selected>10</option>
-                    <option value="25">25</option>
+                    <option value="5" selected>5</option>
+                    <option value="10">10</option>
+                    <option value="20">20</option>
                     <option value="50">50</option>
-                    <option value="100">100</option>
                 </select>
                 <!--end::Select-->
             </div>

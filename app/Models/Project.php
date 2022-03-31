@@ -38,4 +38,12 @@ class Project extends Model
     {
         return $this->hasOne(CategoryProject::class, 'id', 'category_id');
     }
+
+    /**
+     * Get the transaction that owns the project.
+     */
+    public function projectTransaction()
+    {
+        return $this->belongsTo(Transaction::class, 'id', 'project_id');
+    }
 }

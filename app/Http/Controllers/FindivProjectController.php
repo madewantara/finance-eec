@@ -176,7 +176,7 @@ class FindivProjectController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param  string  $uuid
      * @return \Illuminate\Http\Response
      */
     public function show($uuid)
