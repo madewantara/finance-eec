@@ -49270,49 +49270,156 @@ body {
     justify-content: flex-start;
 }
 
-.select2-container .select2-selection--single{
+.select2-container .select2-selection--single {
     padding: 0.5rem 3rem 0.5rem 1rem;
     height: 43px !important;
 }
 
-.select2-container .select2-selection--single .select2-selection__rendered{
+.select2-container .select2-selection--single .select2-selection__rendered {
     padding-left: 0 !important;
     padding-right: 0 !important;
 }
 
-.select2-container--default .select2-selection--single{
+.select2-container--default .select2-selection--single {
     border: 1px solid #e4e6ef;
 }
 
-.select2-container--default .select2-selection--single .select2-selection__arrow b{
+.select2-container--default
+    .select2-selection--single
+    .select2-selection__arrow
+    b {
     top: 75% !important;
     margin-left: -10px !important;
     color: #181c32 !important;
 }
 
-.select2-container{
+.select2-container {
     margin-top: 0.75rem;
 }
 
-.select2-container--default .select2-selection--single .select2-selection__rendered{
+.select2-container--default
+    .select2-selection--single
+    .select2-selection__rendered {
     font-size: 1.1rem !important;
     font-weight: 500;
     color: #181c32 !important;
 }
 
-.select2-container--open .select2-dropdown--below{
+.select2-container--open .select2-dropdown--below {
     top: -10px;
     border-bottom-left-radius: 0.475rem;
     border-bottom-right-radius: 0.475rem;
 }
 
-.select2-results__options{
+.select2-results__options {
     margin: 1% !important;
 }
 
-button.btn-delete.menu-link{
+button.btn-delete.menu-link {
     cursor: pointer;
     background-color: transparent;
     border: none;
     padding-right: 53% !important;
+}
+
+span.select2-selection.select2-selection--multiple.form-control.form-select.account-multiple {
+    background-color: #f5f8fa;
+    border: none;
+    padding: 0.75rem 1rem;
+}
+
+span.select2-selection.select2-selection--multiple.form-control.form-select.pic-multiple {
+    background-color: #f5f8fa;
+    border: none;
+    padding: 0.75rem 1rem;
+}
+
+span.select2-selection.select2-selection--multiple.form-control.form-select.project-multiple {
+    background-color: #f5f8fa;
+    border: none;
+    padding: 0.75rem 1rem;
+}
+
+textarea.select2-search__field {
+    color: #5e6278 !important;
+    font-size: 1.1rem !important;
+    font-weight: 500 !important;
+    line-height: 1.5 !important;
+    font-family: inherit !important;
+}
+
+span.select2-selection.select2-selection--multiple.form-control.form-select.account-multipleex {
+    background-color: #f5f8fa;
+    border: none;
+    padding: 0.75rem 1rem;
+}
+
+span.select2-selection.select2-selection--multiple.form-control.form-select.pic-multipleex {
+    background-color: #f5f8fa;
+    border: none;
+    padding: 0.75rem 1rem;
+}
+
+span.select2-selection.select2-selection--multiple.form-control.form-select.project-multipleex {
+    background-color: #f5f8fa;
+    border: none;
+    padding: 0.75rem 1rem;
+}
+
+span.select2-selection.select2-selection--single.form-control.form-control-white.fw-bolder.pe-5.form-select.type {
+    border: none;
+}
+
+span.select2.select2-container.select2-container--bootstrap5 {
+    margin-top: 0;
+}
+
+.file-upload-text {
+    background-color: transparent;
+    border: 1px solid #009ef7;
+    padding: 10px 20px;
+    color: #009ef7;
+    border-radius: 0.5rem;
+    cursor: pointer;
+}
+
+.file-upload-text:hover {
+    background-color: #009ef7;
+    border: 1px solid #009ef7;
+    padding: 10px 20px;
+    color: whitesmoke;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    transition: 0.2s ease-out;
+}
+
+i.bi.bi-file-earmark-image-fill.d-flex.flex-column.deleteAttach {
+    color: #50cd89;
+}
+
+i.bi.bi-file-earmark-image-fill.d-flex.flex-column.deleteAttach:hover {
+    color: red;
+}
+
+div.deleteText:hover{
+    color: red;
+}
+
+span.select2-selection.select2-selection--single.form-control.form-control-white.fw-bolder.pe-5.form-select.referraldebit{
+    background-color: #f5f8fa;
+    display: grid;
+}
+
+span.select2-selection.select2-selection--single.form-control.form-control-white.fw-bolder.pe-5.form-select.referralcredit{
+    background-color: #f5f8fa;
+    display: grid;
+}
+
+span.select2-selection.select2-selection--single.form-control.form-control-white.fw-bolder.pe-5.form-select.project{
+    background-color: #f5f8fa;
+}
+
+.select2-container--bootstrap5 .select2-selection--single .select2-selection__rendered{
+    color: #5e6278;
+    font-weight: 500 !important;
 }
