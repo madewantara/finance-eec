@@ -48452,7 +48452,8 @@ body {
 }
 @media (max-width: 991.98px) {
     .toolbar {
-        display: flex;
+        display: none;
+        /* display: flex; */
         align-items: center;
         box-shadow: 0 10px 30px 0 rgba(82, 63, 105, 0.05);
     }
@@ -49270,51 +49271,6 @@ body {
     justify-content: flex-start;
 }
 
-.select2-container .select2-selection--single {
-    padding: 0.5rem 3rem 0.5rem 1rem;
-    height: 43px !important;
-}
-
-.select2-container .select2-selection--single .select2-selection__rendered {
-    padding-left: 0 !important;
-    padding-right: 0 !important;
-}
-
-.select2-container--default .select2-selection--single {
-    border: 1px solid #e4e6ef;
-}
-
-.select2-container--default
-    .select2-selection--single
-    .select2-selection__arrow
-    b {
-    top: 75% !important;
-    margin-left: -10px !important;
-    color: #181c32 !important;
-}
-
-.select2-container {
-    margin-top: 0.75rem;
-}
-
-.select2-container--default
-    .select2-selection--single
-    .select2-selection__rendered {
-    font-size: 1.1rem !important;
-    font-weight: 500;
-    color: #181c32 !important;
-}
-
-.select2-container--open .select2-dropdown--below {
-    top: -10px;
-    border-bottom-left-radius: 0.475rem;
-    border-bottom-right-radius: 0.475rem;
-}
-
-.select2-results__options {
-    margin: 1% !important;
-}
-
 button.btn-delete.menu-link {
     cursor: pointer;
     background-color: transparent;
@@ -49329,6 +49285,12 @@ span.select2-selection.select2-selection--multiple.form-control.form-select.acco
 }
 
 span.select2-selection.select2-selection--multiple.form-control.form-select.pic-multiple {
+    background-color: #f5f8fa;
+    border: none;
+    padding: 0.75rem 1rem;
+}
+
+span.select2-selection.select2-selection--multiple.form-control.form-select.paidto-multiple{
     background-color: #f5f8fa;
     border: none;
     padding: 0.75rem 1rem;
@@ -49355,6 +49317,12 @@ span.select2-selection.select2-selection--multiple.form-control.form-select.acco
 }
 
 span.select2-selection.select2-selection--multiple.form-control.form-select.pic-multipleex {
+    background-color: #f5f8fa;
+    border: none;
+    padding: 0.75rem 1rem;
+}
+
+span.select2-selection.select2-selection--multiple.form-control.form-select.paidto-multipleex {
     background-color: #f5f8fa;
     border: none;
     padding: 0.75rem 1rem;
@@ -49398,7 +49366,23 @@ i.bi.bi-file-earmark-image-fill.d-flex.flex-column.deleteAttach {
 }
 
 i.bi.bi-file-earmark-image-fill.d-flex.flex-column.deleteAttach:hover {
-    color: red;
+    color: red !important;
+}
+
+i.bi.bi-file-earmark-word-fill.text-primary.d-flex.flex-column.deleteAttach {
+    color: #009ef7;
+}
+
+i.bi.bi-file-earmark-word-fill.text-primary.d-flex.flex-column.deleteAttach:hover {
+    color: red !important;
+}
+
+i.bi.bi-file-earmark-pdf-fill.text-danger.d-flex.flex-column.deleteAttach {
+    color: #f1416c;
+}
+
+i.bi.bi-file-earmark-pdf-fill.text-danger.d-flex.flex-column.deleteAttach:hover {
+    color: red !important;
 }
 
 div.deleteText:hover{
@@ -49422,4 +49406,40 @@ span.select2-selection.select2-selection--single.form-control.form-control-white
 .select2-container--bootstrap5 .select2-selection--single .select2-selection__rendered{
     color: #5e6278;
     font-weight: 500 !important;
+}
+
+.attach-cash:hover{
+    color: rgba(0, 0, 0, 0.5);
+}
+
+i.bi.bi-file-earmark-image-fill.attach-cash {
+    color: #50cd89;
+}
+
+i.bi.bi-file-earmark-image-fill.attach-cash:hover {
+    color: #00ad4f !important;
+}
+
+i.bi.bi-file-earmark-word-fill.text-primary.attach-cash {
+    color: #009ef7;
+}
+
+i.bi.bi-file-earmark-word-fill.text-primary.attach-cash:hover {
+    color: #0081ca !important;
+}
+
+i.bi.bi-file-earmark-pdf-fill.text-danger.attach-cash {
+    color: #f1416c;
+}
+
+i.bi.bi-file-earmark-pdf-fill.text-danger.attach-cash:hover {
+    color: #bc3859 !important;
+}
+
+span.select2-selection.select2-selection--single.form-control.form-control-white.fw-bolder.pe-5.form-select.status.disabled.select2-selection--clearable{
+    background-color: #e9edef;
+}
+
+span.select2-selection.select2-selection--single.form-control.form-control-white.fw-bolder.pe-5.form-select.status.select2-selection--clearable{
+    background-color: #f5f8fa;      
 }
