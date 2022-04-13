@@ -46,6 +46,7 @@ Route::group([
     Route::get('/cash/edit/{uuid}', [App\Http\Controllers\FindivCashController::class, 'edit'])->name('findiv.cash-edit');
     Route::delete('/cash/delete/{uuid}', [App\Http\Controllers\FindivCashController::class, 'destroy'])->name('findiv.cash-destroy');
     Route::post('/cash/export', [App\Http\Controllers\FindivCashController::class, 'export'])->name('findiv.cash-export');
+    Route::post('/cash/export/{uuid}', [App\Http\Controllers\FindivCashController::class, 'exportDetail'])->name('findiv.cash-detail-export');
 
     //Mandiri Operational Menu
 
