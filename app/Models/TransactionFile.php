@@ -5,21 +5,22 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class TransactionFiles extends Model
+class TransactionFile extends Model
 {
     use HasFactory;
 
     protected $fillable = [
-        'uuid',
         'transaction_id',
+        'category',
+        'type',
         'name',
     ];
 
     /**
      * Get the transaction that owns the files.
      */
-    public function projectFiles()
+    public function fileTransaction()
     {
-        return $this->belongsTo(Transaction::class, 'id');
+        return $this->belongsTo(Transaction::class, 'transaction_id', 'uuid');
     }
 }

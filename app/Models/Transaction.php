@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Account;
 use App\Models\Project;
-use App\Models\TransactionFiles;
+use App\Models\TransactionFile;
 
 class Transaction extends Model
 {
@@ -21,9 +21,12 @@ class Transaction extends Model
         'debit',
         'credit',
         'pic',
+        'paid_to',
         'project_id',
         'type',
+        'is_active',
         'status',
+        'category',
     ];
 
     /**
@@ -47,6 +50,6 @@ class Transaction extends Model
      */
     public function transactionFiles()
     {
-        return $this->hasMany(TransactionFiles::class, 'id');
+        return $this->hasMany(TransactionFile::class, 'transaction_id', 'uuid');
     }
 }

@@ -23,10 +23,12 @@ class CreateTransactionsTable extends Migration
             $table->bigInteger('debit');
             $table->bigInteger('credit');
             $table->string('pic')->nullable();
+            $table->string('paid_to');
             $table->foreignId('project_id')->nullable();
             $table->integer('is_active');
             $table->integer('type');
             $table->integer('status');
+            $table->string('category');
             $table->timestamps();
         });
     }

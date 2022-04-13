@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateTransactionFilesTable extends Migration
+class CreateActivityLogsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,12 +13,11 @@ class CreateTransactionFilesTable extends Migration
      */
     public function up()
     {
-        Schema::create('transaction_files', function (Blueprint $table) {
+        Schema::create('activity_logs', function (Blueprint $table) {
             $table->id();
-            $table->uuid('transaction_id');
+            $table->integer('user_id');
             $table->string('category');
-            $table->integer('type');
-            $table->string('name');
+            $table->string('activity_id');
             $table->timestamps();
         });
     }
@@ -30,6 +29,6 @@ class CreateTransactionFilesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('transaction_files');
+        Schema::dropIfExists('activity_logs');
     }
 }
