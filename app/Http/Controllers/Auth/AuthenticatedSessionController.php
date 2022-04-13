@@ -40,8 +40,8 @@ class AuthenticatedSessionController extends Controller
         }
 
         if(auth()->attempt($validated)){
-            $user = auth()->user()->userRole()->first()->user_id;
-            $userRole = MapUserRole::where('user_id', $user)->first()->role_id;
+            $users = auth()->user()->userRole()->first()->user_id;
+            $userRole = MapUserRole::where('user_id', $users)->first()->role_id;
             $role = Role::where('id', $userRole)->first()->role;
 
             if($role == 'financedivision'){
