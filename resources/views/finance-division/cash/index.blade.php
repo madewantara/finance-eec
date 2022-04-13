@@ -8,7 +8,6 @@
 
 @push('css')
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
-    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" type="text/css">
 @endpush
 
 @section('content')
@@ -98,7 +97,7 @@
                                             <!--begin::Input group-->
                                             <div class="fv-row mb-5">
                                                 <!--begin::Label-->
-                                                <label class="fs-5 fw-bold form-label mb-n1">Referral:</label>
+                                                <label class="fs-5 fw-bold form-label mb-3">Referral:</label>
                                                 <!--end::Label-->
                                                 <!--begin::Input-->
                                                 <select class="form-control form-select account-multipleex"
@@ -116,15 +115,32 @@
                                             <!--begin::Input group-->
                                             <div class="fv-row mb-5">
                                                 <!--begin::Label-->
-                                                <label class="fs-5 fw-bold form-label mb-n1">PIC:</label>
+                                                <label class="fs-5 fw-bold form-label mb-3">PIC:</label>
                                                 <!--end::Label-->
                                                 <!--begin::Input-->
                                                 <select class="form-control form-select pic-multipleex"
                                                     data-pharaonic="select2" id="picsex" name="picsex[]"
                                                     multiple="multiple">
-                                                    @foreach ($allTransactionex as $at)
-                                                        <option value="{{ $at->pic }}">
-                                                            {{ $at->pic }}</option>
+                                                    @foreach ($picex as $p)
+                                                        <option value="{{ $p->pic }}">
+                                                            {{ $p->pic }}</option>
+                                                    @endforeach
+                                                </select>
+                                                <!--end::Input-->
+                                            </div>
+                                            <!--end::Input group-->
+                                            <!--begin::Input group-->
+                                            <div class="fv-row mb-5">
+                                                <!--begin::Label-->
+                                                <label class="fs-5 fw-bold form-label mb-3">Paid To:</label>
+                                                <!--end::Label-->
+                                                <!--begin::Input-->
+                                                <select class="form-control form-select paidto-multipleex"
+                                                    data-pharaonic="select2" id="paidtosex" name="paidtosex[]"
+                                                    multiple="multiple">
+                                                    @foreach ($paidtoex as $pt)
+                                                        <option value="{{ $pt->paid_to }}">
+                                                            {{ $pt->paid_to }}</option>
                                                     @endforeach
                                                 </select>
                                                 <!--end::Input-->
@@ -133,7 +149,7 @@
                                             <!--begin::Input group-->
                                             <div class="fv-row mb-10">
                                                 <!--begin::Label-->
-                                                <label class="fs-5 fw-bold form-label mb-n1">Project:</label>
+                                                <label class="fs-5 fw-bold form-label mb-3">Project:</label>
                                                 <!--end::Label-->
                                                 <!--begin::Input-->
                                                 <select class="form-control form-select project-multipleex"
@@ -257,6 +273,21 @@
             });
         });
         $('.pic-multipleex').on("select2:unselect", function(e) {
+            if (!e.params.originalEvent) {
+                return
+            }
+            e.params.originalEvent.stopPropagation();
+        });
+    </script>
+    <script>
+        $(document).ready(function() {
+            $('.paidto-multipleex').select2({
+                placeholder: "Select Paid To",
+                closeOnSelect: true,
+                allowClear: true,
+            });
+        });
+        $('.paidto-multipleex').on("select2:unselect", function(e) {
             if (!e.params.originalEvent) {
                 return
             }

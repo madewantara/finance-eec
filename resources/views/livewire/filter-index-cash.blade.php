@@ -23,7 +23,7 @@
                     </span>
                     <!--end::Svg Icon-->
                     <input type="text" data-kt-subscription-table-filter="search"
-                        class="form-control form-control-solid w-250px ps-14" wire:model="search"
+                        class="form-control form-control-solid mw-250px ps-14" wire:model="search"
                         placeholder="Search Transaction" />
                 </div>
                 <div class="d-flex align-items-center position-relative my-1 ms-3">
@@ -87,7 +87,7 @@
                                 <!--begin::Input group-->
                                 <div class="fv-row mb-5">
                                     <!--begin::Label-->
-                                    <label class="fs-5 fw-bold form-label mb-n1">Referral:</label>
+                                    <label class="fs-5 fw-bold form-label mb-3">Referral:</label>
                                     <!--end::Label-->
                                     <!--begin::Input-->
                                     <select class="form-control form-select account-multiple" data-pharaonic="select2"
@@ -105,15 +105,32 @@
                                 <!--begin::Input group-->
                                 <div class="fv-row mb-5">
                                     <!--begin::Label-->
-                                    <label class="fs-5 fw-bold form-label mb-n1">PIC:</label>
+                                    <label class="fs-5 fw-bold form-label mb-3">PIC:</label>
                                     <!--end::Label-->
                                     <!--begin::Input-->
                                     <select class="form-control form-select pic-multiple" data-pharaonic="select2"
                                         data-component-id="{{ $this->id }}" wire:model.defer="pics" id="pics"
                                         name="pics[]" multiple="multiple">
-                                        @foreach ($allTransaction as $at)
-                                            <option value="{{ $at->pic }}">
-                                                {{ $at->pic }}</option>
+                                        @foreach ($pic as $p)
+                                            <option value="{{ $p->pic }}">
+                                                {{ $p->pic }}</option>
+                                        @endforeach
+                                    </select>
+                                    <!--end::Input-->
+                                </div>
+                                <!--end::Input group-->
+                                <!--begin::Input group-->
+                                <div class="fv-row mb-5">
+                                    <!--begin::Label-->
+                                    <label class="fs-5 fw-bold form-label mb-3">Paid To:</label>
+                                    <!--end::Label-->
+                                    <!--begin::Input-->
+                                    <select class="form-control form-select paidto-multiple" data-pharaonic="select2"
+                                        data-component-id="{{ $this->id }}" wire:model.defer="paidtos" id="paidtos"
+                                        name="paidtos[]" multiple="multiple">
+                                        @foreach ($paidto as $pt)
+                                            <option value="{{ $pt->paid_to }}">
+                                                {{ $pt->paid_to }}</option>
                                         @endforeach
                                     </select>
                                     <!--end::Input-->
@@ -122,7 +139,7 @@
                                 <!--begin::Input group-->
                                 <div class="fv-row mb-10">
                                     <!--begin::Label-->
-                                    <label class="fs-5 fw-bold form-label mb-n1">Project:</label>
+                                    <label class="fs-5 fw-bold form-label mb-3">Project:</label>
                                     <!--end::Label-->
                                     <!--begin::Input-->
                                     <select class="form-control form-select project-multiple" data-pharaonic="select2"
@@ -215,7 +232,7 @@
         </div>
         <!--end::Card header-->
         <!--begin::Card body-->
-        <div class="card-body pt-0">
+        <div class="card-body pt-0 table-responsive">
             <!--begin::Table-->
             <table class="table align-middle table-row-dashed fs-6 gy-5" id="kt_subscriptions_table">
                 <!--begin::Table head-->
@@ -228,7 +245,6 @@
                                     data-kt-check-target="#kt_subscriptions_table .form-check-input" value="1" />
                             </div>
                         </th>
-                        <th class="min-w-20px">No.</th>
                         <th class="min-w-20px">Date</th>
                         <th class="min-w-70px">Token</th>
                         <th class="min-w-175px">Description</th>
@@ -237,6 +253,7 @@
                         <th class="min-w-70px">Credit</th>
                         <th class="min-w-70px">PIC</th>
                         <th class="min-w-70px">Project</th>
+                        <th class="min-w-70px">Paid To</th>
                         <th class="min-w-70px">Type</th>
                         <th class="min-w-70px">Status</th>
                         <th class="text-end min-w-20px"></th>
@@ -246,34 +263,60 @@
                 <!--end::Table head-->
                 <!--begin::Table body-->
                 <tbody class="text-gray-600 fw-bold">
-                    {{-- {{ dd($transaction) }} --}}
-                    @foreach ($transaction as $t)
+                    @foreach ($transaction as $trans)
                         <tr>
                             <td>
                                 <div class="form-check form-check-sm form-check-custom form-check-solid">
                                     <input class="form-check-input" type="checkbox" value="1" />
                                 </div>
                             </td>
-                            <td class="text-center">{{ $loop->iteration }}</td>
-                            <td class="text-center">{{ date('Y-m-d', strtotime($t->date)) }}</td>
-                            <td class="text-center">{{ $t->token }}</td>
-                            <td>{{ $t->description }}</td>
-                            <td class="text-center">{{ $t->transactionAccount[0]->referral }}</td>
-                            <td class="text-center">Rp. {{ number_format($t->debit, 0, ',', '.') }}</td>
-                            <td class="text-center">Rp. {{ number_format($t->credit, 0, ',', '.') }}</td>
-                            @if (empty($t->pic))
+                            <td class="text-center">
+                                {{ date('Y-m-d', strtotime($trans[0][0]->date)) }}
+                            </td>
+                            <td class="text-center">{{ $trans[0][0]->token }}</td>
+                            <td>
+                                @foreach ($trans[0] as $t)
+                                    {{ $t->description }}<br>
+                                @endforeach
+                            </td>
+                            <td class="text-center">
+                                @foreach ($trans[0] as $t)
+                                    {{ $t->transactionAccount[0]->referral }}<br>
+                                @endforeach
+                            </td>
+                            <td class="text-center">
+                                @foreach ($trans[0] as $t)
+                                    @if (empty($t->debit))
+                                        -<br>
+                                    @else
+                                        Rp. {{ number_format($t->debit, 0, ',', '.') }}<br>
+                                    @endif
+                                @endforeach
+                            </td>
+                            <td class="text-center">
+                                @foreach ($trans[0] as $t)
+                                    @if (empty($t->credit))
+                                        -<br>
+                                    @else
+                                        Rp. {{ number_format($t->credit, 0, ',', '.') }}<br>
+                                    @endif
+                                @endforeach
+                            </td>
+                            @if (empty($trans[0][0]->pic))
                                 <td class="text-center">-</td>
                             @else
-                                <td class="text-center">{{ $t->pic }}</td>
+                                <td class="text-center">{{ $trans[0][0]->pic }}</td>
                             @endif
 
-                            @if (empty($t->transactionProject))
+                            @if (empty($trans[0][0]->transactionProject->name))
                                 <td class="text-center">-</td>
                             @else
-                                <td>{{ $t->transactionProject->name }}</td>
+                                <td class="text-center">{{ $trans[0][0]->transactionProject->name }}</td>
                             @endif
 
-                            @if ($t->type == 1)
+                            <td class="text-center">{{ $trans[0][0]->paid_to }}</td>
+
+                            @if ($trans[0][0]->type == 1)
                                 <td class="text-center"><span class="badge badge-light fw-bolder text-white"
                                         style="background-color: rgb(232, 123, 51);">
                                         Draft</span></td>
@@ -283,16 +326,20 @@
                                         Posted</span></td>
                             @endif
 
-                            @if ($t->status == 1 || $t->status == 2)
+                            @if ($trans[0][0]->status == 1 || $trans[0][0]->status == 2)
                                 <td class="text-center"><span class="badge badge-light-warning fw-bolder">
                                         Pending</span></td>
-                            @elseif ($t->status == 3)
+                            @elseif ($trans[0][0]->status == 3)
                                 <td class="text-center"><span class="badge badge-light-success fw-bolder">
                                         Approved</span></td>
+                            @elseif ($trans[0][0]->status == 4)
+                                <td class="text-center"><span class="badge badge-light-primary fw-bolder">
+                                        Paid</span></td>
                             @else
                                 <td class="text-center"><span class="badge badge-light-danger fw-bolder">
                                         Rejected</span></td>
                             @endif
+
                             <td class="text-end">
                                 <a href="#" class="btn btn-light btn-active-light-primary btn-sm"
                                     data-kt-menu-trigger="click" data-kt-menu-placement="bottom-end"
@@ -306,19 +353,20 @@
                                     data-kt-menu="true">
                                     <!--begin::Menu item-->
                                     <div class="menu-item px-3">
-                                        <a href="{{ route('findiv.cash-detail', ['uuid' => $t->uuid]) }}"
+                                        <a href="{{ route('findiv.cash-detail', ['uuid' => $trans[0][0]->uuid]) }}"
                                             class="menu-link px-3">View</a>
                                     </div>
                                     <!--end::Menu item-->
                                     <!--begin::Menu item-->
                                     <div class="menu-item px-3">
-                                        <a href="{{ route('findiv.cash-edit', ['uuid' => $t->uuid]) }}"
+                                        <a href="{{ route('findiv.cash-edit', ['uuid' => $trans[0][0]->uuid]) }}"
                                             class="menu-link px-3">Edit</a>
                                     </div>
                                     <!--end::Menu item-->
                                     <!--begin::Menu item-->
                                     <div class="menu-item px-3">
-                                        <form action="{{ route('findiv.cash-destroy', ['uuid' => $t->uuid]) }}"
+                                        <form
+                                            action="{{ route('findiv.cash-destroy', ['uuid' => $trans[0][0]->uuid]) }}"
                                             method="POST" class="d-inline">
                                             @csrf
                                             @method('delete')
@@ -338,7 +386,9 @@
             </table>
             <!--end::Table-->
             <div class="d-flex flex-stack flex-wrap pt-10">
-                <div class="fs-6 fw-bold text-gray-700">Showing of {{ count($allTransaction) }} entries
+                <div class="fs-6 fw-bold text-gray-700">Showing {{ count($transaction) }} of
+                    {{ count($distAllTrans) }}
+                    entries
                 </div>
                 <!--begin::Pages-->
                 {{ $transaction->links() }}
@@ -431,6 +481,36 @@
                     allowClear: true,
                 });
                 $('.pic-multiple').on("select2:unselect", function(e) {
+                    if (!e.params.originalEvent) {
+                        return
+                    }
+                    e.params.originalEvent.stopPropagation();
+                });
+            });
+        });
+    </script>
+    <script>
+        $(document).ready(function() {
+            $('.paidto-multiple').select2({
+                placeholder: "Select paid to",
+                closeOnSelect: true,
+                allowClear: true,
+            });
+        });
+        $('.paidto-multiple').on("select2:unselect", function(e) {
+            if (!e.params.originalEvent) {
+                return
+            }
+            e.params.originalEvent.stopPropagation();
+        });
+        document.addEventListener('livewire:load', function(event) {
+            @this.on('refreshDropdown', function() {
+                $('.paidto-multiple').select2({
+                    placeholder: "Select Paid To",
+                    closeOnSelect: true,
+                    allowClear: true,
+                });
+                $('.paidto-multiple').on("select2:unselect", function(e) {
                     if (!e.params.originalEvent) {
                         return
                     }

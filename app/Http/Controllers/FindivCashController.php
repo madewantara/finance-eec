@@ -3,12 +3,18 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Http\Requests\CashRequest;
 use App\Models\Transaction;
+use App\Models\TransactionFile;
 use App\Models\Account;
+use App\Models\ActivityLog;
+use App\Models\User;
 use App\Exports\CashExport;
 use Maatwebsite\Excel\Facades\Excel;
 use Carbon\Carbon;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Auth;
 
 class FindivCashController extends Controller
 {
@@ -19,12 +25,12 @@ class FindivCashController extends Controller
      */
     public function index()
     {
-        $allTransactionex = Transaction::where('is_active', 1)->get();
-        $picex = Transaction::select('pic')->where('is_active', 1)->distinct()->get();
-        $projectex = Transaction::select('project_id')->where('is_active', 1)->with('transactionProject')->distinct()->get();
+        $picex = Transaction::select('pic')->where([['category', 'cash'],['is_active', 1],['pic', '<>', NULL]])->distinct()->get();
+        $paidtoex = Transaction::select('paid_to')->where('is_active', 1)->where('category', 'cash')->where('paid_to', '<>', NULL)->distinct()->get();
+        $projectex = Transaction::select('project_id')->where([['category', 'cash'],['is_active', 1],['project_id', '<>', NULL]])->with('transactionProject')->distinct()->get();
         $accountex = Account::where('is_active', 1)->get();
 
-        return view('finance-division.cash.index', compact('allTransactionex', 'picex', 'projectex', 'accountex'));
+        return view('finance-division.cash.index', compact('picex', 'projectex', 'accountex', 'paidtoex'));
     }
 
     /**
@@ -43,9 +49,99 @@ class FindivCashController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(CashRequest $request)
     {
-        dd($request);
+        $validated = $request->validated();
+
+        $checkExist = Transaction::where([
+            ['category', 'cash'],
+            ['is_active', 1],
+            ['token', $validated['token']],
+        ])->first();
+
+        if($checkExist){
+            return redirect()->back()->with('message', 'Transaction Already Exists');
+        }
+
+        $transactionUuid = Str::uuid()->toString();
+
+        foreach($validated['transDebit'] as $td){
+            $transaction = Transaction::create([
+                'uuid' => $transactionUuid,
+                'date' => $validated['date'],
+                'token' => $validated['token'],
+                'description' => $td['descriptionDebit'],
+                'referral_id' => $td['referralDebit'],
+                'debit' => (int) preg_replace("/[^0-9]/", "", $td['debit']),
+                'credit' => 0,
+                'pic' => $validated['pic'],
+                'paid_to' => $validated['paidto'],
+                'project_id' => $validated['project'],
+                'is_active' => 1,
+                'type' => $validated['type'],
+                'status' => 1,
+                'category' => 'cash',
+            ]);
+        }
+
+        foreach($validated['transCredit'] as $tc){
+            $transaction = Transaction::create([
+                'uuid' => $transactionUuid,
+                'date' => $validated['date'],
+                'token' => $validated['token'],
+                'description' => $tc['descriptionCredit'],
+                'referral_id' => $tc['referralCredit'],
+                'credit' => (int) preg_replace("/[^0-9]/", "", $tc['credit']),
+                'debit' => 0,
+                'pic' => $validated['pic'],
+                'paid_to' => $validated['paidto'],
+                'project_id' => $validated['project'],
+                'is_active' => 1,
+                'type' => $validated['type'],
+                'status' => 1,
+                'category' => 'cash',
+            ]);
+        }
+
+        $report = $request->file('report');
+        if($report){
+            $reportName = $report->getClientOriginalName();
+            $reportStore = TransactionFile::create([
+                'transaction_id' => $transactionUuid,
+                'category' => 'cash',
+                'type' => 1,
+                'name' => $reportName,
+            ]);
+            $reportPath = $report->storeAs('public/Cash/'.$transactionUuid, $reportName);
+        }
+
+        $arrAttachments = json_decode($validated['arrattachments']);
+        if($request->file('attach')){
+            foreach($request->file('attach') as $attach){;
+                if($attach){
+                    $attachName = $attach->getClientOriginalName();
+                    foreach($arrAttachments as $atc){
+                        if($attachName == $atc){
+                            $attachStore = TransactionFile::create([
+                                'transaction_id' => $transactionUuid,
+                                'category' => 'cash',
+                                'type' => 2,
+                                'name' => $attachName,
+                            ]);
+                            $attachPath = $attach->storeAs('public/Cash/'.$transactionUuid, $attachName);
+                        }
+                    }
+                }            
+            }
+        }
+
+        $log = ActivityLog::create([
+            'user_id' => Auth::id(),
+            'category' => 'cash-store',
+            'activity_id' => $transactionUuid,
+        ]);
+
+        return redirect()->route('findiv.cash-index')->with('message', 'Cash Transaction Successfully Added');
     }
 
     /**
@@ -56,7 +152,46 @@ class FindivCashController extends Controller
      */
     public function show($uuid)
     {
-        return view('finance-division.cash.show');
+        $transaction = Transaction::where([
+            ['category', 'cash'],
+            ['is_active', 1],
+            ['uuid', $uuid],
+        ])->with(['transactionFiles', 'transactionAccount', 'transactionProject'])->get();
+
+        $report = TransactionFile::where([
+            ['category', 'cash'],
+            ['transaction_id', $transaction[0]->uuid],
+            ['type', 1],
+        ])->get();
+
+        $attach = TransactionFile::where([
+            ['category', 'cash'],
+            ['transaction_id', $transaction[0]->uuid],
+            ['type', 2],
+        ])->get();
+
+        $log = ActivityLog::where('activity_id', $transaction[0]->uuid)->where(function($query){
+            $query->where('category', 'cash-store')
+                ->orWhere('category', 'cash-update')
+                ->orWhere('category', 'cash-delete')
+                ->orWhere('category', 'cash-approved-findir')
+                ->orWhere('category', 'cash-approved-excdir')
+                ->orWhere('category', 'cash-rejected-findir')
+                ->orWhere('category', 'cash-rejected-excdir')
+                ->orWhere('category', 'cash-paid');
+            })->get();
+        
+        $user = [];
+        foreach($log as $l){
+            array_push($user, User::where('id',$l->user_id)->get());
+        }
+
+        $activity = [];
+        for($i=0;$i<count($log);$i++){
+            array_push($activity, ['log' => $log[$i], 'user' => $user[$i]]);
+        }
+
+        return view('finance-division.cash.show', compact('transaction', 'report', 'attach', 'activity'));
     }
 
     /**
@@ -67,7 +202,28 @@ class FindivCashController extends Controller
      */
     public function edit($uuid)
     {
-        return view('finance-division.cash.edit');
+        $log = ActivityLog::where('activity_id', $uuid)->where(function($query){
+            $query->where('category', 'cash-store')
+                ->orWhere('category', 'cash-update')
+                ->orWhere('category', 'cash-delete')
+                ->orWhere('category', 'cash-approved-findir')
+                ->orWhere('category', 'cash-approved-excdir')
+                ->orWhere('category', 'cash-rejected-findir')
+                ->orWhere('category', 'cash-rejected-excdir')
+                ->orWhere('category', 'cash-paid');
+            })->get();
+        
+        $user = [];
+        foreach($log as $l){
+            array_push($user, User::where('id',$l->user_id)->get());
+        }
+
+        $activity = [];
+        for($i=0;$i<count($log);$i++){
+            array_push($activity, ['log' => $log[$i], 'user' => $user[$i]]);
+        }
+
+        return view('finance-division.cash.edit', compact('activity', 'uuid'));
     }
 
     /**
@@ -122,46 +278,97 @@ class FindivCashController extends Controller
                 if($request->picsex){
                     $query->whereIn('pic', $request->picsex);
                 }
+                if($request->paidtosex){
+                    $query->whereIn('paid_to', $request->paidtosex);
+                }
                 if($request->projectsex){
                     $query->whereIn('project_id', $request->projectsex);
                 }
             })->with(['transactionAccount', 'transactionProject', 'transactionFiles'])->get();
 
-            $arrayData = array();
-            $result = array('Date', 'Token', 'Description', 'Referral', 'Debit', 'Credit', 'PIC', 'Project');
-            $dataTa = array();
-
+            $tempTrans = [];
             foreach($transaction as $t){
-                if(empty($t->transactionProject)){
-                    $result = array(
-                        'Date' => $t->date,
-                        'Token' => $t->token,
-                        'Description' => $t->description,
-                        'Referral' => $t->transactionAccount[0]->referral.' - '.$t->transactionAccount[0]->name,
-                        'Debit' => $t->debit,
-                        'Credit' => $t->credit,
-                        'PIC' => '-',
-                        'Project' => '-',
-                    );
-                }else{
-                    $result = array(
-                        'Date' => $t->date,
-                        'Token' => $t->token,
-                        'Description' => $t->description,
-                        'Referral' => $t->transactionAccount[0]->referral.' - '.$t->transactionAccount[0]->name,
-                        'Debit' => $t->debit,
-                        'Credit' => $t->credit,
-                        'PIC' => $t->pic,
-                        'Project' => $t->transactionProject->name,
-                    );
-                }
-                array_push($arrayData, $result);
+                array_push($tempTrans, $t->uuid);
+            }
+
+            $dataTrans = [];
+            foreach($tempTrans as $tr){
+                $model = Transaction::where('is_active', 1)->where('category', 'cash')->where('uuid', $tr)->with(['transactionAccount', 'transactionProject'])->get();
+                $transUuid = [];
+                array_push($transUuid, $model);
+                array_push($dataTrans, $transUuid);
             }
                 
-            $pdf = PDF::loadView('finance-division.cash.pdf', ['arrayData' => $arrayData, 'todayDate' => $todayDate]);
+            $pdf = PDF::loadView('finance-division.cash.pdf', ['dataTrans' => $dataTrans, 'todayDate' => $todayDate]);
             $pdf->setPaper('A4', 'landscape');
             $filename = $todayDate .' Cash Transaction.pdf';
             return $pdf->download($filename);
         }
     }
+
+    /**
+    * @return \Illuminate\Support\Collection
+    */
+    public function exportDetail($uuid) 
+    {
+        $todayDate = Carbon::now()->format('Y-m-d');
+
+        $transactionDebit = Transaction::where([
+            ['category', 'cash'],
+            ['is_active', 1],
+            ['uuid', $uuid],
+            ['credit', 0],
+        ])->with(['transactionAccount', 'transactionProject'])->get();
+
+        if(count($transactionDebit) == 1){
+            $sum = $transactionDebit[0]->debit;
+        }else{
+            for ($i = 0; $i < (count($transactionDebit) - 1); $i++){
+                $sum = $transactionDebit[$i]->debit + $transactionDebit[$i + 1]->debit;
+            }
+        }
+        $inWords = $this->inWords($sum);
+
+        $pdf = PDF::loadView('finance-division.cash.pdfDetail', ['transactionDebit' => $transactionDebit, 'sum' => $sum, 'inWords' => $inWords, 'todayDate' => $todayDate]);
+        $pdf->setPaper('A4', 'landscape');
+        $filename = $todayDate.' ('.$transactionDebit[0]->token.') Cash Transaction.pdf';
+        return $pdf->download($filename);
+    }
+
+    private function nominal($number) {
+		$number = abs($number);
+		$char = array("", "satu", "dua", "tiga", "empat", "lima", "enam", "tujuh", "delapan", "sembilan", "sepuluh", "sebelas");
+		$temp = "";
+		if ($number < 12) {
+			$temp = " ". $char[$number];
+		} else if ($number <20) {
+			$temp = $this->nominal($number - 10). " belas";
+		} else if ($number < 100) {
+			$temp = $this->nominal($number/10)." puluh". $this->nominal($number % 10);
+		} else if ($number < 200) {
+			$temp = " seratus" . $this->nominal($number - 100);
+		} else if ($number < 1000) {
+			$temp = $this->nominal($number/100) . " ratus" . $this->nominal($number % 100);
+		} else if ($number < 2000) {
+			$temp = " seribu" . $this->nominal($number - 1000);
+		} else if ($number < 1000000) {
+			$temp = $this->nominal($number/1000) . " ribu" . $this->nominal($number % 1000);
+		} else if ($number < 1000000000) {
+			$temp = $this->nominal($number/1000000) . " juta" . $this->nominal($number % 1000000);
+		} else if ($number < 1000000000000) {
+			$temp = $this->nominal($number/1000000000) . " milyar" . $this->nominal(fmod($number,1000000000));
+		} else if ($number < 1000000000000000) {
+			$temp = $this->nominal($number/1000000000000) . " trilyun" . $this->nominal(fmod($number,1000000000000));
+		}     
+		return $temp;
+	}
+ 
+	private function inWords($number) {
+		if($number<0) {
+			$result = "minus ". trim($this->nominal($number));
+		} else {
+			$result = trim($this->nominal($number));
+		}     		
+		return $result;
+	}
 }
