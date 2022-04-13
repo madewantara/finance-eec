@@ -25,14 +25,14 @@
             <table style="margin-bottom: 90px; width:100%;">
                 <thead>
                     <tr>
-                        <th colspan="9" style="padding-top: 60px; padding-bottom: 60px; text-align: left;"><img
+                        <th colspan="10" style="padding-top: 60px; padding-bottom: 20px; text-align: left;"><img
                                 src="{{ public_path('assets/image/logo/head-logo.png') }}" style="width: 300px;">
                         </th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr>
-                        <td colspan="9">
+                        <td colspan="10">
                             <div class="content-head" style="text-align: center;">
                                 <h3><b>PT. Era Elektra Corpora Indonesia</b></h3>
                                 <h3 style="margin-top: -10px; padding-bottom:15px;"><b>Financial Account List</b></h3>
@@ -42,57 +42,88 @@
                 </tbody>
                 <thead style="width:100%; background-color: lightgrey; text-align: center;">
                     <tr>
-                        <th style="width: 3%; height: 30px; border: 1px solid black;">No.</th>
+                        <th style="width: 2%; height: 30px; border: 1px solid black;">No.</th>
                         <th style="width: 10%; height: 30px; border: 1px solid black;">Date
                             Code</th>
                         <th style="width: 11%; height: 30px; border: 1px solid black;">Token
                         </th>
-                        <th style="width: 15%; height: 30px; border: 1px solid black;">Description
+                        <th style="width: 14%; height: 30px; border: 1px solid black;">Description
                         </th>
-                        <th style="width: 15%; height: 30px; border: 1px solid black;">Referral
+                        <th style="width: 13%; height: 30px; border: 1px solid black;">Referral
                         </th>
-                        <th style="width: 12%; height: 30px; border: 1px solid black;">Debit
+                        <th style="width: 10%; height: 30px; border: 1px solid black;">Debit
                         </th>
-                        <th style="width: 12%; height: 30px; border: 1px solid black;">Credit
+                        <th style="width: 10%; height: 30px; border: 1px solid black;">Credit
                         </th>
                         <th style="width: 10%; height: 30px; border: 1px solid black;">PIC
                         </th>
-                        <th style="width: 12%; height: 30px; border: 1px solid black;">Project
+                        <th style="width: 10%; height: 30px; border: 1px solid black;">Paid To
+                        </th>
+                        <th style="width: 10%; height: 30px; border: 1px solid black;">Project
                         </th>
                     </tr>
                 </thead>
                 <tbody style="padding: 3px 3px;">
-                    @foreach ($arrayData as $ad)
-                        <tr style="page-break-inside:avoid;">
-                            <td style="height: 30px; border: 1px solid black; text-align: center;">
+                    @foreach ($dataTrans as $trans)
+                        <tr>
+                            <td style="text-align: center;vertical-align:middle;border: 1px solid black;">
                                 {{ $loop->iteration }}.
                             </td>
-                            <td style="height: 30px; border: 1px solid black; text-align: center;">
-                                {{ $ad['Date'] }}</td>
-                            <td style="height: 30px; border: 1px solid black; padding-left: 5px;">
-                                {{ $ad['Token'] }}</td>
-                            <td style="height: 30px; border: 1px solid black; text-align: center;">
-                                {{ $ad['Description'] }}
+                            <td style="text-align: center;vertical-align:middle;border: 1px solid black;">
+                                {{ date('Y-m-d', strtotime($trans[0][0]->date)) }}
                             </td>
-                            <td style="height: 30px; border: 1px solid black; text-align: center;">
-                                {{ $ad['Referral'] }}
+                            <td style="text-align: center;vertical-align:middle;border: 1px solid black;">
+                                {{ $trans[0][0]->token }}</td>
+                            <td style="vertical-align:middle;border: 1px solid black;">
+                                @foreach ($trans[0] as $t)
+                                    &nbsp;{{ $t->description }}<br>
+                                @endforeach
                             </td>
-                            <td style="height: 30px; border: 1px solid black; text-align: center;">
-                                Rp. {{ number_format($ad['Debit'], 0, ',', '.') }}
+                            <td style="vertical-align:middle;border: 1px solid black;">
+                                @foreach ($trans[0] as $t)
+                                    {{ $t->transactionAccount[0]->referral }} -
+                                    {{ $t->transactionAccount[0]->name }}<br>
+                                @endforeach
                             </td>
-                            <td style="height: 30px; border: 1px solid black; text-align: center;">
-                                Rp. {{ number_format($ad['Credit'], 0, ',', '.') }}
+                            <td style="text-align: center;vertical-align:middle;border: 1px solid black;">
+                                @foreach ($trans[0] as $t)
+                                    @if (empty($t->debit))
+                                        -<br>
+                                    @else
+                                        Rp. {{ number_format($t->debit, 0, ',', '.') }}<br>
+                                    @endif
+                                @endforeach
                             </td>
-                            <td style="height: 30px; border: 1px solid black; text-align: center;">
-                                {{ $ad['PIC'] }}
+                            <td style="text-align: center;vertical-align:middle;border: 1px solid black;">
+                                @foreach ($trans[0] as $t)
+                                    @if (empty($t->credit))
+                                        -<br>
+                                    @else
+                                        Rp. {{ number_format($t->credit, 0, ',', '.') }}<br>
+                                    @endif
+                                @endforeach
                             </td>
-                            <td style="height: 30px; border: 1px solid black; text-align: center;">
-                                {{ $ad['Project'] }}
-                            </td>
+
+                            @if (empty($trans[0][0]->pic))
+                                <td style="text-align: center;vertical-align:middle;border: 1px solid black;">-</td>
+                            @else
+                                <td style="text-align: center;vertical-align:middle;border: 1px solid black;">
+                                    {{ $trans[0][0]->pic }}</td>
+                            @endif
+
+                            <td style="text-align: center;vertical-align:middle;border: 1px solid black;">
+                                {{ $trans[0][0]->paid_to }}</td>
+
+                            @if (empty($trans[0][0]->transactionProject->name))
+                                <td style="text-align: center;vertical-align:middle;border: 1px solid black;">-</td>
+                            @else
+                                <td style="text-align: center;vertical-align:middle;border: 1px solid black;">
+                                    {{ $trans[0][0]->transactionProject->name }}</td>
+                            @endif
                         </tr>
                     @endforeach
                     <tr>
-                        <td colspan="9" style="padding: 10px 0"><i>Printed on {{ $todayDate }}</i>
+                        <td colspan="10" style="padding: 10px 0"><i>Printed on {{ $todayDate }}</i>
                         </td>
                     </tr>
                 </tbody>

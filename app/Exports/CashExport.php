@@ -15,7 +15,7 @@ class CashExport implements FromView
 
     public function view(): View
     {
-        $transaction = Transaction::where('is_active', 1)->where('status', 3)->where(function($query){
+        $transaction = Transaction::select('uuid')->where('is_active', 1)->where('status', 3)->where(function($query){
             if($this->request->datefilterex){
                 $expDate = explode(' -> ', $this->request->datefilterex);
                 $query->whereBetween('date', [$expDate[0],$expDate[1]]);
@@ -26,44 +26,63 @@ class CashExport implements FromView
             if($this->request->picsex){
                 $query->whereIn('pic', $this->request->picsex);
             }
+            if($this->request->paidtosex){
+                $query->whereIn('paid_to', $this->request->paidtosex);
+            }
             if($this->request->projectsex){
                 $query->whereIn('project_id', $this->request->projectsex);
             }
-        })->with(['transactionAccount', 'transactionProject', 'transactionFiles'])->get();
+        })->with(['transactionAccount', 'transactionProject', 'transactionFiles'])->distinct()->get();
+
+        $tempTrans = [];
+        foreach($transaction as $t){
+            array_push($tempTrans, $t->uuid);
+        }
+
+        $dataTrans = [];
+        foreach($tempTrans as $tr){
+            $model = Transaction::where('is_active', 1)->where('category', 'cash')->where('uuid', $tr)->with(['transactionAccount', 'transactionProject'])->get();
+            $transUuid = [];
+            array_push($transUuid, $model);
+            array_push($dataTrans, $transUuid);
+        }
 
         $arrayData = array();
-        $result = array('Date', 'Token', 'Description', 'Referral', 'Debit', 'Credit', 'PIC', 'Project');
-        $dataTa = array();
+        $result = array('Date', 'Token', 'Description', 'Referral', 'Debit', 'Credit', 'Paid To', 'PIC', 'Project');
 
-        foreach($transaction as $t){
-            if(empty($t->transactionProject)){
-                $result = array(
-                    'Date' => $t->date,
-                    'Token' => $t->token,
-                    'Description' => $t->description,
-                    'Referral' => $t->transactionAccount[0]->name,
-                    'Debit' => $t->debit,
-                    'Credit' => $t->credit,
-                    'PIC' => '-',
-                    'Project' => '-',
-                );
-            }else{
-                $result = array(
-                    'Date' => $t->date,
-                    'Token' => $t->token,
-                    'Description' => $t->description,
-                    'Referral' => $t->transactionAccount[0]->name,
-                    'Debit' => $t->debit,
-                    'Credit' => $t->credit,
-                    'PIC' => $t->pic,
-                    'Project' => $t->transactionProject->name,
-                );
+        foreach($dataTrans as $trans){
+            foreach ($trans[0] as $t){
+                if(empty($t->transactionProject)){
+                    $result = array(
+                        'Date' => $t->date,
+                        'Token' => $t->token,
+                        'Description' => $t->description,
+                        'Referral' => $t->transactionAccount[0]->referral." - ".$t->transactionAccount[0]->name,
+                        'Debit' => $t->debit,
+                        'Credit' => $t->credit,
+                        'Paid To' => $t->paid_to,
+                        'PIC' => '-',
+                        'Project' => '-',
+                    );
+                }else{
+                    $result = array(
+                        'Date' => $t->date,
+                        'Token' => $t->token,
+                        'Description' => $t->description,
+                        'Referral' => $t->transactionAccount[0]->referral." - ".$t->transactionAccount[0]->name,
+                        'Debit' => $t->debit,
+                        'Credit' => $t->credit,
+                        'Paid To' => $t->paid_to,
+                        'PIC' => $t->pic,
+                        'Project' => $t->transactionProject->name,
+                    );
+                }
+                array_push($arrayData, $result);
             }
-            array_push($arrayData, $result);
         }
         
         if($this->request->format == 'excel'){
-            return view('finance-division.cash.excel', ['arrayData' => $arrayData]);
+            return view('finance-division.cash.excel', ['dataTrans' => $dataTrans]);
         }
         elseif($this->request->format == 'csv'){
             return view('finance-division.cash.csv', ['arrayData' => $arrayData]);

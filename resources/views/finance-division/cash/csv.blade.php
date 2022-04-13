@@ -12,7 +12,7 @@
         <thead>
             <tr>
                 @foreach ($arrayData[0] as $key => $value)
-                    <th style="text-align: center; width: 150px"><b>{{ ucfirst($key) }}</b></th>
+                    <th><b>{{ ucfirst($key) }}</b></th>
                 @endforeach
             </tr>
         </thead>
