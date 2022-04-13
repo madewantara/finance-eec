@@ -19,6 +19,7 @@ class FilterIndexAccount extends Component
     public function resetcategory()
     {
         $this->reset();
+        $this->emit('refreshFilterCategory');
     }
 
     public function submitfiltercategory()
@@ -43,6 +44,7 @@ class FilterIndexAccount extends Component
                 ->orWhere('category', 'like', '%'.$this->search.'%');
             })->paginate($this->pagesize);
         }
+        $this->emit('refreshFilterCategory');
 
         return view('livewire.filter-index-account', ['account' => $account, 'category' => $category, 'allAccount' => $allAccount]);
     }

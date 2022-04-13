@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Account;
+use App\Models\User;
+use App\Models\ActivityLog;
 use Illuminate\Support\Str;
 use App\Http\Requests\AccountRequest;
 use App\Http\Requests\CategoryRequest;
@@ -11,6 +13,7 @@ use App\Exports\AccountExport;
 use Maatwebsite\Excel\Facades\Excel;
 use Carbon\Carbon;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Support\Facades\Auth;
 
 class FindivAccountController extends Controller
 {
@@ -32,24 +35,13 @@ class FindivAccountController extends Controller
      */
     public function create(Request $request)
     {
-        $account = Account::where('is_active', 1)->get();
-        $countAccount = count($account);
-        
         $category = Account::where('is_active', 1)->distinct()->pluck('category')->toArray();
-        $countCategory = array();
         $allCategory = array();
         foreach($category as $c){
-            $count = count(Account::where([
-                ['is_active', 1],
-                ['category', $c]
-            ])->get());
-            array_push($countCategory, $count);
             array_push($allCategory, preg_replace('/\s+/', '', $c));
         }
 
-        $filter = $request->filter;
-
-        return view('finance-division.account.create', compact('category', 'allCategory', 'countCategory', 'filter', 'countAccount'));
+        return view('finance-division.account.create', compact('allCategory'));
     }
 
     /**
@@ -82,6 +74,12 @@ class FindivAccountController extends Controller
             'is_active' => 1,
         ]);
 
+        $log = ActivityLog::create([
+            'user_id' => Auth::id(),
+            'category' => 'account-store',
+            'activity_id' => $accountUuid,
+        ]);
+
         return redirect()->route('findiv.account-index')->with('message', 'Financial Account Successfully Added');
     }
 
@@ -104,25 +102,37 @@ class FindivAccountController extends Controller
      */
     public function edit(Request $request, $uuid)
     {
-        $account = Account::where('is_active', 1)->get();
-        $countAccount = count($account);
-
         $category = Account::where('is_active', 1)->distinct()->pluck('category')->toArray();
-        $countCategory = array();
         $allCategory = array();
         foreach($category as $c){
-            $count = count(Account::where([
-                ['is_active', 1],
-                ['category', $c]
-            ])->get());
-            array_push($countCategory, $count);
             array_push($allCategory, preg_replace('/\s+/', '', $c));
         }
 
-        $filter = $request->filter;
-        $data = Account::where("uuid", $uuid)->get();
+        $data = Account::where('is_active', 1)->where('uuid', $uuid)->get();
 
-        return view('finance-division.account.edit', compact('category', 'allCategory', 'countCategory', 'filter', 'countAccount', 'data', 'uuid'));
+        $log = ActivityLog::where('activity_id', $uuid)->where(function($query){
+            $query->where('category', 'system')
+            ->orWhere('category', 'account-store')
+            ->orWhere('category', 'account-update')
+            ->orWhere('category', 'account-delete');
+            })->get();
+        
+        $user = [];
+        foreach($log as $l){
+            if($l->user_id == 0){
+                array_push($user, 'system');
+            }
+            else{
+                array_push($user, User::where('id',$l->user_id)->get());
+            }
+        }
+
+        $activity = [];
+        for($i=0;$i<count($log);$i++){
+            array_push($activity, ['log' => $log[$i], 'user' => $user[$i]]);
+        }
+
+        return view('finance-division.account.edit', compact('allCategory', 'data', 'uuid', 'activity'));
     }
 
     /**
@@ -152,12 +162,25 @@ class FindivAccountController extends Controller
         ])->update(['is_active' => 0]);
 
         $accountUuid = Str::uuid()->toString();
+
+        $dataLog = ActivityLog::where('activity_id', $uuid)
+                    ->where(function($query){
+                        $query->where('category', 'like', '%account%')
+                        ->orWhere('category', 'system');
+                    })->update(['activity_id' => $accountUuid]);
+
         $account = Account::create([
             'uuid' => $accountUuid,
             'referral' => $validated['referral'],
             'name' => $validated['name'],
             'category' => $convCategory,
             'is_active' => 1,
+        ]);
+
+        $log = ActivityLog::create([
+            'user_id' => Auth::id(),
+            'category' => 'account-update',
+            'activity_id' => $accountUuid,
         ]);
 
         return redirect()->route('findiv.account-index')->with('message', 'Financial Account Successfully Updated');
@@ -180,10 +203,16 @@ class FindivAccountController extends Controller
             return redirect()->back()->with('message', 'Financial Account does not Exists');
         }
 
-        $checkAccount = Account::where([
+        $deleteAccount = Account::where([
             ["uuid", $uuid],
             ["is_active", 1],
         ])->update(['is_active' => 0]);
+
+        $log = ActivityLog::create([
+            'user_id' => Auth::id(),
+            'category' => 'account-delete',
+            'activity_id' => $uuid,
+        ]);
 
         return redirect()->route('findiv.account-index')->with('message', 'Financial Account Successfully Deleted');
     }

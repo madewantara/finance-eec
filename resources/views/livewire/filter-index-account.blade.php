@@ -22,7 +22,7 @@
                 </span>
                 <!--end::Svg Icon-->
                 <input type="text" data-kt-subscription-table-filter="search"
-                    class="form-control form-control-solid w-250px ps-14" wire:model="search"
+                    class="form-control form-control-solid mw-250px ps-14" wire:model="search"
                     placeholder="Search Account" />
             </div>
             <div class="d-flex align-items-center position-relative my-1 ms-3">
@@ -75,10 +75,10 @@
                         <form wire:submit.prevent="submitfiltercategory">
                             <div class="mb-10">
                                 <label class="form-label fs-6 fw-bold">Category:</label><br>
-                                <select class="form-control form-select form-select-solid fw-bolder"
-                                    wire:model.defer="filtercategory" id="filtercategory" name="filtercategory">
-                                    <option value="" class="form-control form-select form-select-solid fw-bolder"
-                                        selected>All</option>
+                                <select class="form-control form-select form-select-solid fw-bolder category-filter"
+                                    wire:model.defer="filtercategory" data-pharaonic="select2"
+                                    data-component-id="{{ $this->id }}" id="filtercategory" name="filtercategory">
+                                    <option></option>
                                     @foreach ($category as $c)
                                         <option value="{{ $c->category }}"
                                             class="form-control form-select form-select-solid fw-bolder">
@@ -161,7 +161,7 @@
     </div>
     <!--end::Card header-->
     <!--begin::Card body-->
-    <div class="card-body pt-0">
+    <div class="card-body pt-0 table-responsive">
         <!--begin::Table-->
         <table class="table align-middle table-row-dashed fs-6 gy-5" id="kt_subscriptions_table">
             <!--begin::Table head-->
@@ -174,7 +174,6 @@
                                 data-kt-check-target="#kt_subscriptions_table .form-check-input" value="1" />
                         </div>
                     </th>
-                    <th class="min-w-20px">No.</th>
                     <th class="min-w-125px">Account Code</th>
                     <th class="min-w-125px">Account Name</th>
                     <th class="min-w-70px">Category</th>
@@ -195,9 +194,6 @@
                         </td>
                         <!--end::Checkbox-->
                         <!--begin::Customer=-->
-                        <td>
-                            {{ ($account->currentPage() - 1) * $account->perPage() + $loop->iteration }}
-                        </td>
                         <td>
                             {{ $acc->referral }}
                         </td>
@@ -273,3 +269,39 @@
     </div>
     <!--end::Card body-->
 </div>
+
+@push('js')
+    <script src="{{ asset('vendor/pharaonic/pharaonic.select2.min.js') }}"></script>
+    <script>
+        $(document).ready(function() {
+            $('.category-filter').select2({
+                placeholder: "Select category",
+                closeOnSelect: true,
+                allowClear: true,
+                minimumResultsForSearch: -1,
+            });
+        });
+        $('.category-filter').on("select2:unselect", function(e) {
+            if (!e.params.originalEvent) {
+                return
+            }
+            e.params.originalEvent.stopPropagation();
+        });
+        document.addEventListener('livewire:load', function(event) {
+            @this.on('refreshFilterCategory', function() {
+                $('.category-filter').select2({
+                    placeholder: "Select account",
+                    closeOnSelect: true,
+                    allowClear: true,
+                    minimumResultsForSearch: -1,
+                });
+                $('.category-filter').on("select2:unselect", function(e) {
+                    if (!e.params.originalEvent) {
+                        return
+                    }
+                    e.params.originalEvent.stopPropagation();
+                });
+            });
+        });
+    </script>
+@endpush

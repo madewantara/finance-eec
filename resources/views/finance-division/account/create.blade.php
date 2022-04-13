@@ -6,10 +6,6 @@
 
 @section('sub-page-title', 'Add Account')
 
-@push('css')
-    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
-@endpush
-
 @section('content')
     <div class="d-flex flex-column flex-root">
         <!--begin::Page-->
@@ -21,74 +17,14 @@
                 <!--begin::Content-->
                 <div class="content d-flex flex-column flex-column-fluid" id="kt_content">
                     <!--begin::Container-->
-                    <div id="kt_content_container" class="container">
+                    <div id="kt_content_container" class="container-fluid">
                         <!--begin::Layout-->
                         <!--begin::Content-->
                         <div class="row me-lg-5 order-2 order-lg-1 mb-10 mb-lg-0">
-                            <div class="col-md-4 col-lg-3 col-xl-3 mt-2">
-                                <!--begin::Contact group wrapper-->
-                                <div class="card card-flush" id="kt_contacts_list">
-                                    <!--begin::Card header-->
-                                    <div class="card-header" id="kt_contacts_list_header">
-                                        <!--begin::Card title-->
-                                        <div class="card-title">
-                                            <h2 class="fw-bolder pt-7 pb-2">Category</h2>
-                                        </div>
-                                        <!--begin::Card title-->
-                                    </div>
-                                    <!--end::Card header-->
-                                    <!--begin::Card body-->
-                                    <div class="card-body pt-5" id="kt_contacts_list_body">
-                                        <!--begin::List-->
-                                        <div class="scroll-y me-n5 pe-5 h-300px h-xl-auto" data-kt-scroll="true"
-                                            data-kt-scroll-activate="{default: false, lg: true}"
-                                            data-kt-scroll-max-height="auto"
-                                            data-kt-scroll-dependencies="#kt_header, #kt_toolbar, #kt_footer, #kt_contacts_list_header"
-                                            data-kt-scroll-wrappers="#kt_content, #kt_contacts_list_body"
-                                            data-kt-scroll-stretch="#kt_contacts_list, #kt_contacts_main"
-                                            data-kt-scroll-offset="5px" style="max-height: 800px;">
-                                            <!--begin::Category-->
-                                            <div class="d-flex flex-column gap-5 mb-5">
-                                                <div class="d-flex flex-stack">
-                                                    <form id="formFilterAll"
-                                                        class="d-flex align-items-center position-relative w-100 m-0"
-                                                        autocomplete="off" action="" method="GET" role="search">
-                                                        <a href="javascript:{}"
-                                                            onclick="document.getElementById('formFilterAll').submit()"
-                                                            class="fs-6 fw-bolder @if ($filter == '') text-primary @else text-gray-800 @endif text-hover-primary text-active-primary">
-                                                            <input type="hidden" name="filter" id="filter"
-                                                                class="form-control" value="">All</a>
-                                                    </form>
-                                                    <div class="badge badge-light-primary">{{ $countAccount }}</div>
-                                                </div>
-                                            </div>
-                                            @foreach (array_combine($category, $countCategory) as $category => $countCategory)
-                                                <div class="d-flex flex-column gap-5 mb-5">
-                                                    <div class="d-flex flex-stack">
-                                                        <form id="formFilter{{ $category }}"
-                                                            class="d-flex align-items-center position-relative w-100 m-0"
-                                                            autocomplete="off" action="" method="GET" role="search">
-                                                            <a href="javascript:{}"
-                                                                onclick="document.getElementById('formFilter{{ $category }}').submit()"
-                                                                class="fs-6 fw-bolder @if ($filter == $category) text-primary @else text-gray-800 @endif text-hover-primary text-active-primary"
-                                                                active>
-                                                                <input type="hidden" name="filter" id="filter"
-                                                                    class="form-control"
-                                                                    value="{{ $category }}">{{ $category }}</a>
-                                                        </form>
-                                                        <div class="badge badge-light-primary">{{ $countCategory }}</div>
-                                                    </div>
-                                                </div>
-                                            @endforeach
-                                            <!--end::Category-->
-                                        </div>
-                                    </div>
-                                    <!--end::Card body-->
-                                </div>
-                                <!--end::Contact group wrapper-->
+                            <div class="col-lg-4 mt-2">
+                                @livewire('filter-create-account')
                             </div>
-                            @livewire('filter-create-account', ['filter' => $filter])
-                            <div class="col-md-4 col-lg-6 col-xl-6 mt-2">
+                            <div class="col-lg-5 mt-2">
                                 <!--begin::Card-->
                                 <div class="card card-flush pt-3 mb-5 mb-lg-10">
                                     <!--begin::Card header-->
@@ -124,9 +60,9 @@
                                                     style="font-size: 12px; display:block;">* Please use capital
                                                     letter for each word if
                                                     you add new category.</label>
-                                                <select class="form-control form-select mt-3" name="category" id="category"
-                                                    style="width:100%;">
-                                                    <option style="color:#181c32;" value="" disabled selected></option>
+                                                <select class="form-control form-select mt-3 category" name="category"
+                                                    id="category" data-pharaonic="select2">
+                                                    <option></option>
                                                     @foreach ($allCategory as $cat)
                                                         <option style="color:#181c32;" value={{ $cat }}>
                                                             {{ preg_replace('/([a-z])([A-Z])/s', '$1 $2', $cat) }}
@@ -146,6 +82,35 @@
                                 </div>
                                 <!--end::Card-->
                             </div>
+                            <!--begin::Sidebar-->
+                            <div class="col-lg-3 mt-2">
+                                <!--begin::Card-->
+                                <div class="card card-flush" data-kt-sticky="true" data-kt-sticky-name="invoice"
+                                    data-kt-sticky-offset="{default: false, lg: '200px'}" data-kt-sticky-left="auto"
+                                    data-kt-sticky-width="{lg: '405px', lg: '405px'}" data-kt-sticky-top="30px"
+                                    data-kt-sticky-animation="false" data-kt-sticky-zindex="95">
+                                    <div class="card-header pt-7">
+                                        <div class="card-title">
+                                            <h2 class="fw-bolder">Activity</h2>
+                                        </div>
+                                    </div>
+                                    <!--begin::Card body-->
+                                    <div class="card-body p-0 ps-10 pe-10 pb-10">
+                                        <div class="scroll-y me-n5 pe-5 h-550px" data-kt-scroll="true"
+                                            data-kt-scroll-activate="{default: false, lg: true}"
+                                            data-kt-scroll-offset="5px">
+                                            <div class="row mt-7">
+                                                <div class="col-lg-12">
+                                                    <p><i>There are no activities for this account</i></p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!--end::Card body-->
+                                </div>
+                                <!--end::Card-->
+                            </div>
+                            <!--end::Sidebar-->
                         </div>
                         <!--end::Content-->
                         <!--end::Layout-->
@@ -163,14 +128,14 @@
 @endsection
 
 @push('js')
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
-
+    <script src="{{ asset('vendor/pharaonic/pharaonic.select2.min.js') }}"></script>
     <script>
-        $("#category").select2({
-            placeholder: "-- Select Category --",
-            tags: true,
-            width: 'resolve'
+        $(document).ready(function() {
+            $('.category').select2({
+                placeholder: "Select category",
+                closeOnSelect: true,
+                allowClear: true,
+            });
         });
     </script>
 @endpush
