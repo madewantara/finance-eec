@@ -18,10 +18,14 @@ class AuthenticateFinanceDirector
      */
     public function handle(Request $request, Closure $next)
     {
+        if(empty(auth()->user())){
+            return redirect()->route('login')->with('error', 'Your session has expired! Please login to your account.');
+        }
+        
         $user = auth()->user()->userRole()->first()->user_id;
         $userRole = MapUserRole::where('user_id', $user)->first()->role_id;
         $role = Role::where('id', $userRole)->first()->role;
-
+        
         if(auth()->user() && $role == 'financedirector'){
             return $next($request);
         }

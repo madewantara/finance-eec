@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\Role;
 use App\Models\MapUserRole;
 use App\Models\User;
+use Alert;
 
 class AuthenticatedSessionController extends Controller
 {
@@ -31,12 +32,10 @@ class AuthenticatedSessionController extends Controller
      */
     public function store(LoginRequest $request)
     {
-        // $request->authenticate();
-
         $validated = $request->validated();
         $user = User::where('email', $request->email)->first();
         if(!$user){
-            return redirect()->route('login')->with('message', "Your E-mail Address Hasn't Been Registered");
+            return redirect()->route('login')->withError("Your e-mail address have not been registered");    
         }
 
         if(auth()->attempt($validated)){
@@ -45,8 +44,7 @@ class AuthenticatedSessionController extends Controller
             $role = Role::where('id', $userRole)->first()->role;
 
             if($role == 'financedivision'){
-                return redirect()->route('findiv.dashboard');
-                // return view('test1');
+                return redirect()->route('findiv.dashboard')->withSuccess('You have successfully logged into finance division portal.');
             }
             elseif($role == 'financedirector'){
                 return view('test2');
@@ -56,11 +54,8 @@ class AuthenticatedSessionController extends Controller
             }
         }
         else{
-            return redirect()->route('login')->with('error', 'Your Email Address or Password Are Wrong');
+            return redirect()->route('login')->withError('Your email address or password are wrong');
         }
-
-        // $request->session()->regenerate();
-        // return redirect()->intended(RouteServiceProvider::HOME);
     }
 
     /**
@@ -77,6 +72,6 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerateToken();
 
-        return redirect('/login');
+        return redirect('/login')->withSuccess('You have successfully logged out.');
     }
 }
