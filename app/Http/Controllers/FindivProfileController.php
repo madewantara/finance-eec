@@ -6,6 +6,11 @@ use Illuminate\Http\Request;
 
 class FindivProfileController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('finance.division');
+    }
+
     /**
      * Display a listing of the resource.
      *

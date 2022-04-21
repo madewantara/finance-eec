@@ -9,6 +9,11 @@ use Carbon\Carbon;
 
 class FindivProjectController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('finance.division');
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -22,8 +27,8 @@ class FindivProjectController extends Controller
         $avgContract = Project::avg('contract');
         $minContract = Project::min('contract');
         $maxContract = Project::max('contract');
-        $projectActive = Project::where('status', 1)->orWhere('status', 2)->get();
-        $projectActiveLim = Project::where('status', 1)->orWhere('status', 2)->limit(4)->get();
+        $projectActive = Project::where('status', 1)->orWhere('status', 2)->with('projectTransaction')->orderBy('id', 'desc')->get();
+        $projectActiveLim = Project::where('status', 1)->orWhere('status', 2)->orderBy('id', 'desc')->limit(4)->get();
 
         $projPerStat = [];
         foreach($status as $s){
@@ -183,7 +188,7 @@ class FindivProjectController extends Controller
     {
         $project = Project::where('uuid', $uuid)->with('projectCategory')->get();
         $projLocation = Project::where('uuid', $uuid)->with('projectLocation')->get();
-        return view('finance-division.project.show', compact('project', 'projLocation'));
+        return view('finance-division.project.show', compact('project', 'projLocation', 'uuid'));
     }
 
     /**
