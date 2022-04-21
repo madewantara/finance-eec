@@ -196,7 +196,7 @@
                     <!--begin:: Card body-->
                     <div class="card-body p-9">
                         <!--begin::Name-->
-                        <div class="fs-3 fw-bolder text-dark">{{ $p->name }}</div>
+                        <div class="fs-3 fw-bolder text-dark project-name">{{ $p->name }}</div>
                         <!--end::Name-->
                         <!--begin::Description-->
                         <p class="text-gray-400 fw-bold fs-5 mt-1 mb-7">
