@@ -16,7 +16,7 @@ class CreateAccountsTable extends Migration
         Schema::create('accounts', function (Blueprint $table) {
             $table->id();
             $table->uuid('uuid')->unique();
-            $table->string('referral')->unique();
+            $table->string('referral')->unique()->nullable();
             $table->string('name');
             $table->string('category');
             $table->integer('is_active');

@@ -1,4 +1,48 @@
 <div>
+    @if (Session::has('success'))
+        <div class="position-relative">
+            <div class="position-fixed bottom-0 end-0" style="bottom: 2% !important; right: 1% !important; z-index:2;">
+                <div class="alert alert-success alert-dismissible fade show d-flex align-items-center" role="alert">
+                    <span class="svg-icon svg-icon-2hx svg-icon-success me-4">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                            <path opacity="0.3"
+                                d="M20.5543 4.37824L12.1798 2.02473C12.0626 1.99176 11.9376 1.99176 11.8203 2.02473L3.44572 4.37824C3.18118 4.45258 3 4.6807 3 4.93945V13.569C3 14.6914 3.48509 15.8404 4.4417 16.984C5.17231 17.8575 6.18314 18.7345 7.446 19.5909C9.56752 21.0295 11.6566 21.912 11.7445 21.9488C11.8258 21.9829 11.9129 22 12.0001 22C12.0872 22 12.1744 21.983 12.2557 21.9488C12.3435 21.912 14.4326 21.0295 16.5541 19.5909C17.8169 18.7345 18.8277 17.8575 19.5584 16.984C20.515 15.8404 21 14.6914 21 13.569V4.93945C21 4.6807 20.8189 4.45258 20.5543 4.37824Z"
+                                fill="currentColor"></path>
+                            <path
+                                d="M10.5606 11.3042L9.57283 10.3018C9.28174 10.0065 8.80522 10.0065 8.51412 10.3018C8.22897 10.5912 8.22897 11.0559 8.51412 11.3452L10.4182 13.2773C10.8099 13.6747 11.451 13.6747 11.8427 13.2773L15.4859 9.58051C15.771 9.29117 15.771 8.82648 15.4859 8.53714C15.1948 8.24176 14.7183 8.24176 14.4272 8.53714L11.7002 11.3042C11.3869 11.6221 10.874 11.6221 10.5606 11.3042Z"
+                                fill="currentColor"></path>
+                        </svg>
+                    </span>
+                    <div>
+                        {{ Session::get('success') }}
+                    </div>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"
+                        style="5px !important;"></button>
+                </div>
+            </div>
+        </div>
+    @elseif (Session::has('error'))
+        <div class="position-relative">
+            <div class="position-fixed bottom-0 end-0" style="bottom: 2% !important; right: 1% !important; z-index:2;">
+                <div class="alert alert-danger alert-dismissible fade show d-flex align-items-center" role="alert">
+                    <span class="svg-icon svg-icon-2hx svg-icon-danger me-4">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                            <rect opacity="0.4" x="2" y="2" width="20" height="20" rx="10" fill="currentColor"></rect>
+                            <rect x="11" y="14" width="7" height="2" rx="1" transform="rotate(-90 11 14)"
+                                fill="currentColor"></rect>
+                            <rect x="11" y="17" width="2" height="2" rx="1" transform="rotate(-90 11 17)"
+                                fill="currentColor"></rect>
+                        </svg>
+                    </span>
+                    <div>
+                        {{ Session::get('error') }}
+                    </div>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"
+                        style="top:5px;"></button>
+                </div>
+            </div>
+        </div>
+    @endif
     <!--begin::Card header-->
     <div class="card-header border-0 pt-6">
         <!--begin::Card title-->
@@ -41,7 +85,7 @@
         <!--begin::Card toolbar-->
         <div class="card-toolbar">
             <!--begin::Toolbar-->
-            <div class="d-flex justify-content-end" data-kt-subscription-table-toolbar="base">
+            <div class="flex-row-fluid justify-content-end gap-5" data-kt-subscription-table-toolbar="base">
                 <!--begin::Filter-->
                 <button type="button" class="btn btn-light-primary me-3" data-kt-menu-trigger="click"
                     data-kt-menu-placement="bottom-end" data-kt-menu-flip="top-end">
@@ -237,14 +281,8 @@
                                 <!--end::Menu item-->
                                 <!--begin::Menu item-->
                                 <div class="menu-item px-3">
-                                    <form action="{{ route('findiv.account-destroy', ['uuid' => $acc->uuid]) }}"
-                                        method="POST" class="d-inline">
-                                        @csrf
-                                        @method('delete')
-                                        <button type="submit" data-kt-subscriptions-table-filter="delete_row"
-                                            class="btn-delete menu-link px-3 fw-bold"
-                                            onclick="return confirm('Are you sure to delete this data?')">Delete</button>
-                                    </form>
+                                    <button class="btn-delete menu-link px-3 fw-bold"
+                                        wire:click="confirmDelete('{{ $acc->uuid }}')">Delete</button>
                                 </div>
                                 <!--end::Menu item-->
                             </div>
@@ -272,6 +310,7 @@
 
 @push('js')
     <script src="{{ asset('vendor/pharaonic/pharaonic.select2.min.js') }}"></script>
+    <script src="{{ asset('vendor/sweetalert/sweetalert.all.js') }}"></script>
     <script>
         $(document).ready(function() {
             $('.category-filter').select2({
@@ -301,6 +340,42 @@
                     }
                     e.params.originalEvent.stopPropagation();
                 });
+            });
+        });
+    </script>
+    <script type="text/javascript">
+        document.addEventListener('DOMContentLoaded', function(event) {
+            @this.on('triggerDelete', uuid => {
+                Swal.fire({
+                    title: "Are you sure?",
+                    text: "If you delete this account, it will be permanently deleted.",
+                    icon: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#e4e6ef',
+                    cancelButtonText: '<span style="color:#7e8299">Cancel</span>',
+                    confirmButtonText: 'Yes, delete it!',
+                }).then((result) => {
+                    if (result.value) {
+                        @this.call('destroy', uuid)
+                    }
+                });
+            });
+        })
+    </script>
+    <script>
+        window.setTimeout(function() {
+            $(".alert").fadeTo(500, 0).slideUp(500, function() {
+                $(this).remove();
+            });
+        }, 5000);
+        document.addEventListener('livewire:load', function(event) {
+            @this.on('refreshNotification', function() {
+                window.setTimeout(function() {
+                    $(".alert").fadeTo(500, 0).slideUp(500, function() {
+                        $(this).remove();
+                    });
+                }, 5000);
             });
         });
     </script>

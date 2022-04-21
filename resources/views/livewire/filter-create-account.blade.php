@@ -35,7 +35,6 @@
                                 <a wire:click="submitfilteraccount('{{ $categories }}')"
                                     class="fs-6 fw-bolder @if ($this->category == $categories) text-primary @else text-gray-800 @endif text-hover-primary text-active-primary"
                                     active style="cursor: pointer">{{ $categories }}</a>
-                                </form>
                                 <div class="badge badge-light-primary">{{ $countCategory }}</div>
                             </div>
                         </div>
@@ -87,7 +86,7 @@
                                 <!--begin::Details-->
                                 <div class="ms-4">
                                     <a
-                                        class="fs-6 fw-bolder text-gray-900 text-hover-primary mb-2">{{ $search->name }}</a>
+                                        class="fs-6 fw-bolder text-gray-900 text-hover-primary mb-2">{{$search->referral}} - {{ $search->name }}</a>
                                     <div class="fw-bold fs-7 text-muted">{{ $search->category }}
                                     </div>
                                 </div>

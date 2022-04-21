@@ -17,6 +17,11 @@ use Illuminate\Support\Facades\Auth;
 
 class FindivAccountController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('finance.division');
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -25,7 +30,19 @@ class FindivAccountController extends Controller
     public function index()
     {
         $allCategory = Account::where('is_active', 1)->distinct()->pluck('category');
-        return view('finance-division.account.index', compact('allCategory'));
+        $categories = Account::where('is_active', 1)->distinct()->pluck('category')->toArray();
+        $account = Account::where('is_active', 1)->get();
+        $countAccount = count($account);
+        $countCategory = array();
+        foreach($categories as $c){
+            $count = count(Account::where([
+                ['is_active', 1],
+                ['category', $c]
+            ])->get());
+            array_push($countCategory, $count);
+        }
+
+        return view('finance-division.account.index', compact('allCategory', 'account', 'categories', 'countCategory'));
     }
 
     /**
@@ -53,7 +70,7 @@ class FindivAccountController extends Controller
     public function store(AccountRequest $request)
     {
         $validated = $request->validated();
-        $convCategory = $newstr = preg_replace('/([a-z])([A-Z])/s','$1 $2', $validated['category']);
+        $convCategory = preg_replace('/([a-z])([A-Z])/s','$1 $2', $validated['category']);
 
         $checkAccount = Account::where('is_active', 1)
                                 ->where(function($query) use ($validated){
@@ -62,7 +79,7 @@ class FindivAccountController extends Controller
                                 })->first();
 
         if($checkAccount){
-            return redirect()->back()->with('message', 'Financial Account Already Exists');
+            return redirect()->back()->withError('Financial account already exists');
         }
 
         $accountUuid = Str::uuid()->toString();
@@ -80,7 +97,7 @@ class FindivAccountController extends Controller
             'activity_id' => $accountUuid,
         ]);
 
-        return redirect()->route('findiv.account-index')->with('message', 'Financial Account Successfully Added');
+        return redirect()->route('findiv.account-index')->withSuccess('Financial account successfully added');
     }
 
     /**
@@ -153,13 +170,13 @@ class FindivAccountController extends Controller
                                   ->orWhere('name', $validated['name']);
                                 })->first();
         if($checkAccount){
-            return redirect()->back()->with('message', 'Financial Account Already Exists');
+            return redirect()->back()->withError('Financial account already exists');
         }
 
         $curAcc = Account::where([
             ["uuid", $uuid],
             ["is_active", 1],
-        ])->update(['is_active' => 0]);
+        ])->update(['is_active' => 0, 'referral' => NULL]);
 
         $accountUuid = Str::uuid()->toString();
 
@@ -183,7 +200,7 @@ class FindivAccountController extends Controller
             'activity_id' => $accountUuid,
         ]);
 
-        return redirect()->route('findiv.account-index')->with('message', 'Financial Account Successfully Updated');
+        return redirect()->route('findiv.account-index')->withSuccess('Financial account successfully updated');
     }
 
     /**
@@ -192,29 +209,9 @@ class FindivAccountController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($uuid)
+    public function destroy($id)
     {
-        $checkAccount = Account::where([
-            ["uuid", $uuid],
-            ["is_active", 1],
-        ])->get();
-
-        if(empty($checkAccount)){
-            return redirect()->back()->with('message', 'Financial Account does not Exists');
-        }
-
-        $deleteAccount = Account::where([
-            ["uuid", $uuid],
-            ["is_active", 1],
-        ])->update(['is_active' => 0]);
-
-        $log = ActivityLog::create([
-            'user_id' => Auth::id(),
-            'category' => 'account-delete',
-            'activity_id' => $uuid,
-        ]);
-
-        return redirect()->route('findiv.account-index')->with('message', 'Financial Account Successfully Deleted');
+        //
     }
 
     /**
@@ -237,22 +234,39 @@ class FindivAccountController extends Controller
         if($request->format == 'pdf'){
             $collectionData = array();
             $accountData = new Account;
-            foreach($request->exportcategory as $category){
-                if(!empty($category)){
-                    array_push($collectionData, $accountData->where('is_active' , 1)->where('category', $category)->distinct()->get());
+
+            if(!empty($request->exportcategory)){
+                foreach($request->exportcategory as $category){
+                    if(!empty($category)){
+                        array_push($collectionData, $accountData->where('is_active' , 1)->where('category', $category)->distinct()->get());
+                    }
+                }
+                $arrayData = array();
+                $accountArray = array('Referral Code', 'Name', 'Category');
+                foreach($collectionData as $account){
+                    foreach($account as $acc){
+                        $accountArray = array(
+                            'Referral Code' => $acc->referral,
+                            'Name' => $acc->name,
+                            'Category' => $acc->category,
+                        );
+                        array_push($arrayData, $accountArray);
+                    }
                 }
             }
-
-            $arrayData = array();
-            $accountArray = array('Referral Code', 'Name', 'Category');
-            foreach($collectionData as $account){
-                foreach($account as $acc){
-                    $accountArray = array(
-                        'Referral Code' => $acc->referral,
-                        'Name' => $acc->name,
-                        'Category' => $acc->category,
-                    );
-                    array_push($arrayData, $accountArray);
+            else{
+                $collectionData = $accountData->where('is_active' , 1)->get()->groupBy('category')->toArray();
+                $arrayData = array();
+                $accountArray = array('Referral Code', 'Name', 'Category');
+                foreach($collectionData as $account){
+                    foreach($account as $acc){
+                        $accountArray = array(
+                            'Referral Code' => $acc['referral'],
+                            'Name' => $acc['name'],
+                            'Category' => $acc['category'],
+                        );
+                        array_push($arrayData, $accountArray);
+                    }
                 }
             }
             

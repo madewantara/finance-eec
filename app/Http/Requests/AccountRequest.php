@@ -29,4 +29,18 @@ class AccountRequest extends FormRequest
             'category' => ['required', 'string'],
         ];
     }
+
+    /**
+     * Get the error messages for the defined validation rules.
+     *
+     * @return array
+     */
+    public function messages()
+    {
+        return [
+            'referral.required' => '*Referral is required',
+            'name.required' => '*Name is required',
+            'category.required' => '*Category is required',
+        ];
+    }
 }
