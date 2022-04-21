@@ -16,25 +16,42 @@ class AccountExport implements FromView
     public function view(): View
     {
         $collectionData = array();
-        $accountData = new Account;
-        foreach($this->request->exportcategory as $category){
-            if(!empty($category)){
-                array_push($collectionData, $accountData->where('is_active' , 1)->where('category', $category)->distinct()->get());
-            }
-        }
+            $accountData = new Account;
 
-        $arrayData = array();
-        $accountArray = array('Referral Code', 'Name', 'Category');
-        foreach($collectionData as $account){
-            foreach($account as $acc){
-                $accountArray = array(
-                    'Referral Code' => $acc->referral,
-                    'Name' => $acc->name,
-                    'Category' => $acc->category,
-                );
-                array_push($arrayData, $accountArray);
+            if(!empty($this->request->exportcategory)){
+                foreach($this->request->exportcategory as $category){
+                    if(!empty($category)){
+                        array_push($collectionData, $accountData->where('is_active' , 1)->where('category', $category)->distinct()->get());
+                    }
+                }
+                $arrayData = array();
+                $accountArray = array('Referral Code', 'Name', 'Category');
+                foreach($collectionData as $account){
+                    foreach($account as $acc){
+                        $accountArray = array(
+                            'Referral Code' => $acc->referral,
+                            'Name' => $acc->name,
+                            'Category' => $acc->category,
+                        );
+                        array_push($arrayData, $accountArray);
+                    }
+                }
             }
-        }
+            else{
+                $collectionData = $accountData->where('is_active' , 1)->get()->groupBy('category')->toArray();
+                $arrayData = array();
+                $accountArray = array('Referral Code', 'Name', 'Category');
+                foreach($collectionData as $account){
+                    foreach($account as $acc){
+                        $accountArray = array(
+                            'Referral Code' => $acc['referral'],
+                            'Name' => $acc['name'],
+                            'Category' => $acc['category'],
+                        );
+                        array_push($arrayData, $accountArray);
+                    }
+                }
+            }
 
         if($this->request->format == 'excel'){
             return view('finance-division.account.excel', ['arrayData' => $arrayData]);
