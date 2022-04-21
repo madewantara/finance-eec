@@ -17,12 +17,12 @@ class DatabaseSeeder extends Seeder
             UserSeeder::class,
             MapUserRoleSeeder::class,
             RoleSeeder::class,
-            AccountSeeder::class,
             ProjectSeeder::class,
             CategoryProjectSeeder::class,
             LocationProjectSeeder::class,
             TransactionSeeder::class,
             TransactionFilesSeeder::class,
+            BalanceSeeder::class,
         ]);
     }
 }
