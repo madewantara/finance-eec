@@ -17,15 +17,11 @@ use App\Http\Controllers\FindivAccountController;
 
 Route::get('/', function () {
     return view('welcome');
-});
-
-// Route::get('/dashboard', function () {
-//     return view('dashboard');
-// })->middleware(['auth'])->name('dashboard');
+})->name('dashboard');
 
 Route::group([
-    'middleware' => ['finance.division'],
-    'prefix' => 'finance-division'
+    'middleware' => 'finance.division',
+    'prefix' => 'finance-division',
 ], function ($router) {
     Route::get('/dashboard', [App\Http\Controllers\FindivDashboardController::class, 'index'])->name('findiv.dashboard');
 
@@ -35,7 +31,6 @@ Route::group([
     Route::post('/account/post', [App\Http\Controllers\FindivAccountController::class, 'store'])->name('findiv.account-post');
     Route::get('/account/edit/{uuid}', [App\Http\Controllers\FindivAccountController::class, 'edit'])->name('findiv.account-edit');
     Route::post('/account/update/{uuid}', [App\Http\Controllers\FindivAccountController::class, 'update'])->name('findiv.account-update');
-    Route::delete('/account/delete/{uuid}', [App\Http\Controllers\FindivAccountController::class, 'destroy'])->name('findiv.account-destroy');
     Route::get('/account/export', [App\Http\Controllers\FindivAccountController::class, 'export'])->name('findiv.account-export');
     
     //Cash Menu
@@ -44,6 +39,7 @@ Route::group([
     Route::post('/cash/post', [App\Http\Controllers\FindivCashController::class, 'store'])->name('findiv.cash-post');
     Route::get('/cash/{uuid}', [App\Http\Controllers\FindivCashController::class, 'show'])->name('findiv.cash-detail');
     Route::get('/cash/edit/{uuid}', [App\Http\Controllers\FindivCashController::class, 'edit'])->name('findiv.cash-edit');
+    Route::post('/cash/update/{uuid}', [App\Http\Controllers\FindivCashController::class, 'update'])->name('findiv.cash-update');
     Route::delete('/cash/delete/{uuid}', [App\Http\Controllers\FindivCashController::class, 'destroy'])->name('findiv.cash-destroy');
     Route::post('/cash/export', [App\Http\Controllers\FindivCashController::class, 'export'])->name('findiv.cash-export');
     Route::post('/cash/export/{uuid}', [App\Http\Controllers\FindivCashController::class, 'exportDetail'])->name('findiv.cash-detail-export');
