@@ -25,8 +25,8 @@
         <!--end::Aside mobile toggle-->
         <!--begin::Mobile logo-->
         <div class="d-flex align-items-center flex-grow-1 flex-lg-grow-0">
-            <a href="../../demo6/dist/index.html" class="d-lg-none">
-                <img alt="Logo" src="assets/media/logos/logo-3.svg" class="h-30px" />
+            <a href="{{ route('findiv.dashboard') }}" class="d-lg-none">
+                <img alt="Logo" src="{{ asset('assets/image/logo/logo.png') }}" class="h-30px" />
             </a>
         </div>
         <!--end::Mobile logo-->
@@ -67,7 +67,7 @@
                                         data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-dismiss="click"
                                         data-bs-placement="right">
                                         <span class="menu-icon">
-                                            <i class="bi bi-grid fs-3"></i>
+                                            <i class="bi bi-dot fs-3"></i>
                                         </span>
                                         <span class="menu-title">Cash</span>
                                     </a>
@@ -76,7 +76,7 @@
                                         data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-dismiss="click"
                                         data-bs-placement="right">
                                         <span class="menu-icon">
-                                            <i class="bi bi-grid fs-3"></i>
+                                            <i class="bi bi-dot fs-3"></i>
                                         </span>
                                         <span class="menu-title">Mandiri Operational</span>
                                     </a>
@@ -85,7 +85,7 @@
                                         data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-dismiss="click"
                                         data-bs-placement="right">
                                         <span class="menu-icon">
-                                            <i class="bi bi-grid fs-3"></i>
+                                            <i class="bi bi-dot fs-3"></i>
                                         </span>
                                         <span class="menu-title">Mandiri Escrow</span>
                                     </a>
@@ -107,178 +107,6 @@
             <div class="d-flex align-items-stretch flex-shrink-0">
                 <!--begin::Toolbar wrapper-->
                 <div class="d-flex align-items-stretch flex-shrink-0">
-                    <!--begin::Search-->
-                    <div class="d-flex align-items-stretch ms-1 ms-lg-3">
-                        <!--begin::Search-->
-                        <div id="kt_header_search" class="d-flex align-items-stretch" data-kt-search-keypress="true"
-                            data-kt-search-min-length="2" data-kt-search-enter="enter" data-kt-search-layout="menu"
-                            data-kt-menu-trigger="auto" data-kt-menu-overflow="false" data-kt-menu-permanent="true"
-                            data-kt-menu-placement="bottom-end" data-kt-menu-flip="bottom">
-                            <!--begin::Search toggle-->
-                            <div class="d-flex align-items-center" data-kt-search-element="toggle"
-                                id="kt_header_search_toggle">
-                                <div class="btn btn-icon btn-active-light-primary w-30px h-30px w-md-40px h-md-40px">
-                                    <i class="bi bi-search fs-2"></i>
-                                </div>
-                            </div>
-                            <!--end::Search toggle-->
-                            <!--begin::Menu-->
-                            <div data-kt-search-element="content"
-                                class="menu menu-sub menu-sub-dropdown p-7 w-325px w-md-375px">
-                                <!--begin::Wrapper-->
-                                <div data-kt-search-element="wrapper">
-                                    <!--begin::Form-->
-                                    <form data-kt-search-element="form" class="w-100 position-relative mb-3"
-                                        autocomplete="off">
-                                        <!--begin::Icon-->
-                                        <!--begin::Svg Icon | path: icons/duotone/General/Search.svg-->
-                                        <span
-                                            class="svg-icon svg-icon-2 svg-icon-lg-1 svg-icon-gray-500 position-absolute top-50 translate-middle-y ms-0">
-                                            <svg xmlns="http://www.w3.org/2000/svg"
-                                                xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px"
-                                                viewBox="0 0 24 24" version="1.1">
-                                                <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-                                                    <rect x="0" y="0" width="24" height="24" />
-                                                    <path
-                                                        d="M14.2928932,16.7071068 C13.9023689,16.3165825 13.9023689,15.6834175 14.2928932,15.2928932 C14.6834175,14.9023689 15.3165825,14.9023689 15.7071068,15.2928932 L19.7071068,19.2928932 C20.0976311,19.6834175 20.0976311,20.3165825 19.7071068,20.7071068 C19.3165825,21.0976311 18.6834175,21.0976311 18.2928932,20.7071068 L14.2928932,16.7071068 Z"
-                                                        fill="#000000" fill-rule="nonzero" opacity="0.3" />
-                                                    <path
-                                                        d="M11,16 C13.7614237,16 16,13.7614237 16,11 C16,8.23857625 13.7614237,6 11,6 C8.23857625,6 6,8.23857625 6,11 C6,13.7614237 8.23857625,16 11,16 Z M11,18 C7.13400675,18 4,14.8659932 4,11 C4,7.13400675 7.13400675,4 11,4 C14.8659932,4 18,7.13400675 18,11 C18,14.8659932 14.8659932,18 11,18 Z"
-                                                        fill="#000000" fill-rule="nonzero" />
-                                                </g>
-                                            </svg>
-                                        </span>
-                                        <!--end::Svg Icon-->
-                                        <!--end::Icon-->
-                                        <!--begin::Input-->
-                                        <input type="text" class="form-control form-control-flush ps-10" name="search"
-                                            value="" placeholder="Search..." data-kt-search-element="input" />
-                                        <!--end::Input-->
-                                        <!--begin::Spinner-->
-                                        <span class="position-absolute top-50 end-0 translate-middle-y lh-0 d-none me-1"
-                                            data-kt-search-element="spinner">
-                                            <span
-                                                class="spinner-border h-15px w-15px align-middle text-gray-400"></span>
-                                        </span>
-                                        <!--end::Spinner-->
-                                        <!--begin::Reset-->
-                                        <span
-                                            class="btn btn-flush btn-active-color-primary position-absolute top-50 end-0 translate-middle-y lh-0 d-none"
-                                            data-kt-search-element="clear">
-                                            <!--begin::Svg Icon | path: icons/duotone/Navigation/Close.svg-->
-                                            <span class="svg-icon svg-icon-2 svg-icon-lg-1 me-0">
-                                                <svg xmlns="http://www.w3.org/2000/svg"
-                                                    xmlns:xlink="http://www.w3.org/1999/xlink" width="24px"
-                                                    height="24px" viewBox="0 0 24 24" version="1.1">
-                                                    <g transform="translate(12.000000, 12.000000) rotate(-45.000000) translate(-12.000000, -12.000000) translate(4.000000, 4.000000)"
-                                                        fill="#000000">
-                                                        <rect fill="#000000" x="0" y="7" width="16" height="2" rx="1" />
-                                                        <rect fill="#000000" opacity="0.5"
-                                                            transform="translate(8.000000, 8.000000) rotate(-270.000000) translate(-8.000000, -8.000000)"
-                                                            x="0" y="7" width="16" height="2" rx="1" />
-                                                    </g>
-                                                </svg>
-                                            </span>
-                                            <!--end::Svg Icon-->
-                                        </span>
-                                        <!--end::Reset-->
-                                    </form>
-                                    <!--end::Form-->
-                                    <!--begin::Separator-->
-                                    <div class="separator border-gray-200 mb-6"></div>
-                                    <!--end::Separator-->
-                                    <!--begin::Recently viewed-->
-                                    <div class="mb-4" data-kt-search-element="main">
-                                        <!--begin::Heading-->
-                                        <div class="d-flex flex-stack fw-bold mb-4">
-                                            <!--begin::Label-->
-                                            <span class="text-muted fs-6 me-2">Recently Searched:</span>
-                                            <!--end::Label-->
-                                        </div>
-                                        <!--end::Heading-->
-                                        <!--begin::Items-->
-                                        <div class="scroll-y mh-200px mh-lg-325px">
-                                            <!--begin::Item-->
-                                            <div class="d-flex align-items-center mb-5">
-                                                <!--begin::Symbol-->
-                                                <div class="symbol symbol-40px me-4">
-                                                    <span class="symbol-label bg-light">
-                                                        <!--begin::Svg Icon | path: icons/duotone/Interface/Monitor.svg-->
-                                                        <span class="svg-icon svg-icon-2 svg-icon-primary">
-                                                            <svg xmlns="http://www.w3.org/2000/svg" width="24"
-                                                                height="24" viewBox="0 0 24 24" fill="none">
-                                                                <g opacity="0.25">
-                                                                    <path
-                                                                        d="M2 15C2 16.6569 3.34315 18 5 18L19 18C20.6569 18 22 16.6569 22 15V5C22 3.34315 20.6569 2 19 2H5C3.34315 2 2 3.34315 2 5V15Z"
-                                                                        fill="#12131A" />
-                                                                    <path
-                                                                        d="M8 20C7.44772 20 7 20.4477 7 21C7 21.5523 7.44772 22 8 22H16C16.5523 22 17 21.5523 17 21C17 20.4477 16.5523 20 16 20H8Z"
-                                                                        fill="#12131A" />
-                                                                </g>
-                                                                <path
-                                                                    d="M7 6C6.44772 6 6 6.44772 6 7C6 7.55228 6.44772 8 7 8H14C14.5523 8 15 7.55228 15 7C15 6.44772 14.5523 6 14 6H7Z"
-                                                                    fill="#12131A" />
-                                                                <path
-                                                                    d="M7 10C6.44772 10 6 10.4477 6 11C6 11.5523 6.44772 12 7 12H9C9.55229 12 10 11.5523 10 11C10 10.4477 9.55229 10 9 10H7Z"
-                                                                    fill="#12131A" />
-                                                            </svg>
-                                                        </span>
-                                                        <!--end::Svg Icon-->
-                                                    </span>
-                                                </div>
-                                                <!--end::Symbol-->
-                                                <!--begin::Title-->
-                                                <div class="d-flex flex-column">
-                                                    <a href="#"
-                                                        class="fs-6 text-gray-800 text-hover-primary fw-bold">BoomApp
-                                                        by Keenthemes</a>
-                                                    <span class="fs-7 text-muted fw-bold">#45789</span>
-                                                </div>
-                                                <!--end::Title-->
-                                            </div>
-                                            <!--end::Item-->
-                                        </div>
-                                        <!--end::Items-->
-                                    </div>
-                                    <!--end::Recently viewed-->
-                                    <!--begin::Empty-->
-                                    <div data-kt-search-element="empty" class="text-center d-none">
-                                        <!--begin::Icon-->
-                                        <div class="pt-10 pb-10">
-                                            <!--begin::Svg Icon | path: icons/duotone/Interface/File-Search.svg-->
-                                            <span class="svg-icon svg-icon-4x opacity-50">
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                                    viewBox="0 0 24 24" fill="none">
-                                                    <path opacity="0.25"
-                                                        d="M3 4C3 2.34315 4.34315 1 6 1H15.7574C16.553 1 17.3161 1.31607 17.8787 1.87868L20.1213 4.12132C20.6839 4.68393 21 5.44699 21 6.24264V20C21 21.6569 19.6569 23 18 23H6C4.34315 23 3 21.6569 3 20V4Z"
-                                                        fill="#12131A" />
-                                                    <path
-                                                        d="M15 1.89181C15 1.39927 15.3993 1 15.8918 1V1C16.6014 1 17.2819 1.28187 17.7836 1.78361L20.2164 4.21639C20.7181 4.71813 21 5.39863 21 6.10819V6.10819C21 6.60073 20.6007 7 20.1082 7H16C15.4477 7 15 6.55228 15 6V1.89181Z"
-                                                        fill="#12131A" />
-                                                    <path fill-rule="evenodd" clip-rule="evenodd"
-                                                        d="M13.032 15.4462C12.4365 15.7981 11.7418 16 11 16C8.79086 16 7 14.2091 7 12C7 9.79086 8.79086 8 11 8C13.2091 8 15 9.79086 15 12C15 12.7418 14.7981 13.4365 14.4462 14.032L16.7072 16.293C17.0977 16.6835 17.0977 17.3167 16.7072 17.7072C16.3167 18.0977 15.6835 18.0977 15.293 17.7072L13.032 15.4462ZM13 12C13 13.1046 12.1046 14 11 14C9.89543 14 9 13.1046 9 12C9 10.8954 9.89543 10 11 10C12.1046 10 13 10.8954 13 12Z"
-                                                        fill="#12131A" />
-                                                </svg>
-                                            </span>
-                                            <!--end::Svg Icon-->
-                                        </div>
-                                        <!--end::Icon-->
-                                        <!--begin::Message-->
-                                        <div class="pb-15 fw-bold">
-                                            <h3 class="text-gray-600 fs-5 mb-2">No result found</h3>
-                                            <div class="text-muted fs-7">Please try again with a different query</div>
-                                        </div>
-                                        <!--end::Message-->
-                                    </div>
-                                    <!--end::Empty-->
-                                </div>
-                                <!--end::Wrapper-->
-                            </div>
-                            <!--end::Menu-->
-                        </div>
-                        <!--end::Search-->
-                    </div>
-                    <!--end::Search-->
                     <!--begin::User-->
                     <div class="d-flex align-items-center ms-1 ms-lg-3" id="kt_header_user_menu_toggle">
                         <!--begin::Menu wrapper-->

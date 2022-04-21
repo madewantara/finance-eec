@@ -15,7 +15,7 @@
 		<meta property="og:site_name" content="Keenthemes | Metronic" />
 		<link rel="canonical" href="Https://preview.keenthemes.com/metronic8" /> --}}
 
-    <link rel="shortcut icon" href="{{ asset('assets/image/logo/main-logo.png') }}" />
+    <link rel="shortcut icon" href="{{ asset('assets/image/logo/logo.png') }}" />
 
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
@@ -28,11 +28,27 @@
 </head>
 
 <body @yield('body')>
-    @yield('content')
+    <div class="d-flex flex-column flex-root">
+        <!--begin::Page-->
+        <div class="page d-flex flex-row flex-column-fluid">
+            @include('layouts.sidebar.sidebar-findiv')
+            <!--begin::Wrapper-->
+            <div class="wrapper d-flex flex-column flex-row-fluid" id="kt_wrapper">
+                @include('layouts.header.header-findiv')
+                @yield('content')
+                @include('layouts.footer.footer-findiv')
+            </div>
+            <!--end::Wrapper-->
+        </div>
+        <!--end::Page-->
+    </div>
+    <!--end::Root-->
+
     <script src="{{ asset('assets/js/plugins.bundle.js') }}"></script>
     <script src="{{ asset('assets/js/scripts.bundle.js') }}"></script>
-    @stack('js')
+    @include('sweetalert::alert')
     @livewireScripts
+    @stack('js')
 </body>
 
 </html>

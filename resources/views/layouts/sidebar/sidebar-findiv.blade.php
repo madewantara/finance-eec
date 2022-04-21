@@ -6,8 +6,8 @@
     <!--begin::Brand-->
     <div class="aside-logo py-8" id="kt_aside_logo">
         <!--begin::Logo-->
-        <a href=".{{ asset('assets/image/logo/main-logo.png') }}" class="d-flex align-items-center">
-            <img alt="Logo" src="{{ asset('assets/image/logo/main-logo.png') }}" class="h-45px logo" />
+        <a href="{{ route('findiv.dashboard') }}" class="d-flex align-items-center">
+            <img alt="Logo" src="{{ asset('assets/image/logo/logo.png') }}" class="h-80px logo" />
         </a>
         <!--end::Logo-->
     </div>
@@ -21,31 +21,37 @@
             <!--begin::Menu-->
             <div class="menu menu-column menu-title-gray-700 menu-state-title-primary menu-state-icon-primary menu-state-bullet-primary menu-arrow-gray-500 fw-bold"
                 id="#kt_aside_menu" data-kt-menu="true">
-                <div class="menu-item py-2">
+                <div class="menu-item py-2 text-hover-primary">
                     <a class="menu-link menu-center" href="{{ route('findiv.dashboard') }}" data-bs-trigger="hover"
                         data-bs-dismiss="click" data-bs-placement="right">
+                        
                         <span class="menu-icon me-0">
-                            <i class="bi bi-house fs-2"></i>
+                            <i class="bi bi-house fs-2 @if (Route::currentRouteName() == 'findiv.dashboard') @yield('active-icon') @endif"
+                                style="color: #f5f5f58a"></i>
                         </span>
-                        <span class="menu-title">Dashboard</span>
+                        <span
+                            class="menu-title @if (Route::currentRouteName() == 'findiv.dashboard') @yield('active-link') @endif">Dashboard</span>
                     </a>
                 </div>
-                <div class="menu-item py-2">
+                <div class="menu-item py-2 text-hover-primary">
                     <a class="menu-link menu-center" href="{{ route('findiv.account-index') }}"
                         data-bs-trigger="hover" data-bs-dismiss="click" data-bs-placement="right">
                         <span class="menu-icon me-0">
-                            <i class="bi bi-file-text fs-2"></i>
+                            <i class="bi bi-file-text fs-2 @if (Route::currentRouteName() == 'findiv.account-create' || Route::currentRouteName() == 'findiv.account-index' || Route::currentRouteName() == 'findiv.account-edit') @yield('active-icon') @endif"
+                                style="color: #f5f5f58a"></i>
                         </span>
-                        <span class="menu-title">Accounts</span>
+                        <span
+                            class="menu-title @if (Route::currentRouteName() == 'findiv.account-create' || Route::currentRouteName() == 'findiv.account-index' || Route::currentRouteName() == 'findiv.account-edit') @yield('active-link') @endif">Accounts</span>
                     </a>
                 </div>
-                <div data-kt-menu-trigger="click" data-kt-menu-placement="right-start" class="menu-item py-2">
+                <div data-kt-menu-trigger="click" data-kt-menu-placement="right-start"
+                    class="menu-item py-2 text-hover-primary">
                     <span class="menu-link menu-center" data-bs-trigger="hover" data-bs-dismiss="click"
                         data-bs-placement="right">
                         <span class="menu-icon me-0">
-                            <i class="bi bi-journals fs-2"></i>
+                            <i class="bi bi-journals fs-2 @if (Route::currentRouteName() == 'findiv.cash-index' || Route::currentRouteName() == 'findiv.cash-create' || Route::currentRouteName() == 'findiv.cash-detail' || Route::currentRouteName() == 'findiv.cash-edit') @yield('active-icon') @endif" style="color: #f5f5f58a"></i>
                         </span>
-                        <span class="menu-title">Journals</span>
+                        <span class="menu-title @if (Route::currentRouteName() == 'findiv.cash-index' || Route::currentRouteName() == 'findiv.cash-create' || Route::currentRouteName() == 'findiv.cash-detail' || Route::currentRouteName() == 'findiv.cash-edit') @yield('active-link') @endif">Journals</span>
                     </span>
                     <div class="menu-sub menu-sub-dropdown w-225px px-1 py-4">
                         <div class="menu-item">
@@ -79,13 +85,14 @@
                         </div>
                     </div>
                 </div>
-                <div class="menu-item py-2">
+                <div class="menu-item py-2 text-hover-primary">
                     <a class="menu-link menu-center" href="{{ route('findiv.project-index') }}"
                         data-bs-trigger="hover" data-bs-dismiss="click" data-bs-placement="right">
                         <span class="menu-icon me-0">
-                            <i class="bi bi-patch-check fs-2"></i>
+                            <i class="bi bi-patch-check fs-2 text-hover-primary @if (Route::currentRouteName() == 'findiv.project-index' || Route::currentRouteName() == 'findiv.project-detail') @yield('active-icon') @endif"
+                                style="color: #f5f5f58a"></i>
                         </span>
-                        <span class="menu-title">Projects</span>
+                        <span class="menu-title @if (Route::currentRouteName() == 'findiv.project-index' || Route::currentRouteName() == 'findiv.project-detail') @yield('active-link') @endif">Projects</span>
                     </a>
                 </div>
             </div>
