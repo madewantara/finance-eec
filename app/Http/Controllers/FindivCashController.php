@@ -7,6 +7,7 @@ use App\Http\Requests\CashRequest;
 use App\Models\Transaction;
 use App\Models\TransactionFile;
 use App\Models\Account;
+use App\Models\Balance;
 use App\Models\ActivityLog;
 use App\Models\User;
 use App\Exports\CashExport;
@@ -15,9 +16,16 @@ use Carbon\Carbon;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Arr;
+use Storage;
 
 class FindivCashController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('finance.division');
+    }
+    
     /**
      * Display a listing of the resource.
      *
@@ -60,7 +68,7 @@ class FindivCashController extends Controller
         ])->first();
 
         if($checkExist){
-            return redirect()->back()->with('message', 'Transaction Already Exists');
+            return redirect()->back()->withError('Cash transaction already exists');
         }
 
         $transactionUuid = Str::uuid()->toString();
@@ -117,21 +125,19 @@ class FindivCashController extends Controller
 
         $arrAttachments = json_decode($validated['arrattachments']);
         if($request->file('attach')){
-            foreach($request->file('attach') as $attach){;
-                if($attach){
-                    $attachName = $attach->getClientOriginalName();
-                    foreach($arrAttachments as $atc){
-                        if($attachName == $atc){
-                            $attachStore = TransactionFile::create([
-                                'transaction_id' => $transactionUuid,
-                                'category' => 'cash',
-                                'type' => 2,
-                                'name' => $attachName,
-                            ]);
-                            $attachPath = $attach->storeAs('public/Cash/'.$transactionUuid, $attachName);
-                        }
+            foreach($request->file('attach') as $attach){
+                $attachName = $attach->getClientOriginalName();
+                foreach($arrAttachments as $atc){
+                    if($attachName == $atc){
+                        $attachStore = TransactionFile::create([
+                            'transaction_id' => $transactionUuid,
+                            'category' => 'cash',
+                            'type' => 2,
+                            'name' => $attachName,
+                        ]);
+                        $attachPath = $attach->storeAs('public/Cash/'.$transactionUuid, $attachName);
                     }
-                }            
+                }          
             }
         }
 
@@ -141,7 +147,7 @@ class FindivCashController extends Controller
             'activity_id' => $transactionUuid,
         ]);
 
-        return redirect()->route('findiv.cash-index')->with('message', 'Cash Transaction Successfully Added');
+        return redirect()->route('findiv.cash-index')->withSuccess('Cash transaction successfully added');
     }
 
     /**
@@ -230,12 +236,263 @@ class FindivCashController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  int  $uuid
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(CashRequest $request, $uuid)
     {
-        //
+        $validated = $request->validated();
+
+        $checkExist = NULL;
+        if($validated['token'] != $validated['oldToken']){
+            $checkExist = Transaction::where([
+                ['category', 'cash'],
+                ['is_active', 1],
+                ['token', $validated['token']],
+            ])->first();
+        }
+        
+        if($checkExist) {
+            return redirect()->back()->with('token', true)->withError('Cash transaction already exists');
+        }
+
+        $curTrans = Transaction::where([
+            ['category', 'cash'],
+            ['is_active', 1],
+            ['token', $validated['oldToken']],
+        ])->update(['is_active' => 0]);
+
+        $transUuid = Str::uuid()->toString();
+
+        $dataLog = ActivityLog::where('activity_id', $uuid)->where(function($query){
+                    $query->where('category', 'cash-store')
+                        ->orWhere('category', 'cash-update')
+                        ->orWhere('category', 'cash-delete')
+                        ->orWhere('category', 'cash-approved-findir')
+                        ->orWhere('category', 'cash-approved-excdir')
+                        ->orWhere('category', 'cash-rejected-findir')
+                        ->orWhere('category', 'cash-rejected-excdir')
+                        ->orWhere('category', 'cash-paid');
+                    })->get();
+        
+        foreach($dataLog as $dl){
+            ActivityLog::create([
+                'user_id' => $dl->user_id,
+                'category' => $dl->category,
+                'activity_id' => $transUuid,
+            ]);
+        }
+
+        $oldTrans = Transaction::where([
+            ['category', 'cash'],
+            ['is_active', 0],
+            ['token', $validated['oldToken']],
+            ['uuid', $uuid],
+        ])->get();
+
+        $oldReport = TransactionFile::where([
+            ['category', 'cash'],
+            ['transaction_id', $oldTrans[0]->uuid],
+            ['type', 1],
+        ])->get();
+        
+        $oldAttach = TransactionFile::where([
+            ['category', 'cash'],
+            ['transaction_id', $oldTrans[0]->uuid],
+            ['type', 2],
+        ])->get();
+
+        foreach($validated['transDebit'] as $td){
+            if(Arr::exists($validated, 'status')){
+                $transaction = Transaction::create([
+                    'uuid' => $transUuid,
+                    'date' => $validated['date'],
+                    'token' => $validated['token'],
+                    'description' => $td['descriptionDebit'],
+                    'referral_id' => $td['referralDebit'],
+                    'debit' => (int) preg_replace("/[^0-9]/", "", $td['debit']),
+                    'credit' => 0,
+                    'pic' => $validated['pic'],
+                    'paid_to' => $validated['paidto'],
+                    'project_id' => $validated['project'],
+                    'is_active' => 1,
+                    'type' => $validated['type'],
+                    'status' => $validated['status'],
+                    'category' => 'cash',
+                ]);
+            }else{
+                $transaction = Transaction::create([
+                    'uuid' => $transUuid,
+                    'date' => $validated['date'],
+                    'token' => $validated['token'],
+                    'description' => $td['descriptionDebit'],
+                    'referral_id' => $td['referralDebit'],
+                    'debit' => (int) preg_replace("/[^0-9]/", "", $td['debit']),
+                    'credit' => 0,
+                    'pic' => $validated['pic'],
+                    'paid_to' => $validated['paidto'],
+                    'project_id' => $validated['project'],
+                    'is_active' => 1,
+                    'type' => $validated['type'],
+                    'status' => $oldTrans[0]->status,
+                    'category' => 'cash',
+                ]);
+            }
+        }
+
+        foreach($validated['transCredit'] as $tc){
+            if(Arr::exists($validated, 'status')){
+                $transaction = Transaction::create([
+                    'uuid' => $transUuid,
+                    'date' => $validated['date'],
+                    'token' => $validated['token'],
+                    'description' => $tc['descriptionCredit'],
+                    'referral_id' => $tc['referralCredit'],
+                    'credit' => (int) preg_replace("/[^0-9]/", "", $tc['credit']),
+                    'debit' => 0,
+                    'pic' => $validated['pic'],
+                    'paid_to' => $validated['paidto'],
+                    'project_id' => $validated['project'],
+                    'is_active' => 1,
+                    'type' => $validated['type'],
+                    'status' => $validated['status'],
+                    'category' => 'cash',
+                ]);
+            }
+            else{
+                $transaction = Transaction::create([
+                    'uuid' => $transUuid,
+                    'date' => $validated['date'],
+                    'token' => $validated['token'],
+                    'description' => $tc['descriptionCredit'],
+                    'referral_id' => $tc['referralCredit'],
+                    'credit' => (int) preg_replace("/[^0-9]/", "", $tc['credit']),
+                    'debit' => 0,
+                    'pic' => $validated['pic'],
+                    'paid_to' => $validated['paidto'],
+                    'project_id' => $validated['project'],
+                    'is_active' => 1,
+                    'type' => $validated['type'],
+                    'status' => $oldTrans[0]->status,
+                    'category' => 'cash',
+                ]);
+            }
+        }
+
+        $report = $request->file('report');
+        if(Arr::exists($validated, 'report')){
+            $reportName = $report->getClientOriginalName();
+            $reportStore = TransactionFile::create([
+                'transaction_id' => $transUuid,
+                'category' => 'cash',
+                'type' => 1,
+                'name' => $reportName,
+            ]);
+            $reportPath = $report->storeAs('public/Cash/'.$transUuid, $reportName);
+        }else{
+            $reportStore = TransactionFile::create([
+                'transaction_id' => $transUuid,
+                'category' => 'cash',
+                'type' => 1,
+                'name' => $oldReport[0]->name,
+            ]);
+            Storage::copy('public/Cash/'.$oldTrans[0]->uuid.'/'.$oldReport[0]->name, 'public/Cash/'.$transUuid.'/'.$oldReport[0]->name);
+        }
+
+        $arrAttachments = json_decode($validated['arrattachments']);
+        if(Arr::exists($validated, 'attach')){
+            foreach($request->file('attach') as $attach){
+                $attachName = $attach->getClientOriginalName();
+                foreach($arrAttachments as $atc){
+                    if($attachName == $atc){
+                        $checkExistTempAttach = TransactionFile::where([
+                            'transaction_id' => $transUuid,
+                            'category' => 'cash',
+                            'type' => 2,
+                            'name' => $attachName,
+                        ])->get();
+
+                        if(count($checkExistTempAttach) == 0){
+                            $attachStore = TransactionFile::create([
+                                'transaction_id' => $transUuid,
+                                'category' => 'cash',
+                                'type' => 2,
+                                'name' => $attachName,
+                            ]);
+                        }
+
+                        if(Storage::exists('public/Cash/'.$transUuid.'/'.$attachName)) {
+                            continue;
+                        }else{
+                            $attachPath = $attach->storeAs('public/Cash/'.$transUuid, $attachName);
+                        }
+                    }
+                }         
+            }
+            foreach($oldAttach as $oa){
+                foreach($arrAttachments as $atc){
+                    if($oa->name == $atc){
+                        $checkExistTempAttach = TransactionFile::where([
+                            'transaction_id' => $transUuid,
+                            'category' => 'cash',
+                            'type' => 2,
+                            'name' => $oa->name,
+                        ])->get();
+                        
+                        if(count($checkExistTempAttach) == 0){
+                            $attachStore = TransactionFile::create([
+                                'transaction_id' => $transUuid,
+                                'category' => 'cash',
+                                'type' => 2,
+                                'name' => $oa->name,
+                            ]);
+                        }
+
+                        if(Storage::exists('public/Cash/'.$transUuid.'/'.$oa->name)) {
+                            continue;
+                        }else{
+                            Storage::copy('public/Cash/'.$oldTrans[0]->uuid.'/'.$oa->name, 'public/Cash/'.$transUuid.'/'.$oa->name);
+                        }
+                    }
+                }
+            }
+        }else{
+            foreach($oldAttach as $oa){
+                foreach($arrAttachments as $atc){
+                    if($oa->name == $atc){
+                        $checkExistTempAttach = TransactionFile::where([
+                            'transaction_id' => $transUuid,
+                            'category' => 'cash',
+                            'type' => 2,
+                            'name' => $oa->name,
+                        ])->get();
+                        
+                        if(count($checkExistTempAttach) == 0){
+                            $attachStore = TransactionFile::create([
+                                'transaction_id' => $transUuid,
+                                'category' => 'cash',
+                                'type' => 2,
+                                'name' => $oa->name,
+                            ]);
+                        }
+
+                        if(Storage::exists('public/Cash/'.$transUuid.'/'.$oa->name)) {
+                            continue;
+                        }else{
+                            Storage::copy('public/Cash/'.$oldTrans[0]->uuid.'/'.$oa->name, 'public/Cash/'.$transUuid.'/'.$oa->name);
+                        }
+                    }
+                }
+            }
+        }
+
+        $log = ActivityLog::create([
+            'user_id' => Auth::id(),
+            'category' => 'cash-update',
+            'activity_id' => $transUuid,
+        ]);
+
+        return redirect()->route('findiv.cash-index')->withSuccess('Cash transaction successfully updated');
     }
 
     /**
@@ -284,7 +541,7 @@ class FindivCashController extends Controller
                 if($request->projectsex){
                     $query->whereIn('project_id', $request->projectsex);
                 }
-            })->with(['transactionAccount', 'transactionProject', 'transactionFiles'])->get();
+            })->with(['transactionAccount', 'transactionProject', 'transactionFiles'])->orderBy('id', 'desc')->distinct()->get();
 
             $tempTrans = [];
             foreach($transaction as $t){
@@ -293,7 +550,7 @@ class FindivCashController extends Controller
 
             $dataTrans = [];
             foreach($tempTrans as $tr){
-                $model = Transaction::where('is_active', 1)->where('category', 'cash')->where('uuid', $tr)->with(['transactionAccount', 'transactionProject'])->get();
+                $model = Transaction::where('is_active', 1)->where('category', 'cash')->where('uuid', $tr)->with(['transactionAccount', 'transactionProject'])->orderBy('id', 'desc')->get();
                 $transUuid = [];
                 array_push($transUuid, $model);
                 array_push($dataTrans, $transUuid);

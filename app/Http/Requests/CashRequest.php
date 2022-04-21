@@ -24,12 +24,13 @@ class CashRequest extends FormRequest
     public function rules()
     {
         $rules = [
-            'date' => 'required|string',
-            'token' => 'required|string',
-            'project' => 'string',
-            'status' => 'string',
-            'pic' => 'string',
-            'paidto' => 'string',
+            'date' => 'required',
+            'token' => 'required',
+            'oldToken' => '',
+            'project' => '',
+            'status' => '',
+            'pic' => '',
+            'paidto' => 'required',
             'type' => 'required',
             'transDebit.*.descriptionDebit' => 'required',
             'transDebit.*.referralDebit' => 'required',
@@ -79,5 +80,18 @@ class CashRequest extends FormRequest
         }
 
         return $rules;
+    }
+
+    /**
+     * Get the error messages for the defined validation rules.
+     *
+     * @return array
+     */
+    public function messages()
+    {
+        return [
+            'report.mimes' => '*Only formats are allowed: .doc, .docx, .pdf, .jpg, .jpeg, .png.',
+            'attach.*.mimes' => '*Only formats are allowed: .doc, .docx, .pdf, .jpg, .jpeg, .png.',
+        ];
     }
 }

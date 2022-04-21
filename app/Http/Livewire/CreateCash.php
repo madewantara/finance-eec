@@ -20,9 +20,25 @@ class CreateCash extends Component
     public function mount(){
         $this->allProject = Project::with(["projectCategory", "projectLocation"])->get();
         $this->allReferral = Account::where('is_active', 1)->get();
-        $this->transDebit[] = ['descriptionDebit' => '', 'referralDebit' => '', 'debit' => 'Rp. 0'];
-        $this->transCredit[] = ['descriptionCredit' => '', 'referralCredit' => '', 'credit' => 'Rp. 0'];
+        
+        if(old('transDebit')){
+            foreach(old('transDebit') as $index => $od){
+                $this->transDebit[$index] = ['descriptionDebit' => $od['descriptionDebit'], 'referralDebit' => $od['referralDebit'], 'debit' => $od['debit']];
+            }
+        }else{
+            $this->transDebit[] = ['descriptionDebit' => '', 'referralDebit' => '', 'debit' => 'Rp. 0'];
+        }
+
+        if(old('transCredit')){
+            foreach(old('transCredit') as $index => $oc){
+                $this->transCredit[$index] = ['descriptionCredit' => $oc['descriptionCredit'], 'referralCredit' => $oc['referralCredit'], 'credit' => $oc['credit']];
+            }
+        }else{
+            $this->transCredit[] = ['descriptionCredit' => '', 'referralCredit' => '', 'credit' => 'Rp. 0'];
+        }
         $this->emit('refreshDropdown');
+        $this->emit('refreshValidation');
+        $this->emit('refreshNotification');
     }
 
     public function render()
@@ -49,9 +65,11 @@ class CreateCash extends Component
         $arrSumCredit = [];
 
         $this->currDate = Carbon::now()->format('Y-m-d');
-        
         $this->emit('refreshNominal');
         $this->emit('refreshDropdown');
+        $this->emit('refreshValidation');
+        $this->emit('refreshNotification');
+
         return view('livewire.create-cash');
     }
 
@@ -59,12 +77,16 @@ class CreateCash extends Component
         $this->transDebit[] = ['descriptionDebit' => '', 'referralDebit' => '', 'debit' => 'Rp. 0'];
         $this->emit('refreshDropdown');
         $this->emit('refreshNominal');
+        $this->emit('refreshValidation');
+        $this->emit('refreshNotification');
     }
     
     public function addCredit(){
         $this->transCredit[] = ['descriptionCredit' => '', 'referralCredit' => '', 'credit' => 'Rp. 0'];
         $this->emit('refreshDropdown');
         $this->emit('refreshNominal');
+        $this->emit('refreshValidation');
+        $this->emit('refreshNotification');
     }
 
     public function removeDebit($indexDebit){
@@ -72,6 +94,8 @@ class CreateCash extends Component
         array_values($this->transDebit);
         $this->emit('refreshDropdown');
         $this->emit('refreshNominal');
+        $this->emit('refreshValidation');
+        $this->emit('refreshNotification');
     }
 
     public function removeCredit($indexCredit){
@@ -79,6 +103,8 @@ class CreateCash extends Component
         array_values($this->transCredit);
         $this->emit('refreshDropdown');
         $this->emit('refreshNominal');
+        $this->emit('refreshValidation');
+        $this->emit('refreshNotification');
     }
 
     public function resetcash()
@@ -90,5 +116,7 @@ class CreateCash extends Component
         $this->transCredit[] = ['descriptionCredit' => '', 'referralCredit' => '', 'credit' => 'Rp. 0'];
         $this->emit('refreshDropdown');
         $this->emit('refreshNominal');
+        $this->emit('refreshValidation');
+        $this->emit('refreshNotification');
     }
 }

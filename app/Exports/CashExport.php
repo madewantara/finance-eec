@@ -32,7 +32,7 @@ class CashExport implements FromView
             if($this->request->projectsex){
                 $query->whereIn('project_id', $this->request->projectsex);
             }
-        })->with(['transactionAccount', 'transactionProject', 'transactionFiles'])->distinct()->get();
+        })->with(['transactionAccount', 'transactionProject', 'transactionFiles'])->orderBy('id', 'desc')->distinct()->get();
 
         $tempTrans = [];
         foreach($transaction as $t){
@@ -41,7 +41,7 @@ class CashExport implements FromView
 
         $dataTrans = [];
         foreach($tempTrans as $tr){
-            $model = Transaction::where('is_active', 1)->where('category', 'cash')->where('uuid', $tr)->with(['transactionAccount', 'transactionProject'])->get();
+            $model = Transaction::where('is_active', 1)->where('category', 'cash')->where('uuid', $tr)->with(['transactionAccount', 'transactionProject'])->orderBy('id', 'desc')->get();
             $transUuid = [];
             array_push($transUuid, $model);
             array_push($dataTrans, $transUuid);
