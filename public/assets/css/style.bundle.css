@@ -49385,6 +49385,22 @@ i.bi.bi-file-earmark-pdf-fill.text-danger.d-flex.flex-column.deleteAttach:hover 
     color: red !important;
 }
 
+i.bi.bi-file-earmark-excel.d-flex.flex-column.deleteAttach{
+    color: red !important;
+}
+
+i.bi.bi-file-earmark-excel.d-flex.flex-column.deleteAttach:hover{
+    color: #b00000 !important;
+}
+
+div.error-file{
+    color: red !important;
+}
+
+div.error-file:hover{
+    color: #b00000 !important;
+}
+
 div.deleteText:hover{
     color: red;
 }
@@ -49442,4 +49458,115 @@ span.select2-selection.select2-selection--single.form-control.form-control-white
 
 span.select2-selection.select2-selection--single.form-control.form-control-white.fw-bolder.pe-5.form-select.status.select2-selection--clearable{
     background-color: #f5f8fa;      
+}
+
+.fs-3.fw-bolder.text-dark.project-name:hover{
+    color: #009ef7 !important;
+}
+
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 30px;
+    height: 18px;
+}
+  
+.switch input { 
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    -webkit-transition: .4s;
+    transition: .4s;
+  }
+  
+  .slider:before {
+    position: absolute;
+    content: "";
+    height: 10px;
+    width: 10px;
+    left: 4px;
+    bottom: 4px;
+    background-color: white;
+    -webkit-transition: .4s;
+    transition: .4s;
+  }
+
+input:checked + .slider {
+    background-color: #2196F3;
+}
+
+input:focus + .slider {
+    box-shadow: 0 0 1px #2196F3;
+}
+
+input:checked + .slider:before {
+    -webkit-transform: translateX(12px);
+    -ms-transform: translateX(12px);
+    transform: translateX(12px);
+}
+
+.slider.round {
+    border-radius: 34px;
+}
+
+.slider.round:before {
+    border-radius: 50%;
+}
+
+body.swal2-height-auto{
+    height: 100% !important;
+}
+
+.swal2-styled.swal2-confirm {
+    background-color: #009ef7 !important;
+    padding: 10px 30px !important;
+    border-radius: 0.5rem !important;
+}
+
+.active-sidebar-icon{
+    color: #009ef7 !important;
+}
+
+.active-sidebar-link{
+    color: #fff !important;
+}
+
+.was-validated .custom-select:invalid + .select2 .select2-selection{
+    border-color: #f1416c !important;
+    padding-right: calc(1.5em + 1.5rem) !important;
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12' width='12' height='12' fill='none' stroke='%23F1416C'%3e%3ccircle cx='6' cy='6' r='4.5'/%3e%3cpath stroke-linejoin='round' d='M5.8 3.6h.4L6 6.5z'/%3e%3ccircle cx='6' cy='8.2' r='.6' fill='%23F1416C' stroke='none'/%3e%3c/svg%3e") !important;
+    background-repeat: no-repeat !important;
+    background-position: right calc(0.375em + 0.375rem) center !important;
+    background-size: calc(0.75em + 0.75rem) calc(0.75em + 0.75rem) !important;
+}
+
+.was-validated .custom-select:valid + .select2 .select2-selection{
+    border-color: #50cd89 !important;
+    padding-right: calc(1.5em + 1.5rem) !important;
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 8 8'%3e%3cpath fill='%2350CD89' d='M2.3 6.73L.6 4.53c-.4-1.04.46-1.4 1.1-.8l1.1 1.4 3.4-3.8c.6-.63 1.6-.27 1.2.7l-4 4.6c-.43.5-.8.4-1.1.1z'/%3e%3c/svg%3e") !important;
+    background-repeat: no-repeat !important;
+    background-position: right calc(0.375em + 0.375rem) center !important;
+    background-size: calc(0.75em + 0.75rem) calc(0.75em + 0.75rem) !important;
+}
+
+span.select2-selection.select2-selection--single.form-control.form-control-white.custom-select.fw-bolder.pe-5.form-select.status.add.select2-selection--clearable{
+    background-color: #7e82993b !important;
+}
+
+span.select2-selection.select2-selection--single.form-control.form-control-white.custom-select.fw-bolder.pe-5.form-select.status.add.disabled{
+    background-color: #7e82993b !important;
+}
+
+span.select2-selection.select2-selection--single.form-control.form-control-white.fw-bolder.pe-5.form-select.status.edit{
+    background-color: #f5f8fa !important;
 }
