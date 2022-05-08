@@ -4,7 +4,10 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Project;
+use App\Models\Transaction;
 use App\Models\CategoryProject;
+use App\Models\ActivityLog;
+use App\Models\User;
 use Carbon\Carbon;
 
 class FindivProjectController extends Controller
@@ -21,14 +24,68 @@ class FindivProjectController extends Controller
      */
     public function index()
     {
-        $project = Project::with("projectCategory")->get();
-        $status = Project::select('status')->distinct()->get();
-        $totalContract = Project::sum('contract');
-        $avgContract = Project::avg('contract');
-        $minContract = Project::min('contract');
-        $maxContract = Project::max('contract');
-        $projectActive = Project::where('status', 1)->orWhere('status', 2)->with('projectTransaction')->orderBy('id', 'desc')->get();
-        $projectActiveLim = Project::where('status', 1)->orWhere('status', 2)->orderBy('id', 'desc')->limit(4)->get();
+        $project = Project::where('is_active', 1)->with("projectCategory")->orderBy('status', 'asc')->get();
+        $status = Project::select('status')->where('is_active', 1)->distinct()->get();
+        $totalContract = Project::where('is_active', 1)->sum('contract');
+        $avgContract = Project::where('is_active', 1)->avg('contract');
+        $minContract = Project::where('is_active', 1)->min('contract');
+        $maxContract = Project::where('is_active', 1)->max('contract');
+        $projectActive = Project::where('is_active', 1)->where('status', 1)->orWhere('status', 2)->with('projectTransaction')->orderBy('id', 'desc')->get();
+        $projectActiveLim = Project::where('is_active', 1)->where('status', 1)->orWhere('status', 2)->orderBy('id', 'desc')->limit(4)->get();
+
+        $tempArrExp = [];
+        foreach($project as $p){
+            $expensePerProj = Transaction::where([
+                ['is_active', 1],
+                ['type', 2],
+                ['project_id', $p->id],
+            ])->get();
+            array_push($tempArrExp, $expensePerProj);
+        }
+
+        $tempSumExp = [];
+        foreach($tempArrExp as $tae){
+            $tempSumExpProj = [];
+            foreach($tae as $t){
+                if($t->credit == 0){
+                    array_push($tempSumExpProj, $t->debit);
+                }
+            }
+
+            if(!count($tae) == 0){
+                array_push($tempSumExp, $tempSumExpProj);
+            }else{
+                array_push($tempSumExp, []);
+            }
+        }
+        
+        $sumhighProjectExpanse = 0;
+        $arrhighProjectExpanse = [];
+        foreach($tempSumExp as $tse){
+            if(!empty($tse)){
+                foreach ($tse as $t){
+                    $sumhighProjectExpanse = $sumhighProjectExpanse + $t;
+                }
+            }else{
+                $sumhighProjectExpanse = 0;
+            }
+            array_push($arrhighProjectExpanse, $sumhighProjectExpanse);
+            $sumhighProjectExpanse = 0;
+        }
+        
+        $highProjectExpanse = $arrhighProjectExpanse[0];
+        for($i=1;$i<count($arrhighProjectExpanse);$i++){
+            if($arrhighProjectExpanse[$i] > $highProjectExpanse){
+                $highProjectExpanse = $arrhighProjectExpanse[$i];
+            }
+        }
+
+        $lowProjectExpanse = $arrhighProjectExpanse[0];
+        for($i=1;$i<count($arrhighProjectExpanse);$i++){
+            if($arrhighProjectExpanse[$i] < $lowProjectExpanse){
+                $lowProjectExpanse = $arrhighProjectExpanse[$i];
+            }
+        }
 
         $projPerStat = [];
         foreach($status as $s){
@@ -77,6 +134,7 @@ class FindivProjectController extends Controller
                 if($resultC1<$resultC2 && $resultC1<$resultC3){
                     array_push($result, 1);
                     Project::where([
+                        ['is_active', 1],
                         ['status',1],
                         ['uuid', $p->uuid],
                     ])->update(['priority' => 1]);
@@ -84,6 +142,7 @@ class FindivProjectController extends Controller
                 elseif($resultC2<$resultC1 && $resultC2<$resultC3){
                     array_push($result, 2);
                     Project::where([
+                        ['is_active', 1],
                         ['status',1],
                         ['uuid', $p->uuid],
                     ])->update(['priority' => 2]);
@@ -91,6 +150,7 @@ class FindivProjectController extends Controller
                 else{
                     array_push($result, 3);
                     Project::where([
+                        ['is_active', 1],
                         ['status',1],
                         ['uuid', $p->uuid],
                     ])->update(['priority' => 3]);
@@ -98,7 +158,7 @@ class FindivProjectController extends Controller
             }
 
             $itr += 1;
-            $priority = Project::where('status', 1)->pluck('priority');
+            $priority = Project::where('is_active', 1)->where('status', 1)->pluck('priority');
             if($initCluster != $result){
                 $status == 'false';
                 $initCluster = $result;
@@ -110,9 +170,9 @@ class FindivProjectController extends Controller
             }
 
             //New Centroid 1
-            $dataC1Contract = Project::select('contract')->where([['status',1],['priority',1]])->avg('contract');
-            $dataC1Category = Project::select('category_id')->where([['status',1],['priority',1]])->avg('category_id');
-            $dataC1 = Project::where([['status',1],['priority',1]])->get();
+            $dataC1Contract = Project::select('contract')->where([['is_active',1],['status',1],['priority',1]])->avg('contract');
+            $dataC1Category = Project::select('category_id')->where([['is_active',1],['status',1],['priority',1]])->avg('category_id');
+            $dataC1 = Project::where([['is_active',1],['status',1],['priority',1]])->get();
             $startDate1 = array();
             $duration1 = array();
             foreach($dataC1 as $dc1){
@@ -123,9 +183,9 @@ class FindivProjectController extends Controller
             $dataC1Duration = array_sum($duration1)/count($duration1);
 
             //New Centroid 2
-            $dataC2Contract = Project::select('contract')->where([['status',1],['priority',2]])->avg('contract');
-            $dataC2Category = Project::select('category_id')->where([['status',1],['priority',2]])->avg('category_id');
-            $dataC2 = Project::where([['status',1],['priority',2]])->get();
+            $dataC2Contract = Project::select('contract')->where([['is_active',1],['status',1],['priority',2]])->avg('contract');
+            $dataC2Category = Project::select('category_id')->where([['is_active',1],['status',1],['priority',2]])->avg('category_id');
+            $dataC2 = Project::where([['is_active',1],['status',1],['priority',2]])->get();
             $startDate2 = array();
             $duration2 = array();
             foreach($dataC2 as $dc2){
@@ -136,9 +196,9 @@ class FindivProjectController extends Controller
             $dataC2Duration = array_sum($duration2)/count($duration2);
 
             //New Centroid 3
-            $dataC3Contract = Project::select('contract')->where([['status',1],['priority',3]])->avg('contract');
-            $dataC3Category = Project::select('category_id')->where([['status',1],['priority',3]])->avg('category_id');
-            $dataC3 = Project::where([['status',1],['priority',3]])->get();
+            $dataC3Contract = Project::select('contract')->where([['is_active',1],['status',1],['priority',3]])->avg('contract');
+            $dataC3Category = Project::select('category_id')->where([['is_active',1],['status',1],['priority',3]])->avg('category_id');
+            $dataC3 = Project::where([['is_active',1],['status',1],['priority',3]])->get();
             $startDate3 = array();
             $duration3 = array();
             foreach($dataC3 as $dc3){
@@ -154,7 +214,7 @@ class FindivProjectController extends Controller
         }
         //End K-Means Clustering
 
-        return view('finance-division.project.index', compact('project', 'projPerStat', 'totalContract', 'avgContract', 'maxContract', 'minContract', 'projectActive', 'projectActiveLim'));
+        return view('finance-division.project.index', compact('project', 'projPerStat', 'totalContract', 'avgContract', 'maxContract', 'minContract', 'projectActive', 'projectActiveLim', 'highProjectExpanse', 'lowProjectExpanse', 'arrhighProjectExpanse'));
     }
 
     /**
@@ -186,9 +246,98 @@ class FindivProjectController extends Controller
      */
     public function show($uuid)
     {
-        $project = Project::where('uuid', $uuid)->with('projectCategory')->get();
-        $projLocation = Project::where('uuid', $uuid)->with('projectLocation')->get();
-        return view('finance-division.project.show', compact('project', 'projLocation', 'uuid'));
+        $project = Project::where('is_active', 1)->where('uuid', $uuid)->with('projectCategory')->get();
+        $projLocation = Project::where('is_active', 1)->where('uuid', $uuid)->with('projectLocation')->get();
+        $lastTrans = Transaction::select('uuid')->where([
+            ['is_active', 1],
+            ['type', 2],
+            ['project_id', $project[0]->id],
+        ])->orderBy('updated_at', 'desc')->distinct()->get();
+
+        $arrLastTrans = [];
+        foreach($lastTrans as $lt){
+            array_push($arrLastTrans, Transaction::where([
+                ['is_active', 1],
+                ['type', 2],
+                ['uuid', $lt->uuid],
+                ['debit', 0],
+            ])->get());
+        }
+
+        $totalProjTrans = [];
+        foreach($arrLastTrans as $alt){
+            $sumTrans = 0;
+            foreach($alt as $a){
+                $sumTrans = $sumTrans + $a->credit;
+            }
+            array_push($totalProjTrans, $sumTrans);
+            $sumTrans = 0;
+        }
+
+        $projFiles = Transaction::select('uuid')->where([
+                ['is_active', 1],
+                ['type', 2],
+                ['project_id', $project[0]->id],
+            ])->with('transactionFiles')->distinct()->get();
+        
+        $arrFiles = [];
+        foreach($projFiles as $pf){
+            if(empty($pf->transactionFiles)){
+                continue;
+            }else{
+                foreach($pf->transactionFiles as $pt){
+                    array_push($arrFiles, ['uuid' => $pt->transaction_id, 'category' => $pt->category, 'name' => $pt->name]);
+                }
+            }
+        }
+        krsort($arrFiles);
+        
+        $expensePerProj = Transaction::where([
+            ['is_active', 1],
+            ['type', 2],
+            ['project_id', $project[0]->id],
+        ])->get();
+
+        $tempSumExp = [];
+        foreach($expensePerProj as $epp){
+            if($epp->credit == 0){
+                array_push($tempSumExp, $epp->debit);
+            }
+        }
+        
+        $sumProjectExpanse = 0;
+        foreach($tempSumExp as $tse){
+            if($tse == 0){
+                $sumProjectExpanse = 0;
+            }else{
+                $sumProjectExpanse = $sumProjectExpanse + $tse;
+            }
+        }
+
+        $projActivity = Transaction::where([
+            ['is_active', 1],
+            ['type', 2],
+            ['project_id', $project[0]->id],
+        ])->get()->unique('uuid');
+
+        $arrProjActivity = [];
+        foreach($projActivity as $pa){
+            array_push($arrProjActivity, ActivityLog::where([
+                ['activity_id', $pa->uuid],
+                ['category', 'like', '%'.$pa->category.'%'],
+            ])->get());
+        }
+
+        $lastProjActivity = [];
+        foreach($arrProjActivity as $apa){
+            foreach($apa as $a){
+                $user = User::where('id', $a->user_id)->get();
+                array_push($lastProjActivity, [$user[0]->email, $a->category, $a->updated_at]);
+            }
+        }
+        krsort($lastProjActivity);
+
+        return view('finance-division.project.show', compact('project', 'projLocation', 'uuid', 'sumProjectExpanse', 'arrFiles', 'arrLastTrans', 'totalProjTrans', 'lastProjActivity'));
     }
 
     /**

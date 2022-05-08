@@ -21,6 +21,50 @@
 @endpush
 
 @section('content')
+    @if (Session::has('success'))
+        <div class="position-relative">
+            <div class="position-fixed bottom-0 end-0" style="bottom: 2% !important; right: 1% !important; z-index:2;">
+                <div class="alert alert-success alert-dismissible fade show d-flex align-items-center" role="alert">
+                    <span class="svg-icon svg-icon-2hx svg-icon-success me-4">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                            <path opacity="0.3"
+                                d="M20.5543 4.37824L12.1798 2.02473C12.0626 1.99176 11.9376 1.99176 11.8203 2.02473L3.44572 4.37824C3.18118 4.45258 3 4.6807 3 4.93945V13.569C3 14.6914 3.48509 15.8404 4.4417 16.984C5.17231 17.8575 6.18314 18.7345 7.446 19.5909C9.56752 21.0295 11.6566 21.912 11.7445 21.9488C11.8258 21.9829 11.9129 22 12.0001 22C12.0872 22 12.1744 21.983 12.2557 21.9488C12.3435 21.912 14.4326 21.0295 16.5541 19.5909C17.8169 18.7345 18.8277 17.8575 19.5584 16.984C20.515 15.8404 21 14.6914 21 13.569V4.93945C21 4.6807 20.8189 4.45258 20.5543 4.37824Z"
+                                fill="currentColor"></path>
+                            <path
+                                d="M10.5606 11.3042L9.57283 10.3018C9.28174 10.0065 8.80522 10.0065 8.51412 10.3018C8.22897 10.5912 8.22897 11.0559 8.51412 11.3452L10.4182 13.2773C10.8099 13.6747 11.451 13.6747 11.8427 13.2773L15.4859 9.58051C15.771 9.29117 15.771 8.82648 15.4859 8.53714C15.1948 8.24176 14.7183 8.24176 14.4272 8.53714L11.7002 11.3042C11.3869 11.6221 10.874 11.6221 10.5606 11.3042Z"
+                                fill="currentColor"></path>
+                        </svg>
+                    </span>
+                    <div>
+                        {{ Session::get('success') }}
+                    </div>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"
+                        style="5px !important;"></button>
+                </div>
+            </div>
+        </div>
+    @elseif (Session::has('error'))
+        <div class="position-relative">
+            <div class="position-fixed bottom-0 end-0" style="bottom: 2% !important; right: 1% !important; z-index:2;">
+                <div class="alert alert-danger alert-dismissible fade show d-flex align-items-center" role="alert">
+                    <span class="svg-icon svg-icon-2hx svg-icon-danger me-4">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                            <rect opacity="0.4" x="2" y="2" width="20" height="20" rx="10" fill="currentColor"></rect>
+                            <rect x="11" y="14" width="7" height="2" rx="1" transform="rotate(-90 11 14)"
+                                fill="currentColor"></rect>
+                            <rect x="11" y="17" width="2" height="2" rx="1" transform="rotate(-90 11 17)"
+                                fill="currentColor"></rect>
+                        </svg>
+                    </span>
+                    <div>
+                        {{ Session::get('error') }}
+                    </div>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"
+                        style="top:5px;"></button>
+                </div>
+            </div>
+        </div>
+    @endif
     <!--begin::Content-->
     <div class="content d-flex flex-column flex-column-fluid" id="kt_content">
         <!--begin::Container-->
@@ -48,10 +92,15 @@
                                     <span class="symbol-label text-inverse-primary fw-bolder"
                                         style="background-color: #f6910d; width:100%; height:100%; font-size:60px;">{{ strtoupper($project[0]->name[0]) }}</span>
                                 </div>
-                            @elseif($project[0]->projectCategory->category == 'Reinstallation')
+                            @elseif($project[0]->projectCategory->category == 'Radar Reinstallation')
                                 <div class="symbol bg-light" style="width: 100%; height: 100%">
                                     <span class="symbol-label text-inverse-primary fw-bolder"
                                         style="background-color:#9f4398; width:100%; height:100%; font-size:60px;">{{ strtoupper($project[0]->name[0]) }}</span>
+                                </div>
+                            @elseif($project[0]->projectCategory->category == 'Radar Spare Part')
+                                <div class="symbol bg-light" style="width: 100%; height: 100%">
+                                    <span class="symbol-label text-inverse-primary fw-bolder"
+                                        style="background-color:#00647b; width:100%; height:100%; font-size:60px;">{{ strtoupper($project[0]->name[0]) }}</span>
                                 </div>
                             @else
                                 <div class="symbol bg-light" style="width: 100%; height: 100%">
@@ -69,7 +118,7 @@
                                 <div class="d-flex flex-column">
                                     <!--begin::Status-->
                                     <div class="d-flex align-items-center mb-1">
-                                        <a href="{{route('findiv.project-detail', ['uuid' => $uuid])}}"
+                                        <a href="{{ route('findiv.project-detail', ['uuid' => $uuid]) }}"
                                             class="text-gray-800 text-hover-primary fs-2 fw-bolder me-3">{{ $project[0]->name }}</a>
                                         @if ($project[0]->status == 1)
                                             <span class="badge badge-light me-2">To
@@ -97,6 +146,7 @@
                                         @endif
                                     </div>
                                     <!--end::Status-->
+
                                     <!--begin::Description-->
                                     <div class="d-flex flex-wrap fw-bold mb-4 fs-5 text-gray-400">
                                         {{ $project[0]->projectCategory->category }}
@@ -104,62 +154,6 @@
                                     <!--end::Description-->
                                 </div>
                                 <!--end::Details-->
-                                <!--begin::Actions-->
-                                <div class="d-flex mb-4">
-                                    <!--begin::Menu-->
-                                    <div class="me-0">
-                                        <button class="btn btn-sm btn-icon btn-bg-light btn-active-color-primary"
-                                            data-kt-menu-trigger="click" data-kt-menu-placement="bottom-end">
-                                            <i class="bi bi-three-dots fs-3"></i>
-                                        </button>
-                                        <!--begin::Menu 3-->
-                                        <div class="menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-800 menu-state-bg-light-primary fw-bold w-200px py-3"
-                                            data-kt-menu="true">
-                                            <!--begin::Heading-->
-                                            <div class="menu-item px-3">
-                                                <div class="menu-content text-muted pb-2 px-3 fs-7 text-uppercase">
-                                                    Payments</div>
-                                            </div>
-                                            <!--end::Heading-->
-                                            <!--begin::Menu item-->
-                                            <div class="menu-item px-3">
-                                                <a href="#" class="menu-link flex-stack px-3">Create
-                                                    Payment
-                                                    <i class="fas fa-exclamation-circle ms-2 fs-7" data-bs-toggle="tooltip"
-                                                        title=""
-                                                        data-bs-original-title="Specify a target name for future usage and reference"
-                                                        aria-label="Specify a target name for future usage and reference"></i></a>
-                                            </div>
-                                            <!--end::Menu item-->
-                                            <!--begin::Menu item-->
-                                            <div class="menu-item px-3" data-kt-menu-trigger="hover"
-                                                data-kt-menu-placement="right-end">
-                                                <a href="#" class="menu-link px-3">
-                                                    <span class="menu-title">Quick Export</span>
-                                                    <span class="menu-arrow"></span>
-                                                </a>
-                                                <!--begin::Menu sub-->
-                                                <div class="menu-sub menu-sub-dropdown w-175px py-4">
-                                                    <!--begin::Menu item-->
-                                                    <div class="menu-item px-3">
-                                                        <a href="#" class="menu-link px-3">Excel</a>
-                                                    </div>
-                                                    <!--end::Menu item-->
-                                                    <!--begin::Menu item-->
-                                                    <div class="menu-item px-3">
-                                                        <a href="#" class="menu-link px-3">PDF</a>
-                                                    </div>
-                                                    <!--end::Menu item-->
-                                                </div>
-                                                <!--end::Menu sub-->
-                                            </div>
-                                            <!--end::Menu item-->
-                                        </div>
-                                        <!--end::Menu 3-->
-                                    </div>
-                                    <!--end::Menu-->
-                                </div>
-                                <!--end::Actions-->
                             </div>
                             <!--end::Head-->
                             <!--begin::Info-->
@@ -194,6 +188,29 @@
                                         <!--end::Label-->
                                     </div>
                                     <!--end::Stat-->
+                                    <!--begin::Users-->
+                                    <div
+                                        class="border border-gray-300 border-dashed rounded min-w-125px py-3 px-4 me-6 mb-3">
+                                        <!--begin::User-->
+                                        <div class="symbol symbol-35px symbol-circle me-3" data-bs-toggle="tooltip" title=""
+                                            data-bs-original-title={{ $project[0]->project_manager }}"
+                                            style="float:left;">
+                                            <span
+                                                class="symbol-label bg-warning text-inverse-warning fw-bolder">{{ strtoupper($project[0]->project_manager[0]) }}</span>
+                                        </div>
+                                        <!--end::User-->
+                                        <div class="d-flex align-items-center">
+                                            <div class="fs-4 fw-bolder counted">{{ $project[0]->project_manager }}</div>
+                                        </div>
+                                        <!--begin::Label-->
+                                        <div class="fw-bold fs-7 text-gray-400">Project
+                                            Manager
+                                        </div>
+                                        <!--end::Label-->
+                                    </div>
+                                    <!--end::Users-->
+                                </div>
+                                <div class="d-flex flex-wrap">
                                     <!--begin::Stat-->
                                     <div
                                         class="border border-gray-300 border-dashed rounded min-w-125px py-3 px-4 me-6 mb-3">
@@ -216,8 +233,54 @@
                                         class="border border-gray-300 border-dashed rounded min-w-125px py-3 px-4 me-6 mb-3">
                                         <!--begin::Number-->
                                         <div class="d-flex align-items-center">
+                                            @if ($project[0]->projectCategory->category == 'New Radar')
+                                                <div class="fs-4 fw-bolder counted">
+                                                    Rp.
+                                                    {{ number_format($project[0]->contract - $project[0]->contract * 0.015, 0, ',', '.') }}
+                                                </div>
+                                            @elseif($project[0]->projectCategory->category == 'Preventive Maintenance')
+                                                <div class="fs-4 fw-bolder counted">
+                                                    Rp.
+                                                    {{ number_format($project[0]->contract - $project[0]->contract * 0.02, 0, ',', '.') }}
+                                                </div>
+                                            @elseif($project[0]->projectCategory->category == 'Corrective Maintenance')
+                                                <div class="fs-4 fw-bolder counted">
+                                                    Rp.
+                                                    {{ number_format($project[0]->contract - $project[0]->contract * 0.02, 0, ',', '.') }}
+                                                </div>
+                                            @elseif($project[0]->projectCategory->category == 'Radar Reinstallation')
+                                                <div class="fs-4 fw-bolder counted">
+                                                    Rp.
+                                                    {{ number_format($project[0]->contract - $project[0]->contract * 0.015, 0, ',', '.') }}
+                                                </div>
+                                            @elseif($project[0]->projectCategory->category == 'Radar Spare Part')
+                                                <div class="fs-4 fw-bolder counted">
+                                                    Rp.
+                                                    {{ number_format($project[0]->contract - $project[0]->contract * 0.015, 0, ',', '.') }}
+                                                </div>
+                                            @else
+                                                <div class="fs-4 fw-bolder counted">
+                                                    Rp.
+                                                    {{ number_format($project[0]->contract - $project[0]->contract * 0.015, 0, ',', '.') }}
+                                                </div>
+                                            @endif
+                                        </div>
+                                        <!--end::Number-->
+                                        <!--begin::Label-->
+                                        <div class="fw-bold fs-7 text-gray-400">Nett Contract
+                                        </div>
+                                        <!--end::Label-->
+                                    </div>
+                                    <!--end::Stat-->
+                                    <!--begin::Stat-->
+                                    <div
+                                        class="border border-gray-300 border-dashed rounded min-w-125px py-3 px-4 me-6 mb-3">
+                                        <!--begin::Number-->
+                                        <div class="d-flex align-items-center">
                                             <div class="fs-4 fw-bolder counted" data-kt-countup="true"
-                                                data-kt-countup-value="15000" data-kt-countup-prefix="$">$15,000</div>
+                                                data-kt-countup-value="15000" data-kt-countup-prefix="$">
+                                                Rp.
+                                                {{ number_format($sumProjectExpanse, 0, ',', '.') }}</div>
                                         </div>
                                         <!--end::Number-->
                                         <!--begin::Label-->
@@ -226,25 +289,50 @@
                                         <!--end::Label-->
                                     </div>
                                     <!--end::Stat-->
-                                    <!--begin::Users-->
+                                    <!--begin::Stat-->
                                     <div
                                         class="border border-gray-300 border-dashed rounded min-w-125px py-3 px-4 me-6 mb-3">
-                                        <!--begin::User-->
-                                        <div class="symbol symbol-35px symbol-circle me-3" data-bs-toggle="tooltip" title=""
-                                            data-bs-original-title="Alan Warden" style="float:left;">
-                                            <span class="symbol-label bg-warning text-inverse-warning fw-bolder">A</span>
-                                        </div>
-                                        <!--end::User-->
+                                        <!--begin::Number-->
                                         <div class="d-flex align-items-center">
-                                            <div class="fs-4 fw-bolder counted">Alan Warden</div>
+                                            @if ($project[0]->projectCategory->category == 'New Radar')
+                                                <div class="fs-4 fw-bolder counted">
+                                                    Rp.
+                                                    {{ number_format($project[0]->contract - $project[0]->contract * 0.015 - $sumProjectExpanse, 0, ',', '.') }}
+                                                </div>
+                                            @elseif($project[0]->projectCategory->category == 'Preventive Maintenance')
+                                                <div class="fs-4 fw-bolder counted">
+                                                    Rp.
+                                                    {{ number_format($project[0]->contract - $project[0]->contract * 0.02 - $sumProjectExpanse, 0, ',', '.') }}
+                                                </div>
+                                            @elseif($project[0]->projectCategory->category == 'Corrective Maintenance')
+                                                <div class="fs-4 fw-bolder counted">
+                                                    Rp.
+                                                    {{ number_format($project[0]->contract - $project[0]->contract * 0.02 - $sumProjectExpanse, 0, ',', '.') }}
+                                                </div>
+                                            @elseif($project[0]->projectCategory->category == 'Radar Reinstallation')
+                                                <div class="fs-4 fw-bolder counted">
+                                                    Rp.
+                                                    {{ number_format($project[0]->contract - $project[0]->contract * 0.015 - $sumProjectExpanse, 0, ',', '.') }}
+                                                </div>
+                                            @elseif($project[0]->projectCategory->category == 'Radar Spare Part')
+                                                <div class="fs-4 fw-bolder counted">
+                                                    Rp.
+                                                    {{ number_format($project[0]->contract - $project[0]->contract * 0.015 - $sumProjectExpanse, 0, ',', '.') }}
+                                                </div>
+                                            @else
+                                                <div class="fs-4 fw-bolder counted">
+                                                    Rp.
+                                                    {{ number_format($project[0]->contract - $project[0]->contract * 0.015 - $sumProjectExpanse, 0, ',', '.') }}
+                                                </div>
+                                            @endif
                                         </div>
+                                        <!--end::Number-->
                                         <!--begin::Label-->
-                                        <div class="fw-bold fs-7 text-gray-400">Project
-                                            Manager
+                                        <div class="fw-bold fs-7 text-gray-400">Margin Budget
                                         </div>
                                         <!--end::Label-->
                                     </div>
-                                    <!--end::Users-->
+                                    <!--end::Stat-->
                                 </div>
                                 <!--end::Stats-->
 
@@ -300,8 +388,7 @@
                                     <!--begin::Card title-->
                                     <div class="card-title flex-column">
                                         <h3 class="fw-bolder mb-1">Latest Files</h3>
-                                        <div class="fs-6 text-gray-400">Total 382 fiels, 2,6GB space
-                                            usage</div>
+                                        <div class="fs-6 text-gray-400">Total {{ count($arrFiles) }} files</div>
                                     </div>
                                     <!--end::Card title-->
                                 </div>
@@ -310,23 +397,86 @@
                                 <div class="card-body p-9 pt-3">
                                     <!--begin::Files-->
                                     <div class="d-flex flex-column mb-9">
-                                        <!--begin::File-->
-                                        <div class="d-flex align-items-center mb-5">
-                                            <!--begin::Icon-->
-                                            <div class="symbol symbol-30px me-5">
-                                                <img alt="Icon" src="/metronic8/demo6/assets/media/svg/files/pdf.svg">
-                                            </div>
-                                            <!--end::Icon-->
-                                            <!--begin::Details-->
-                                            <div class="fw-bold">
-                                                <a class="fs-6 fw-bolder text-dark text-hover-primary" href="#">Project tech
-                                                    requirements</a>
-                                                <div class="text-gray-400">2 days ago
-                                                    <a href="#">Karina Clark</a>
+                                        @if (!empty($arrFiles))
+                                            @foreach (array_slice($arrFiles, 0, 5) as $index => $af)
+                                                <!--begin::File-->
+                                                <div class="d-flex align-items-center mb-5">
+                                                    <!--begin::Icon-->
+                                                    <div class="symbol symbol-30px me-5">
+                                                        @if (pathinfo($af['name'], PATHINFO_EXTENSION) == 'jpg' || pathinfo($af['name'], PATHINFO_EXTENSION) == 'png' || pathinfo($af['name'], PATHINFO_EXTENSION) == 'jpeg')
+                                                            <i class="bi bi-file-earmark-image-fill text-success attach-cash"
+                                                                style="font-size: 300%;margin-bottom:5%;"></i>
+                                                        @elseif(pathinfo($af['name'], PATHINFO_EXTENSION) == 'doc' || pathinfo($af['name'], PATHINFO_EXTENSION) == 'docx')
+                                                            <i class="bi bi-file-earmark-word-fill text-primary attach-cash"
+                                                                style="font-size: 300%;margin-bottom:5%;"></i>
+                                                        @elseif(pathinfo($af['name'], PATHINFO_EXTENSION) == 'pdf')
+                                                            <i class="bi bi-file-earmark-pdf-fill text-danger attach-cash"
+                                                                style="font-size: 300%;margin-bottom:5%;"></i>
+                                                        @endif
+                                                    </div>
+                                                    <!--end::Icon-->
+                                                    <!--begin::Details-->
+                                                    <div class="fw-bold">
+                                                        @if (pathinfo($af['name'], PATHINFO_EXTENSION) == 'jpg' || pathinfo($af['name'], PATHINFO_EXTENSION) == 'png' || pathinfo($af['name'], PATHINFO_EXTENSION) == 'jpeg')
+                                                            <a href="#" data-bs-toggle="modal"
+                                                                class="fs-6 fw-bolder text-dark text-hover-primary"
+                                                                data-bs-target="#fileModal{{ $index }}">{{ $af['name'] }}</a>
+                                                        @elseif(pathinfo($af['name'], PATHINFO_EXTENSION) == 'doc' || pathinfo($af['name'], PATHINFO_EXTENSION) == 'docx')
+                                                            <a href="#" data-bs-toggle="modal"
+                                                                class="fs-6 fw-bolder text-dark text-hover-primary"
+                                                                data-bs-target="#fileModal{{ $index }}">{{ $af['name'] }}</a>
+                                                        @elseif(pathinfo($af['name'], PATHINFO_EXTENSION) == 'pdf')
+                                                            <a class="fs-6 fw-bolder text-dark text-hover-primary"
+                                                                target="_blank"
+                                                                href="{{ asset('storage/' . ucfirst($af['category']) . '/' . $af['uuid'] . '/' . $af['name']) }}">{{ $af['name'] }}</a>
+                                                        @endif
+                                                        @if ($af['category'] == 'cash')
+                                                            <div class="text-gray-400">Cash Transaction</div>
+                                                        @elseif($af['category'] == 'operational')
+                                                            <div class="text-gray-400">Mandiri Operational Transaction
+                                                            </div>
+                                                        @else
+                                                            <div class="text-gray-400">Mandiri Escrow Transaction</div>
+                                                        @endif
+                                                    </div>
+                                                    <!--end::Details-->
+                                                    <div class="modal fade" id="fileModal{{ $index }}"
+                                                        tabindex="-1" aria-hidden="true">
+                                                        <div class="modal-dialog modal-fullscreen">
+                                                            <div class="modal-content">
+                                                                <div class="modal-header">
+                                                                    <h5 class="modal-title" id="modalLabel">
+                                                                        {{ $af['name'] }}
+                                                                    </h5>
+                                                                    <button type="button" class="btn-close"
+                                                                        data-bs-dismiss="modal" aria-label="Close"></button>
+                                                                </div>
+                                                                <div class="modal-body text-center">
+                                                                    @if (pathinfo($af['name'], PATHINFO_EXTENSION) == 'doc' || pathinfo($af['name'], PATHINFO_EXTENSION) == 'docx')
+                                                                        <iframe
+                                                                            src='https://view.officeapps.live.com/op/embed.aspx?src={{ asset('storage/' . ucfirst($af['category']) . '/' . $af['uuid'] . '/' . $af['name']) }}'
+                                                                            width='100%' height='100%'
+                                                                            frameborder='0'></iframe>
+                                                                    @elseif(pathinfo($af['name'], PATHINFO_EXTENSION) == 'jpg' || pathinfo($af['name'], PATHINFO_EXTENSION) == 'png' || pathinfo($af['name'], PATHINFO_EXTENSION) == 'jpeg')
+                                                                        <img class="img img-fluid"
+                                                                            src="{{ asset('storage/' . ucfirst($af['category']) . '/' . $af['uuid'] . '/' . $af['name']) }}"
+                                                                            alt="{{ $af['name'] }}"
+                                                                            style="max-width: 100%; height: auto;">
+                                                                    @endif
+                                                                </div>
+                                                                <div class="modal-footer">
+                                                                    <button type="button" class="btn btn-secondary"
+                                                                        data-bs-dismiss="modal">Close</button>
+                                                                    <a type="button" class="btn btn-primary"
+                                                                        href="{{ asset('storage/' . ucfirst($af['category']) . '/' . $af['uuid'] . '/' . $af['name']) }}"
+                                                                        download="">Download</a>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                            <!--end::Details-->
-                                        </div>
+                                            @endforeach
+                                        @endif
                                         <!--end::File-->
                                     </div>
                                     <!--end::Files-->
@@ -345,7 +495,7 @@
                                     <!--begin::Card title-->
                                     <div class="card-title flex-column">
                                         <h3 class="fw-bolder mb-1">Latest Transaction</h3>
-                                        <div class="fs-6 text-gray-400">From total 482 Participants
+                                        <div class="fs-6 text-gray-400">Total {{ count($arrLastTrans) }} transactions
                                         </div>
                                     </div>
                                     <!--end::Card title-->
@@ -353,31 +503,49 @@
                                 <!--end::Card toolbar-->
                                 <!--begin::Card body-->
                                 <div class="card-body d-flex flex-column p-9 pt-3 mb-9">
-                                    <!--begin::Item-->
-                                    <div class="d-flex align-items-center mb-5">
-                                        <!--begin::Avatar-->
-                                        <div class="me-5 position-relative">
-                                            <!--begin::Image-->
-                                            <div class="symbol symbol-35px symbol-circle">
-                                                <img alt="Pic" src="/metronic8/demo6/assets/media/avatars/300-6.jpg">
+                                    @foreach (array_slice($arrLastTrans, 0, 5) as $index => $alt)
+                                        <!--begin::Item-->
+                                        <div class="d-flex align-items-center mb-5">
+                                            <!--begin::Avatar-->
+                                            <div class="me-5 position-relative">
+                                                <!--begin::Image-->
+                                                <div class="symbol symbol-35px symbol-circle">
+                                                    @if ($alt[0]->category == 'cash')
+                                                        <span
+                                                            class="symbol-label bg-success text-inverse-primary fw-bolder">C</span>
+                                                    @elseif($alt[0]->category == 'operational')
+                                                        <span
+                                                            class="symbol-label bg-primary text-inverse-primary fw-bolder">O</span>
+                                                    @else
+                                                        <span
+                                                            class="symbol-label bg-danger text-inverse-primary fw-bolder">E</span>
+                                                    @endif
+                                                </div>
+                                                <!--end::Image-->
                                             </div>
-                                            <!--end::Image-->
+                                            <!--end::Avatar-->
+                                            <!--begin::Details-->
+                                            <div class="fw-bold">
+                                                @if ($alt[0]->category == 'cash')
+                                                    <a href="{{ route('findiv.cash-detail', ['uuid' => $alt[0]->uuid]) }}"
+                                                        class="fs-5 fw-bolder text-gray-900 text-hover-primary">Cash
+                                                        Transaction - {{ $alt[0]->token }}</a>
+                                                @elseif($alt[0]->category == 'operational')
+                                                    <a href="{{ route('findiv.operational-detail', ['uuid' => $alt[0]->uuid]) }}"
+                                                        class="fs-5 fw-bolder text-gray-900 text-hover-primary">Mandiri
+                                                        Operational Transaction - {{ $alt[0]->token }}</a>
+                                                @else
+                                                    <a href="{{ route('findiv.escrow-detail', ['uuid' => $alt[0]->uuid]) }}"
+                                                        class="fs-5 fw-bolder text-gray-900 text-hover-primary">Mandiri
+                                                        Escrow Transaction - {{ $alt[0]->token }}</a>
+                                                @endif
+                                                <div class="text-gray-400">Total transaction : Rp.
+                                                    {{ number_format($totalProjTrans[$index], 0, ',', '.') }}</div>
+                                            </div>
+                                            <!--end::Details-->
                                         </div>
-                                        <!--end::Avatar-->
-                                        <!--begin::Details-->
-                                        <div class="fw-bold">
-                                            <a href="#" class="fs-5 fw-bolder text-gray-900 text-hover-primary">Emma
-                                                Smith</a>
-                                            <div class="text-gray-400">8 Pending &amp; 97
-                                                Completed
-                                                Tasks</div>
-                                        </div>
-                                        <!--end::Details-->
-                                        <!--begin::Badge-->
-                                        <div class="badge badge-light ms-auto">5</div>
-                                        <!--end::Badge-->
-                                    </div>
-                                    <!--end::Item-->
+                                        <!--end::Item-->
+                                    @endforeach
                                 </div>
                                 <!--end::Card body-->
                             </div>
@@ -393,7 +561,7 @@
                                     <!--begin::Card title-->
                                     <div class="card-title flex-column">
                                         <h3 class="fw-bolder mb-1">Latest Activity</h3>
-                                        <div class="fs-6 text-gray-400">From total 482 Participants
+                                        <div class="fs-6 text-gray-400">Total {{ count($lastProjActivity) }} activities
                                         </div>
                                     </div>
                                     <!--end::Card title-->
@@ -402,29 +570,275 @@
                                 <!--begin::Card body-->
                                 <div class="card-body d-flex flex-column p-9 pt-3 mb-9">
                                     <!--begin::Item-->
-                                    <div class="d-flex align-items-center mb-5">
-                                        <!--begin::Avatar-->
-                                        <div class="me-5 position-relative">
-                                            <!--begin::Image-->
-                                            <div class="symbol symbol-35px symbol-circle">
-                                                <img alt="Pic" src="/metronic8/demo6/assets/media/avatars/300-6.jpg">
+                                    @foreach (array_slice($lastProjActivity, 0, 6) as $lpa)
+                                        <div class="d-flex align-items-center mb-5">
+                                            <!--begin::Avatar-->
+                                            <div class="me-5 position-relative">
+                                                <!--begin::Image-->
+                                                <div class="symbol symbol-35px symbol-circle">
+                                                    @if (explode('-', trim($lpa[1]))[0] == 'cash')
+                                                        <span
+                                                            class="symbol-label bg-success text-inverse-primary fw-bolder">{{ ucfirst($lpa[0][0]) }}</span>
+                                                    @elseif(explode('-', trim($lpa[1]))[0] == 'operational')
+                                                        <span
+                                                            class="symbol-label bg-primary text-inverse-primary fw-bolder">{{ ucfirst($lpa[0][0]) }}</span>
+                                                    @elseif(explode('-', trim($lpa[1]))[0] == 'escrow')
+                                                        <span
+                                                            class="symbol-label bg-danger text-inverse-primary fw-bolder">{{ ucfirst($lpa[0][0]) }}</span>
+                                                    @endif
+                                                </div>
+                                                <!--end::Image-->
                                             </div>
-                                            <!--end::Image-->
+                                            <!--end::Avatar-->
+                                            <!--begin::Details-->
+                                            <div class="fw-bold">
+                                                <div class="fs-5 fw-bolder text-gray-900 text-dark">
+                                                    @if ($lpa[1] == 'cash-store')
+                                                        <div class="text-gray-900 fs-6">Has <i
+                                                                class="text-dark fw-bolder">created</i>
+                                                            this
+                                                            transaction on
+                                                            {{ $lpa[2]->format('l, jS \of F Y h:i:s A') }}
+                                                        </div>
+                                                        <div class="text-gray-400 fs-7">
+                                                            {{ ucfirst(explode('-', trim($lpa[1]))[0]) }} transaction
+                                                        </div>
+                                                    @elseif ($lpa[1] == 'cash-update')
+                                                        <div class="text-gray-900 fs-6">Has <i
+                                                                class="text-dark fw-bolder">updated</i>
+                                                            this
+                                                            transaction on
+                                                            {{ $lpa[2]->format('l, jS \of F Y h:i:s A') }}
+                                                        </div>
+                                                        <div class="text-gray-400 fs-7">
+                                                            {{ ucfirst(explode('-', trim($lpa[1]))[0]) }} transaction
+                                                        </div>
+                                                    @elseif ($lpa[1] == 'cash-delete')
+                                                        <div class="text-gray-900 fs-6">Has <i
+                                                                class="text-dark fw-bolder">deleted</i>
+                                                            this
+                                                            transaction on
+                                                            {{ $lpa[2]->format('l, jS \of F Y h:i:s A') }}
+                                                        </div>
+                                                        <div class="text-gray-400 fs-7">
+                                                            {{ ucfirst(explode('-', trim($lpa[1]))[0]) }} transaction
+                                                        </div>
+                                                    @elseif ($lpa[1] == 'cash-approved-findir')
+                                                        <div class="text-gray-900 fs-6">Has <i
+                                                                class="text-dark fw-bolder">approved</i>
+                                                            this
+                                                            transaction on
+                                                            {{ $lpa[2]->format('l, jS \of F Y h:i:s A') }}
+                                                        </div>
+                                                        <div class="text-gray-400 fs-7">
+                                                            {{ ucfirst(explode('-', trim($lpa[1]))[0]) }} transaction
+                                                        </div>
+                                                    @elseif ($lpa[1] == 'cash-approved-excdir')
+                                                        <div class="text-gray-900 fs-6">Has <i
+                                                                class="text-dark fw-bolder">approved</i>
+                                                            this
+                                                            transaction on
+                                                            {{ $lpa[2]->format('l, jS \of F Y h:i:s A') }}
+                                                        </div>
+                                                        <div class="text-gray-400 fs-7">
+                                                            {{ ucfirst(explode('-', trim($lpa[1]))[0]) }} transaction
+                                                        </div>
+                                                    @elseif ($lpa[1] == 'cash-rejected-findir')
+                                                        <div class="text-gray-900 fs-6">Has <i
+                                                                class="text-dark fw-bolder">rejected</i>
+                                                            this
+                                                            transaction on
+                                                            {{ $lpa[2]->format('l, jS \of F Y h:i:s A') }}
+                                                        </div>
+                                                        <div class="text-gray-400 fs-7">
+                                                            {{ ucfirst(explode('-', trim($lpa[1]))[0]) }} transaction
+                                                        </div>
+                                                    @elseif ($lpa[1] == 'cash-rejected-excdir')
+                                                        <div class="text-gray-900 fs-6">Has <i
+                                                                class="text-dark fw-bolder">rejected</i>
+                                                            this
+                                                            transaction on
+                                                            {{ $lpa[2]->format('l, jS \of F Y h:i:s A') }}
+                                                        </div>
+                                                        <div class="text-gray-400 fs-7">
+                                                            {{ ucfirst(explode('-', trim($lpa[1]))[0]) }} transaction
+                                                        </div>
+                                                    @elseif ($lpa[1] == 'cash-paid')
+                                                        <div class="text-gray-900 fs-6">Has <i
+                                                                class="text-dark fw-bolder">paid</i>
+                                                            this
+                                                            transaction on
+                                                            {{ $lpa[2]->format('l, jS \of F Y h:i:s A') }}
+                                                        </div>
+                                                        <div class="text-gray-400 fs-7">
+                                                            {{ ucfirst(explode('-', trim($lpa[1]))[0]) }} transaction
+                                                        </div>
+                                                    @elseif ($lpa[1] == 'operational-store')
+                                                        <div class="text-gray-900 fs-6">Has <i
+                                                                class="text-dark fw-bolder">created</i>
+                                                            this
+                                                            transaction on
+                                                            {{ $lpa[2]->format('l, jS \of F Y h:i:s A') }}
+                                                        </div>
+                                                        <div class="text-gray-400 fs-7">
+                                                            Mandiri {{ explode('-', trim($lpa[1]))[0] }} transaction
+                                                        </div>
+                                                    @elseif ($lpa[1] == 'operational-update')
+                                                        <div class="text-gray-900 fs-6">Has <i
+                                                                class="text-dark fw-bolder">updated</i>
+                                                            this
+                                                            transaction on
+                                                            {{ $lpa[2]->format('l, jS \of F Y h:i:s A') }}
+                                                        </div>
+                                                        <div class="text-gray-400 fs-7">
+                                                            Mandiri {{ explode('-', trim($lpa[1]))[0] }} transaction
+                                                        </div>
+                                                    @elseif ($lpa[1] == 'operational-delete')
+                                                        <div class="text-gray-900 fs-6">Has <i
+                                                                class="text-dark fw-bolder">deleted</i>
+                                                            this
+                                                            transaction on
+                                                            {{ $lpa[2]->format('l, jS \of F Y h:i:s A') }}
+                                                        </div>
+                                                        <div class="text-gray-400 fs-7">
+                                                            Mandiri {{ explode('-', trim($lpa[1]))[0] }} transaction
+                                                        </div>
+                                                    @elseif ($lpa[1] == 'operational-approved-findir')
+                                                        <div class="text-gray-900 fs-6">Has <i
+                                                                class="text-dark fw-bolder">approved</i>
+                                                            this
+                                                            transaction on
+                                                            {{ $lpa[2]->format('l, jS \of F Y h:i:s A') }}
+                                                        </div>
+                                                        <div class="text-gray-400 fs-7">
+                                                            Mandiri {{ explode('-', trim($lpa[1]))[0] }} transaction
+                                                        </div>
+                                                    @elseif ($lpa[1] == 'operational-approved-excdir')
+                                                        <div class="text-gray-900 fs-6">Has <i
+                                                                class="text-dark fw-bolder">approved</i>
+                                                            this
+                                                            transaction on
+                                                            {{ $lpa[2]->format('l, jS \of F Y h:i:s A') }}
+                                                        </div>
+                                                        <div class="text-gray-400 fs-7">
+                                                            Mandiri {{ explode('-', trim($lpa[1]))[0] }} transaction
+                                                        </div>
+                                                    @elseif ($lpa[1] == 'operational-rejected-findir')
+                                                        <div class="text-gray-900 fs-6">Has <i
+                                                                class="text-dark fw-bolder">rejected</i>
+                                                            this
+                                                            transaction on
+                                                            {{ $lpa[2]->format('l, jS \of F Y h:i:s A') }}
+                                                        </div>
+                                                        <div class="text-gray-400 fs-7">
+                                                            Mandiri {{ explode('-', trim($lpa[1]))[0] }} transaction
+                                                        </div>
+                                                    @elseif ($lpa[1] == 'operational-rejected-excdir')
+                                                        <div class="text-gray-900 fs-6">Has <i
+                                                                class="text-dark fw-bolder">rejected</i>
+                                                            this
+                                                            transaction on
+                                                            {{ $lpa[2]->format('l, jS \of F Y h:i:s A') }}
+                                                        </div>
+                                                        <div class="text-gray-400 fs-7">
+                                                            Mandiri {{ explode('-', trim($lpa[1]))[0] }} transaction
+                                                        </div>
+                                                    @elseif ($lpa[1] == 'operational-paid')
+                                                        <div class="text-gray-900 fs-6">Has <i
+                                                                class="text-dark fw-bolder">paid</i>
+                                                            this
+                                                            transaction on
+                                                            {{ $lpa[2]->format('l, jS \of F Y h:i:s A') }}
+                                                        </div>
+                                                        <div class="text-gray-400 fs-7">
+                                                            Mandiri {{ explode('-', trim($lpa[1]))[0] }} transaction
+                                                        </div>
+                                                    @elseif ($lpa[1] == 'escrow-store')
+                                                        <div class="text-gray-900 fs-6">Has <i
+                                                                class="text-dark fw-bolder">created</i>
+                                                            this
+                                                            transaction on
+                                                            {{ $lpa[2]->format('l, jS \of F Y h:i:s A') }}
+                                                        </div>
+                                                        <div class="text-gray-400 fs-7">
+                                                            Mandiri {{ explode('-', trim($lpa[1]))[0] }} transaction
+                                                        </div>
+                                                    @elseif ($lpa[1] == 'escrow-update')
+                                                        <div class="text-gray-900 fs-6">Has <i
+                                                                class="text-dark fw-bolder">updated</i>
+                                                            this
+                                                            transaction on
+                                                            {{ $lpa[2]->format('l, jS \of F Y h:i:s A') }}
+                                                        </div>
+                                                        <div class="text-gray-400 fs-7">
+                                                            Mandiri {{ explode('-', trim($lpa[1]))[0] }} transaction
+                                                        </div>
+                                                    @elseif ($lpa[1] == 'escrow-delete')
+                                                        <div class="text-gray-900 fs-6">Has <i
+                                                                class="text-dark fw-bolder">deleted</i>
+                                                            this
+                                                            transaction on
+                                                            {{ $lpa[2]->format('l, jS \of F Y h:i:s A') }}
+                                                        </div>
+                                                        <div class="text-gray-400 fs-7">
+                                                            Mandiri {{ explode('-', trim($lpa[1]))[0] }} transaction
+                                                        </div>
+                                                    @elseif ($lpa[1] == 'escrow-approved-findir')
+                                                        <div class="text-gray-900 fs-6">Has <i
+                                                                class="text-dark fw-bolder">approved</i>
+                                                            this
+                                                            transaction on
+                                                            {{ $lpa[2]->format('l, jS \of F Y h:i:s A') }}
+                                                        </div>
+                                                        <div class="text-gray-400 fs-7">
+                                                            Mandiri {{ explode('-', trim($lpa[1]))[0] }} transaction
+                                                        </div>
+                                                    @elseif ($lpa[1] == 'escrow-approved-excdir')
+                                                        <div class="text-gray-900 fs-6">Has <i
+                                                                class="text-dark fw-bolder">approved</i>
+                                                            this
+                                                            transaction on
+                                                            {{ $lpa[2]->format('l, jS \of F Y h:i:s A') }}
+                                                        </div>
+                                                        <div class="text-gray-400 fs-7">
+                                                            Mandiri {{ explode('-', trim($lpa[1]))[0] }} transaction
+                                                        </div>
+                                                    @elseif ($lpa[1] == 'escrow-rejected-findir')
+                                                        <div class="text-gray-900 fs-6">Has <i
+                                                                class="text-dark fw-bolder">rejected</i>
+                                                            this
+                                                            transaction on
+                                                            {{ $lpa[2]->format('l, jS \of F Y h:i:s A') }}
+                                                        </div>
+                                                        <div class="text-gray-400 fs-7">
+                                                            Mandiri {{ explode('-', trim($lpa[1]))[0] }} transaction
+                                                        </div>
+                                                    @elseif ($lpa[1] == 'escrow-rejected-excdir')
+                                                        <div class="text-gray-900 fs-6">Has <i
+                                                                class="text-dark fw-bolder">rejected</i>
+                                                            this
+                                                            transaction on
+                                                            {{ $lpa[2]->format('l, jS \of F Y h:i:s A') }}
+                                                        </div>
+                                                        <div class="text-gray-400 fs-7">
+                                                            Mandiri {{ explode('-', trim($lpa[1]))[0] }} transaction
+                                                        </div>
+                                                    @elseif ($lpa[1] == 'escrow-paid')
+                                                        <div class="text-gray-900 fs-6">Has <i
+                                                                class="text-dark fw-bolder">paid</i>
+                                                            this
+                                                            transaction on
+                                                            {{ $lpa[2]->format('l, jS \of F Y h:i:s A') }}
+                                                        </div>
+                                                        <div class="text-gray-400 fs-7">
+                                                            Mandiri {{ explode('-', trim($lpa[1]))[0] }} transaction
+                                                        </div>
+                                                    @endif
+                                                </div>
+                                            </div>
+                                            <!--end::Details-->
                                         </div>
-                                        <!--end::Avatar-->
-                                        <!--begin::Details-->
-                                        <div class="fw-bold">
-                                            <a href="#" class="fs-5 fw-bolder text-gray-900 text-hover-primary">Emma
-                                                Smith</a>
-                                            <div class="text-gray-400">8 Pending &amp; 97
-                                                Completed
-                                                Tasks</div>
-                                        </div>
-                                        <!--end::Details-->
-                                        <!--begin::Badge-->
-                                        <div class="badge badge-light ms-auto">5</div>
-                                        <!--end::Badge-->
-                                    </div>
+                                    @endforeach
                                     <!--end::Item-->
                                 </div>
                                 <!--end::Card body-->
@@ -441,16 +855,11 @@
                                     <!--begin::Card title-->
                                     <div class="card-title flex-column">
                                         <h3 class="fw-bolder mb-1">Project Location</h3>
-                                        <div class="fs-6 text-gray-400">From total 482 Participants
+                                        <div class="fs-6 text-gray-400">
+                                            {{ $projLocation[0]->projectLocation->address }}
                                         </div>
                                     </div>
                                     <!--end::Card title-->
-                                    <!--begin::Card toolbar-->
-                                    <div class="card-toolbar">
-                                        <a href="#" class="btn btn-bg-light btn-active-color-primary btn-sm">Google
-                                            Maps</a>
-                                    </div>
-                                    <!--end::Card toolbar-->
                                 </div>
                                 <!--end::Card toolbar-->
                                 <!--begin::Card body-->
@@ -474,201 +883,7 @@
                 <!--end::overview-->
                 {{-- begin::budget --}}
                 <div class="tab-pane fade" role="tabpanel" id="budget">
-                    <div class="card card-flush mt-6 mt-xl-9">
-                        <!--begin::Card header-->
-                        <div class="card-header mt-5">
-                            <!--begin::Card title-->
-                            <div class="card-title flex-column">
-                                <h3 class="fw-bolder mb-1">Project Spendings</h3>
-                                <div class="fs-6 text-gray-400">Total $260,300 sepnt so far</div>
-                            </div>
-                            <!--begin::Card title-->
-                            <!--begin::Card toolbar-->
-                            <div class="card-toolbar my-1">
-                                <!--begin::Select-->
-                                <div class="me-6 my-1">
-                                    <select id="kt_filter_year" name="year" data-control="select2" data-hide-search="true"
-                                        class="w-125px form-select form-select-solid form-select-sm select2-hidden-accessible"
-                                        data-select2-id="select2-data-kt_filter_year" tabindex="-1" aria-hidden="true">
-                                        <option value="All" selected="selected" data-select2-id="select2-data-41-tibr">All
-                                            time</option>
-                                        <option value="thisyear">This year</option>
-                                        <option value="thismonth">This month</option>
-                                        <option value="lastmonth">Last month</option>
-                                        <option value="last90days">Last 90 days</option>
-                                    </select>
-                                </div>
-                                <!--end::Select-->
-                                <!--begin::Select-->
-                                <div class="me-4 my-1">
-                                    <select id="kt_filter_orders" name="orders" data-control="select2"
-                                        data-hide-search="true"
-                                        class="w-125px form-select form-select-solid form-select-sm select2-hidden-accessible"
-                                        data-select2-id="select2-data-kt_filter_orders" tabindex="-1" aria-hidden="true">
-                                        <option value="All" selected="selected" data-select2-id="select2-data-43-jb3o">All
-                                            Orders
-                                        </option>
-                                        <option value="Approved">Approved</option>
-                                        <option value="Declined">Declined</option>
-                                        <option value="In Progress">In Progress</option>
-                                        <option value="In Transit">In Transit</option>
-                                    </select>
-                                </div>
-                                <!--end::Select-->
-                                <!--begin::Search-->
-                                <div class="d-flex align-items-center position-relative my-1">
-                                    <!--begin::Svg Icon | path: icons/duotune/general/gen021.svg-->
-                                    <span class="svg-icon svg-icon-3 position-absolute ms-3">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-                                            fill="none">
-                                            <rect opacity="0.5" x="17.0365" y="15.1223" width="8.15546" height="2" rx="1"
-                                                transform="rotate(45 17.0365 15.1223)" fill="black">
-                                            </rect>
-                                            <path
-                                                d="M11 19C6.55556 19 3 15.4444 3 11C3 6.55556 6.55556 3 11 3C15.4444 3 19 6.55556 19 11C19 15.4444 15.4444 19 11 19ZM11 5C7.53333 5 5 7.53333 5 11C5 14.4667 7.53333 17 11 17C14.4667 17 17 14.4667 17 11C17 7.53333 14.4667 5 11 5Z"
-                                                fill="black"></path>
-                                        </svg>
-                                    </span>
-                                    <!--end::Svg Icon-->
-                                    <input type="text" id="kt_filter_search"
-                                        class="form-control form-control-solid form-select-sm w-150px ps-9"
-                                        placeholder="Search Order">
-                                </div>
-                                <!--end::Search-->
-                            </div>
-                            <!--begin::Card toolbar-->
-                        </div>
-                        <!--end::Card header-->
-                        <!--begin::Card body-->
-                        <div class="card-body pt-0">
-                            <!--begin::Table container-->
-                            <div class="table-responsive">
-                                <!--begin::Table-->
-                                <div id="kt_profile_overview_table_wrapper"
-                                    class="dataTables_wrapper dt-bootstrap4 no-footer">
-                                    <div class="table-responsive">
-                                        <table id="kt_profile_overview_table"
-                                            class="table table-row-bordered table-row-dashed gy-4 align-middle fw-bolder dataTable no-footer">
-                                            <!--begin::Head-->
-                                            <thead class="fs-7 text-gray-400 text-uppercase">
-                                                <tr>
-                                                    <th class="min-w-250px sorting" tabindex="0"
-                                                        aria-controls="kt_profile_overview_table" rowspan="1" colspan="1"
-                                                        aria-label="Manager: activate to sort column ascending"
-                                                        style="width: 434.719px;">Manager</th>
-                                                    <th class="min-w-150px sorting" tabindex="0"
-                                                        aria-controls="kt_profile_overview_table" rowspan="1" colspan="1"
-                                                        aria-label="Date: activate to sort column ascending"
-                                                        style="width: 268.031px;">Date</th>
-                                                    <th class="min-w-90px sorting" tabindex="0"
-                                                        aria-controls="kt_profile_overview_table" rowspan="1" colspan="1"
-                                                        aria-label="Amount: activate to sort column ascending"
-                                                        style="width: 163.703px;">Amount</th>
-                                                    <th class="min-w-90px sorting" tabindex="0"
-                                                        aria-controls="kt_profile_overview_table" rowspan="1" colspan="1"
-                                                        aria-label="Status: activate to sort column ascending"
-                                                        style="width: 178.641px;">Status</th>
-                                                    <th class="min-w-50px text-end sorting" tabindex="0"
-                                                        aria-controls="kt_profile_overview_table" rowspan="1" colspan="1"
-                                                        aria-label="Details: activate to sort column ascending"
-                                                        style="width: 117.406px;">Details</th>
-                                                </tr>
-                                            </thead>
-                                            <!--end::Head-->
-                                            <!--begin::Body-->
-                                            <tbody class="fs-6">
-                                                <tr class="odd">
-                                                    <td>
-                                                        <!--begin::User-->
-                                                        <div class="d-flex align-items-center">
-                                                            <!--begin::Wrapper-->
-                                                            <div class="me-5 position-relative">
-                                                                <!--begin::Avatar-->
-                                                                <div class="symbol symbol-35px symbol-circle">
-                                                                    <img alt="Pic"
-                                                                        src="/metronic8/demo6/assets/media/avatars/300-6.jpg">
-                                                                </div>
-                                                                <!--end::Avatar-->
-                                                            </div>
-                                                            <!--end::Wrapper-->
-                                                            <!--begin::Info-->
-                                                            <div class="d-flex flex-column justify-content-center">
-                                                                <a href=""
-                                                                    class="fs-6 text-gray-800 text-hover-primary">Emma
-                                                                    Smith</a>
-                                                                <div class="fw-bold text-gray-400">
-                                                                    smith@kpmg.com</div>
-                                                            </div>
-                                                            <!--end::Info-->
-                                                        </div>
-                                                        <!--end::User-->
-                                                    </td>
-                                                    <td data-order="2022-12-20T00:00:00+07:00">Dec
-                                                        20, 2022</td>
-                                                    <td>$778.00</td>
-                                                    <td>
-                                                        <span
-                                                            class="badge badge-light-danger fw-bolder px-4 py-3">Rejected</span>
-                                                    </td>
-                                                    <td class="text-end">
-                                                        <a href="#" class="btn btn-light btn-sm">View</a>
-                                                    </td>
-                                                </tr>
-                                            </tbody>
-                                            <!--end::Body-->
-                                        </table>
-                                    </div>
-                                    <div class="row">
-                                        <div
-                                            class="col-sm-12 col-md-5 d-flex align-items-center justify-content-center justify-content-md-start">
-                                            <div class="dataTables_length" id="kt_profile_overview_table_length">
-                                                <label><select name="kt_profile_overview_table_length"
-                                                        aria-controls="kt_profile_overview_table"
-                                                        class="form-select form-select-sm form-select-solid">
-                                                        <option value="10">10</option>
-                                                        <option value="25">25</option>
-                                                        <option value="50">50</option>
-                                                        <option value="100">100</option>
-                                                    </select></label>
-                                            </div>
-                                        </div>
-                                        <div
-                                            class="col-sm-12 col-md-7 d-flex align-items-center justify-content-center justify-content-md-end">
-                                            <div class="dataTables_paginate paging_simple_numbers"
-                                                id="kt_profile_overview_table_paginate">
-                                                <ul class="pagination">
-                                                    <li class="paginate_button page-item previous disabled"
-                                                        id="kt_profile_overview_table_previous"><a href="#"
-                                                            aria-controls="kt_profile_overview_table" data-dt-idx="0"
-                                                            tabindex="0" class="page-link"><i
-                                                                class="previous"></i></a>
-                                                    </li>
-                                                    <li class="paginate_button page-item active"><a href="#"
-                                                            aria-controls="kt_profile_overview_table" data-dt-idx="1"
-                                                            tabindex="0" class="page-link">1</a></li>
-                                                    <li class="paginate_button page-item "><a href="#"
-                                                            aria-controls="kt_profile_overview_table" data-dt-idx="2"
-                                                            tabindex="0" class="page-link">2</a></li>
-                                                    <li class="paginate_button page-item "><a href="#"
-                                                            aria-controls="kt_profile_overview_table" data-dt-idx="3"
-                                                            tabindex="0" class="page-link">3</a></li>
-                                                    <li class="paginate_button page-item next"
-                                                        id="kt_profile_overview_table_next"><a href="#"
-                                                            aria-controls="kt_profile_overview_table" data-dt-idx="4"
-                                                            tabindex="0" class="page-link"><i
-                                                                class="next"></i></a>
-                                                    </li>
-                                                </ul>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <!--end::Table-->
-                            </div>
-                            <!--end::Table container-->
-                        </div>
-                        <!--end::Card body-->
-                    </div>
+                    @livewire('finance-division.filter-project-budget', ['uuid' => $uuid]);
                 </div>
                 {{-- end::budget --}}
                 {{-- begin::files --}}
@@ -676,62 +891,119 @@
                     <div class="d-flex flex-wrap flex-stack my-5">
                         <!--begin::Heading-->
                         <h3 class="fw-bolder my-2">Project Files
-                            <span class="fs-6 text-gray-400 fw-bold ms-1">+590</span>
+                            <span class="fs-6 text-gray-400 fw-bold ms-1">{{ count($arrFiles) }} Files</span>
                         </h3>
                         <!--end::Heading-->
-                        <!--begin::Controls-->
-                        <div class="d-flex my-2">
-                            <!--begin::Search-->
-                            <div class="d-flex align-items-center position-relative me-4">
-                                <!--begin::Svg Icon | path: icons/duotune/general/gen021.svg-->
-                                <span class="svg-icon svg-icon-3 position-absolute translate-middle-y top-50 ms-4">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-                                        fill="none">
-                                        <rect opacity="0.5" x="17.0365" y="15.1223" width="8.15546" height="2" rx="1"
-                                            transform="rotate(45 17.0365 15.1223)" fill="black"></rect>
-                                        <path
-                                            d="M11 19C6.55556 19 3 15.4444 3 11C3 6.55556 6.55556 3 11 3C15.4444 3 19 6.55556 19 11C19 15.4444 15.4444 19 11 19ZM11 5C7.53333 5 5 7.53333 5 11C5 14.4667 7.53333 17 11 17C14.4667 17 17 14.4667 17 11C17 7.53333 14.4667 5 11 5Z"
-                                            fill="black"></path>
-                                    </svg>
-                                </span>
-                                <!--end::Svg Icon-->
-                                <input type="text" id="kt_filter_search"
-                                    class="form-control form-control-sm form-control-solid bg-body fw-bold fs-7 w-150px ps-11"
-                                    placeholder="Search">
-                            </div>
-                            <!--end::Search-->
-                        </div>
-                        <!--end::Controls-->
                     </div>
                     <div class="row g-6 g-xl-9 mb-6 mb-xl-9">
-                        <!--begin::Col-->
-                        <div class="col-md-6 col-lg-4 col-xl-3">
-                            <!--begin::Card-->
-                            <div class="card h-100">
-                                <!--begin::Card body-->
-                                <div class="card-body d-flex justify-content-center text-center flex-column p-8">
-                                    <!--begin::Name-->
-                                    <a href="/metronic8/demo6/../demo6/apps/file-manager/files.html"
-                                        class="text-gray-800 text-hover-primary d-flex flex-column">
-                                        <!--begin::Image-->
-                                        <div class="symbol symbol-60px mb-5">
-                                            <img src="/metronic8/demo6/assets/media/svg/files/pdf.svg" alt="">
-                                        </div>
-                                        <!--end::Image-->
-                                        <!--begin::Title-->
-                                        <div class="fs-5 fw-bolder mb-2">Project Reqs..</div>
-                                        <!--end::Title-->
-                                    </a>
-                                    <!--end::Name-->
-                                    <!--begin::Description-->
-                                    <div class="fs-7 fw-bold text-gray-400">3 days ago</div>
-                                    <!--end::Description-->
+                        @foreach ($arrFiles as $index => $af)
+                            <!--begin::Col-->
+                            <div class="col-md-6 col-lg-4 col-xl-3">
+                                <!--begin::Card-->
+                                <div class="card h-100">
+                                    <!--begin::Card body-->
+                                    <div class="card-body d-flex justify-content-center text-center flex-column p-8">
+                                        <!--begin::Name-->
+                                        @if (pathinfo($af['name'], PATHINFO_EXTENSION) == 'jpg' || pathinfo($af['name'], PATHINFO_EXTENSION) == 'png' || pathinfo($af['name'], PATHINFO_EXTENSION) == 'jpeg')
+                                            <a href="#" data-bs-toggle="modal"
+                                                data-bs-target="#allFileModal{{ $index }}"
+                                                class="text-gray-800 d-flex flex-column"
+                                                class="text-gray-800 d-flex flex-column">
+                                                <!--begin::Image-->
+                                                <div class="symbol symbol-60px mb-5">
+                                                    <i class="bi bi-file-earmark-image-fill text-success"
+                                                        style="font-size: 300%;margin-bottom:5%;"></i>
+                                                </div>
+                                                <!--end::Image-->
+                                                <!--begin::Title-->
+                                                <div class="fs-5 fw-bolder mb-2 text-hover-primary">{{ $af['name'] }}
+                                                </div>
+                                                <!--end::Title-->
+                                            </a>
+                                        @elseif(pathinfo($af['name'], PATHINFO_EXTENSION) == 'doc' || pathinfo($af['name'], PATHINFO_EXTENSION) == 'docx')
+                                            <a href="#" data-bs-toggle="modal"
+                                                data-bs-target="#allFileModal{{ $index }}"
+                                                class="text-gray-800 d-flex flex-column">
+                                                <!--begin::Image-->
+                                                <div class="symbol symbol-60px mb-5">
+                                                    <i class="bi bi-file-earmark-word-fill text-primary"
+                                                        style="font-size: 300%;margin-bottom:5%;"></i>
+                                                </div>
+                                                <!--end::Image-->
+                                                <!--begin::Title-->
+                                                <div class="fs-5 fw-bolder mb-2 text-hover-primary">{{ $af['name'] }}
+                                                </div>
+                                                <!--end::Title-->
+                                            </a>
+                                        @elseif(pathinfo($af['name'], PATHINFO_EXTENSION) == 'pdf')
+                                            <a href="{{ asset('storage/' . ucfirst($af['category'] . '/' . $af['uuid'] . '/' . $af['name'])) }}"
+                                                class="text-gray-800 d-flex flex-column" target="_blank">
+                                                <!--begin::Image-->
+                                                <div class="symbol symbol-60px mb-5">
+                                                    <i class="bi bi-file-earmark-pdf-fill text-danger"
+                                                        style="font-size: 300%;margin-bottom:5%;"></i>
+                                                </div>
+                                                <!--end::Image-->
+                                                <!--begin::Title-->
+                                                <div class="fs-5 fw-bolder mb-2 text-hover-primary">{{ $af['name'] }}
+                                                </div>
+                                                <!--end::Title-->
+                                            </a>
+                                        @endif
+
+                                        <!--end::Name-->
+                                        @if ($af['category'] == 'cash')
+                                            <!--begin::Description-->
+                                            <div class="fs-7 fw-bold text-gray-400">Cash transaction</div>
+                                            <!--end::Description-->
+                                        @elseif ($af['category'] == 'operational')
+                                            <!--begin::Description-->
+                                            <div class="fs-7 fw-bold text-gray-400">Mandiri operational transaction</div>
+                                            <!--end::Description-->
+                                        @else
+                                            <!--begin::Description-->
+                                            <div class="fs-7 fw-bold text-gray-400">Mandiri escrow transaction</div>
+                                            <!--end::Description-->
+                                        @endif
+                                    </div>
+                                    <!--end::Card body-->
                                 </div>
-                                <!--end::Card body-->
+                                <!--end::Card-->
+                                <div class="modal fade" id="allFileModal{{ $index }}" tabindex="-1"
+                                    aria-hidden="true">
+                                    <div class="modal-dialog modal-fullscreen">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="modalLabel">
+                                                    {{ $af['name'] }}
+                                                </h5>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                    aria-label="Close"></button>
+                                            </div>
+                                            <div class="modal-body text-center">
+                                                @if (pathinfo($af['name'], PATHINFO_EXTENSION) == 'doc' || pathinfo($af['name'], PATHINFO_EXTENSION) == 'docx')
+                                                    <iframe
+                                                        src='https://view.officeapps.live.com/op/embed.aspx?src={{ asset('storage/' . ucfirst($af['category']) . '/' . $af['uuid'] . '/' . $af['name']) }}'
+                                                        width='100%' height='100%' frameborder='0'></iframe>
+                                                @elseif(pathinfo($af['name'], PATHINFO_EXTENSION) == 'jpg' || pathinfo($af['name'], PATHINFO_EXTENSION) == 'png' || pathinfo($af['name'], PATHINFO_EXTENSION) == 'jpeg')
+                                                    <img class="img img-fluid"
+                                                        src="{{ asset('storage/' . ucfirst($af['category']) . '/' . $af['uuid'] . '/' . $af['name']) }}"
+                                                        alt="{{ $af['name'] }}" style="max-width: 100%; height: auto;">
+                                                @endif
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary"
+                                                    data-bs-dismiss="modal">Close</button>
+                                                <a type="button" class="btn btn-primary"
+                                                    href="{{ asset('storage/' . ucfirst($af['category']) . '/' . $af['uuid'] . '/' . $af['name']) }}"
+                                                    download="">Download</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
-                            <!--end::Card-->
-                        </div>
-                        <!--end::Col-->
+                            <!--end::Col-->
+                        @endforeach
                     </div>
                 </div>
                 {{-- end::files --}}
@@ -758,7 +1030,7 @@
                                     </svg>
                                 </span>
                                 <!--end::Svg Icon-->
-                                <h3 class="fw-bolder m-0 text-gray-800">Jan 23, 2022</h3>
+                                <h3 class="fw-bolder m-0 text-gray-800">All time activities</h3>
                             </div>
                             <!--end::Title-->
                         </div>
@@ -771,63 +1043,726 @@
                                 <div class="card-body p-0">
                                     <!--begin::Timeline-->
                                     <div class="timeline">
-                                        <!--begin::Timeline item-->
-                                        <div class="timeline-item">
-                                            <!--begin::Timeline line-->
-                                            <div class="timeline-line w-40px"></div>
-                                            <!--end::Timeline line-->
-                                            <!--begin::Timeline icon-->
-                                            <div class="timeline-icon symbol symbol-circle symbol-40px">
-                                                <div class="symbol-label bg-light">
-                                                    <!--begin::Svg Icon | path: icons/duotune/communication/com009.svg-->
-                                                    <span class="svg-icon svg-icon-2 svg-icon-gray-500">
-                                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                                            viewBox="0 0 24 24" fill="none">
-                                                            <path opacity="0.3"
-                                                                d="M5.78001 21.115L3.28001 21.949C3.10897 22.0059 2.92548 22.0141 2.75004 21.9727C2.57461 21.9312 2.41416 21.8418 2.28669 21.7144C2.15923 21.5869 2.06975 21.4264 2.0283 21.251C1.98685 21.0755 1.99507 20.892 2.05201 20.7209L2.886 18.2209L7.22801 13.879L10.128 16.774L5.78001 21.115Z"
-                                                                fill="black"></path>
-                                                            <path
-                                                                d="M21.7 8.08899L15.911 2.30005C15.8161 2.2049 15.7033 2.12939 15.5792 2.07788C15.455 2.02637 15.3219 1.99988 15.1875 1.99988C15.0531 1.99988 14.92 2.02637 14.7958 2.07788C14.6717 2.12939 14.5589 2.2049 14.464 2.30005L13.74 3.02295C13.548 3.21498 13.4402 3.4754 13.4402 3.74695C13.4402 4.01849 13.548 4.27892 13.74 4.47095L14.464 5.19397L11.303 8.35498C10.1615 7.80702 8.87825 7.62639 7.62985 7.83789C6.38145 8.04939 5.2293 8.64265 4.332 9.53601C4.14026 9.72817 4.03256 9.98855 4.03256 10.26C4.03256 10.5315 4.14026 10.7918 4.332 10.984L13.016 19.667C13.208 19.859 13.4684 19.9668 13.74 19.9668C14.0115 19.9668 14.272 19.859 14.464 19.667C15.3575 18.77 15.9509 17.618 16.1624 16.3698C16.374 15.1215 16.1932 13.8383 15.645 12.697L18.806 9.53601L19.529 10.26C19.721 10.452 19.9814 10.5598 20.253 10.5598C20.5245 10.5598 20.785 10.452 20.977 10.26L21.7 9.53601C21.7952 9.44108 21.8706 9.32825 21.9221 9.2041C21.9737 9.07995 22.0002 8.94691 22.0002 8.8125C22.0002 8.67809 21.9737 8.54505 21.9221 8.4209C21.8706 8.29675 21.7952 8.18392 21.7 8.08899Z"
-                                                                fill="black"></path>
-                                                        </svg>
-                                                    </span>
-                                                    <!--end::Svg Icon-->
-                                                </div>
-                                            </div>
-                                            <!--end::Timeline icon-->
-                                            <!--begin::Timeline content-->
-                                            <div class="timeline-content mb-10 mt-n2">
-                                                <!--begin::Timeline heading-->
-                                                <div class="overflow-auto pe-3">
-                                                    <!--begin::Title-->
-                                                    <div class="fs-5 fw-bold mb-2">Invitation for
-                                                        crafting engaging designs that speak human
-                                                        workshop</div>
-                                                    <!--end::Title-->
-                                                    <!--begin::Description-->
-                                                    <div class="d-flex align-items-center mt-1 fs-6">
-                                                        <!--begin::Info-->
-                                                        <div class="text-muted me-2 fs-7">Sent at
-                                                            4:23
-                                                            PM by</div>
-                                                        <!--end::Info-->
-                                                        <!--begin::User-->
-                                                        <div class="symbol symbol-circle symbol-25px"
-                                                            data-bs-toggle="tooltip" data-bs-boundary="window"
-                                                            data-bs-placement="top" title=""
-                                                            data-bs-original-title="Alan Nilson">
-                                                            <img src="/metronic8/demo6/assets/media/avatars/300-1.jpg"
-                                                                alt="img">
+                                        @foreach ($lastProjActivity as $lpa)
+                                            <!--begin::Timeline item-->
+                                            <div class="timeline-item">
+                                                <!--begin::Timeline line-->
+                                                <div class="timeline-line w-40px border-gray-500"></div>
+                                                <!--end::Timeline line-->
+                                                <!--begin::Timeline icon-->
+                                                <div class="timeline-icon symbol symbol-circle symbol-40px">
+                                                    @if (explode('-', trim($lpa[1]))[1] == 'store')
+                                                        <div class="symbol-label bg-light-primary">
+                                                            <!--begin::Svg Icon | path: icons/duotune/communication/com009.svg-->
+                                                            <span class="svg-icon svg-icon-2 svg-icon-gray-700">
+                                                                <svg xmlns="http://www.w3.org/2000/svg" width="24"
+                                                                    height="24" viewBox="0 0 24 24" fill="none">
+                                                                    <path opacity="0.3"
+                                                                        d="M5.78001 21.115L3.28001 21.949C3.10897 22.0059 2.92548 22.0141 2.75004 21.9727C2.57461 21.9312 2.41416 21.8418 2.28669 21.7144C2.15923 21.5869 2.06975 21.4264 2.0283 21.251C1.98685 21.0755 1.99507 20.892 2.05201 20.7209L2.886 18.2209L7.22801 13.879L10.128 16.774L5.78001 21.115Z"
+                                                                        fill="black"></path>
+                                                                    <path
+                                                                        d="M21.7 8.08899L15.911 2.30005C15.8161 2.2049 15.7033 2.12939 15.5792 2.07788C15.455 2.02637 15.3219 1.99988 15.1875 1.99988C15.0531 1.99988 14.92 2.02637 14.7958 2.07788C14.6717 2.12939 14.5589 2.2049 14.464 2.30005L13.74 3.02295C13.548 3.21498 13.4402 3.4754 13.4402 3.74695C13.4402 4.01849 13.548 4.27892 13.74 4.47095L14.464 5.19397L11.303 8.35498C10.1615 7.80702 8.87825 7.62639 7.62985 7.83789C6.38145 8.04939 5.2293 8.64265 4.332 9.53601C4.14026 9.72817 4.03256 9.98855 4.03256 10.26C4.03256 10.5315 4.14026 10.7918 4.332 10.984L13.016 19.667C13.208 19.859 13.4684 19.9668 13.74 19.9668C14.0115 19.9668 14.272 19.859 14.464 19.667C15.3575 18.77 15.9509 17.618 16.1624 16.3698C16.374 15.1215 16.1932 13.8383 15.645 12.697L18.806 9.53601L19.529 10.26C19.721 10.452 19.9814 10.5598 20.253 10.5598C20.5245 10.5598 20.785 10.452 20.977 10.26L21.7 9.53601C21.7952 9.44108 21.8706 9.32825 21.9221 9.2041C21.9737 9.07995 22.0002 8.94691 22.0002 8.8125C22.0002 8.67809 21.9737 8.54505 21.9221 8.4209C21.8706 8.29675 21.7952 8.18392 21.7 8.08899Z"
+                                                                        fill="black"></path>
+                                                                </svg>
+                                                            </span>
+                                                            <!--end::Svg Icon-->
                                                         </div>
-                                                        <!--end::User-->
-                                                    </div>
-                                                    <!--end::Description-->
+                                                    @elseif(explode('-', trim($lpa[1]))[1] == 'update')
+                                                        <div class="symbol-label bg-light-warning">
+                                                            <!--begin::Svg Icon | path: icons/duotune/communication/com009.svg-->
+                                                            <span class="svg-icon svg-icon-2 svg-icon-gray-700">
+                                                                <svg xmlns="http://www.w3.org/2000/svg" width="24"
+                                                                    height="24" viewBox="0 0 24 24" fill="none">
+                                                                    <path opacity="0.3"
+                                                                        d="M5.78001 21.115L3.28001 21.949C3.10897 22.0059 2.92548 22.0141 2.75004 21.9727C2.57461 21.9312 2.41416 21.8418 2.28669 21.7144C2.15923 21.5869 2.06975 21.4264 2.0283 21.251C1.98685 21.0755 1.99507 20.892 2.05201 20.7209L2.886 18.2209L7.22801 13.879L10.128 16.774L5.78001 21.115Z"
+                                                                        fill="black"></path>
+                                                                    <path
+                                                                        d="M21.7 8.08899L15.911 2.30005C15.8161 2.2049 15.7033 2.12939 15.5792 2.07788C15.455 2.02637 15.3219 1.99988 15.1875 1.99988C15.0531 1.99988 14.92 2.02637 14.7958 2.07788C14.6717 2.12939 14.5589 2.2049 14.464 2.30005L13.74 3.02295C13.548 3.21498 13.4402 3.4754 13.4402 3.74695C13.4402 4.01849 13.548 4.27892 13.74 4.47095L14.464 5.19397L11.303 8.35498C10.1615 7.80702 8.87825 7.62639 7.62985 7.83789C6.38145 8.04939 5.2293 8.64265 4.332 9.53601C4.14026 9.72817 4.03256 9.98855 4.03256 10.26C4.03256 10.5315 4.14026 10.7918 4.332 10.984L13.016 19.667C13.208 19.859 13.4684 19.9668 13.74 19.9668C14.0115 19.9668 14.272 19.859 14.464 19.667C15.3575 18.77 15.9509 17.618 16.1624 16.3698C16.374 15.1215 16.1932 13.8383 15.645 12.697L18.806 9.53601L19.529 10.26C19.721 10.452 19.9814 10.5598 20.253 10.5598C20.5245 10.5598 20.785 10.452 20.977 10.26L21.7 9.53601C21.7952 9.44108 21.8706 9.32825 21.9221 9.2041C21.9737 9.07995 22.0002 8.94691 22.0002 8.8125C22.0002 8.67809 21.9737 8.54505 21.9221 8.4209C21.8706 8.29675 21.7952 8.18392 21.7 8.08899Z"
+                                                                        fill="black"></path>
+                                                                </svg>
+                                                            </span>
+                                                            <!--end::Svg Icon-->
+                                                        </div>
+                                                    @elseif(explode('-', trim($lpa[1]))[1] == 'delete')
+                                                        <div class="symbol-label bg-light-danger">
+                                                            <!--begin::Svg Icon | path: icons/duotune/communication/com009.svg-->
+                                                            <span class="svg-icon svg-icon-2 svg-icon-gray-700">
+                                                                <svg xmlns="http://www.w3.org/2000/svg" width="24"
+                                                                    height="24" viewBox="0 0 24 24" fill="none">
+                                                                    <path opacity="0.3"
+                                                                        d="M5.78001 21.115L3.28001 21.949C3.10897 22.0059 2.92548 22.0141 2.75004 21.9727C2.57461 21.9312 2.41416 21.8418 2.28669 21.7144C2.15923 21.5869 2.06975 21.4264 2.0283 21.251C1.98685 21.0755 1.99507 20.892 2.05201 20.7209L2.886 18.2209L7.22801 13.879L10.128 16.774L5.78001 21.115Z"
+                                                                        fill="black"></path>
+                                                                    <path
+                                                                        d="M21.7 8.08899L15.911 2.30005C15.8161 2.2049 15.7033 2.12939 15.5792 2.07788C15.455 2.02637 15.3219 1.99988 15.1875 1.99988C15.0531 1.99988 14.92 2.02637 14.7958 2.07788C14.6717 2.12939 14.5589 2.2049 14.464 2.30005L13.74 3.02295C13.548 3.21498 13.4402 3.4754 13.4402 3.74695C13.4402 4.01849 13.548 4.27892 13.74 4.47095L14.464 5.19397L11.303 8.35498C10.1615 7.80702 8.87825 7.62639 7.62985 7.83789C6.38145 8.04939 5.2293 8.64265 4.332 9.53601C4.14026 9.72817 4.03256 9.98855 4.03256 10.26C4.03256 10.5315 4.14026 10.7918 4.332 10.984L13.016 19.667C13.208 19.859 13.4684 19.9668 13.74 19.9668C14.0115 19.9668 14.272 19.859 14.464 19.667C15.3575 18.77 15.9509 17.618 16.1624 16.3698C16.374 15.1215 16.1932 13.8383 15.645 12.697L18.806 9.53601L19.529 10.26C19.721 10.452 19.9814 10.5598 20.253 10.5598C20.5245 10.5598 20.785 10.452 20.977 10.26L21.7 9.53601C21.7952 9.44108 21.8706 9.32825 21.9221 9.2041C21.9737 9.07995 22.0002 8.94691 22.0002 8.8125C22.0002 8.67809 21.9737 8.54505 21.9221 8.4209C21.8706 8.29675 21.7952 8.18392 21.7 8.08899Z"
+                                                                        fill="black"></path>
+                                                                </svg>
+                                                            </span>
+                                                            <!--end::Svg Icon-->
+                                                        </div>
+                                                    @elseif(explode('-', trim($lpa[1]))[1] == 'approved')
+                                                        <div class="symbol-label bg-success">
+                                                            <!--begin::Svg Icon | path: icons/duotune/communication/com009.svg-->
+                                                            <span class="svg-icon svg-icon-2 svg-icon-white">
+                                                                <svg xmlns="http://www.w3.org/2000/svg" width="24"
+                                                                    height="24" viewBox="0 0 24 24" fill="none">
+                                                                    <path opacity="0.3"
+                                                                        d="M5.78001 21.115L3.28001 21.949C3.10897 22.0059 2.92548 22.0141 2.75004 21.9727C2.57461 21.9312 2.41416 21.8418 2.28669 21.7144C2.15923 21.5869 2.06975 21.4264 2.0283 21.251C1.98685 21.0755 1.99507 20.892 2.05201 20.7209L2.886 18.2209L7.22801 13.879L10.128 16.774L5.78001 21.115Z"
+                                                                        fill="black"></path>
+                                                                    <path
+                                                                        d="M21.7 8.08899L15.911 2.30005C15.8161 2.2049 15.7033 2.12939 15.5792 2.07788C15.455 2.02637 15.3219 1.99988 15.1875 1.99988C15.0531 1.99988 14.92 2.02637 14.7958 2.07788C14.6717 2.12939 14.5589 2.2049 14.464 2.30005L13.74 3.02295C13.548 3.21498 13.4402 3.4754 13.4402 3.74695C13.4402 4.01849 13.548 4.27892 13.74 4.47095L14.464 5.19397L11.303 8.35498C10.1615 7.80702 8.87825 7.62639 7.62985 7.83789C6.38145 8.04939 5.2293 8.64265 4.332 9.53601C4.14026 9.72817 4.03256 9.98855 4.03256 10.26C4.03256 10.5315 4.14026 10.7918 4.332 10.984L13.016 19.667C13.208 19.859 13.4684 19.9668 13.74 19.9668C14.0115 19.9668 14.272 19.859 14.464 19.667C15.3575 18.77 15.9509 17.618 16.1624 16.3698C16.374 15.1215 16.1932 13.8383 15.645 12.697L18.806 9.53601L19.529 10.26C19.721 10.452 19.9814 10.5598 20.253 10.5598C20.5245 10.5598 20.785 10.452 20.977 10.26L21.7 9.53601C21.7952 9.44108 21.8706 9.32825 21.9221 9.2041C21.9737 9.07995 22.0002 8.94691 22.0002 8.8125C22.0002 8.67809 21.9737 8.54505 21.9221 8.4209C21.8706 8.29675 21.7952 8.18392 21.7 8.08899Z"
+                                                                        fill="black"></path>
+                                                                </svg>
+                                                            </span>
+                                                            <!--end::Svg Icon-->
+                                                        </div>
+                                                    @elseif(explode('-', trim($lpa[1]))[1] == 'rejected')
+                                                        <div class="symbol-label bg-danger">
+                                                            <!--begin::Svg Icon | path: icons/duotune/communication/com009.svg-->
+                                                            <span class="svg-icon svg-icon-2 svg-icon-white">
+                                                                <svg xmlns="http://www.w3.org/2000/svg" width="24"
+                                                                    height="24" viewBox="0 0 24 24" fill="none">
+                                                                    <path opacity="0.3"
+                                                                        d="M5.78001 21.115L3.28001 21.949C3.10897 22.0059 2.92548 22.0141 2.75004 21.9727C2.57461 21.9312 2.41416 21.8418 2.28669 21.7144C2.15923 21.5869 2.06975 21.4264 2.0283 21.251C1.98685 21.0755 1.99507 20.892 2.05201 20.7209L2.886 18.2209L7.22801 13.879L10.128 16.774L5.78001 21.115Z"
+                                                                        fill="black"></path>
+                                                                    <path
+                                                                        d="M21.7 8.08899L15.911 2.30005C15.8161 2.2049 15.7033 2.12939 15.5792 2.07788C15.455 2.02637 15.3219 1.99988 15.1875 1.99988C15.0531 1.99988 14.92 2.02637 14.7958 2.07788C14.6717 2.12939 14.5589 2.2049 14.464 2.30005L13.74 3.02295C13.548 3.21498 13.4402 3.4754 13.4402 3.74695C13.4402 4.01849 13.548 4.27892 13.74 4.47095L14.464 5.19397L11.303 8.35498C10.1615 7.80702 8.87825 7.62639 7.62985 7.83789C6.38145 8.04939 5.2293 8.64265 4.332 9.53601C4.14026 9.72817 4.03256 9.98855 4.03256 10.26C4.03256 10.5315 4.14026 10.7918 4.332 10.984L13.016 19.667C13.208 19.859 13.4684 19.9668 13.74 19.9668C14.0115 19.9668 14.272 19.859 14.464 19.667C15.3575 18.77 15.9509 17.618 16.1624 16.3698C16.374 15.1215 16.1932 13.8383 15.645 12.697L18.806 9.53601L19.529 10.26C19.721 10.452 19.9814 10.5598 20.253 10.5598C20.5245 10.5598 20.785 10.452 20.977 10.26L21.7 9.53601C21.7952 9.44108 21.8706 9.32825 21.9221 9.2041C21.9737 9.07995 22.0002 8.94691 22.0002 8.8125C22.0002 8.67809 21.9737 8.54505 21.9221 8.4209C21.8706 8.29675 21.7952 8.18392 21.7 8.08899Z"
+                                                                        fill="black"></path>
+                                                                </svg>
+                                                            </span>
+                                                            <!--end::Svg Icon-->
+                                                        </div>
+                                                    @elseif(explode('-', trim($lpa[1]))[1] == 'paid')
+                                                        <div class="symbol-label bg-primary">
+                                                            <!--begin::Svg Icon | path: icons/duotune/communication/com009.svg-->
+                                                            <span class="svg-icon svg-icon-2 svg-icon-white">
+                                                                <svg xmlns="http://www.w3.org/2000/svg" width="24"
+                                                                    height="24" viewBox="0 0 24 24" fill="none">
+                                                                    <path opacity="0.3"
+                                                                        d="M5.78001 21.115L3.28001 21.949C3.10897 22.0059 2.92548 22.0141 2.75004 21.9727C2.57461 21.9312 2.41416 21.8418 2.28669 21.7144C2.15923 21.5869 2.06975 21.4264 2.0283 21.251C1.98685 21.0755 1.99507 20.892 2.05201 20.7209L2.886 18.2209L7.22801 13.879L10.128 16.774L5.78001 21.115Z"
+                                                                        fill="black"></path>
+                                                                    <path
+                                                                        d="M21.7 8.08899L15.911 2.30005C15.8161 2.2049 15.7033 2.12939 15.5792 2.07788C15.455 2.02637 15.3219 1.99988 15.1875 1.99988C15.0531 1.99988 14.92 2.02637 14.7958 2.07788C14.6717 2.12939 14.5589 2.2049 14.464 2.30005L13.74 3.02295C13.548 3.21498 13.4402 3.4754 13.4402 3.74695C13.4402 4.01849 13.548 4.27892 13.74 4.47095L14.464 5.19397L11.303 8.35498C10.1615 7.80702 8.87825 7.62639 7.62985 7.83789C6.38145 8.04939 5.2293 8.64265 4.332 9.53601C4.14026 9.72817 4.03256 9.98855 4.03256 10.26C4.03256 10.5315 4.14026 10.7918 4.332 10.984L13.016 19.667C13.208 19.859 13.4684 19.9668 13.74 19.9668C14.0115 19.9668 14.272 19.859 14.464 19.667C15.3575 18.77 15.9509 17.618 16.1624 16.3698C16.374 15.1215 16.1932 13.8383 15.645 12.697L18.806 9.53601L19.529 10.26C19.721 10.452 19.9814 10.5598 20.253 10.5598C20.5245 10.5598 20.785 10.452 20.977 10.26L21.7 9.53601C21.7952 9.44108 21.8706 9.32825 21.9221 9.2041C21.9737 9.07995 22.0002 8.94691 22.0002 8.8125C22.0002 8.67809 21.9737 8.54505 21.9221 8.4209C21.8706 8.29675 21.7952 8.18392 21.7 8.08899Z"
+                                                                        fill="black"></path>
+                                                                </svg>
+                                                            </span>
+                                                            <!--end::Svg Icon-->
+                                                        </div>
+                                                    @endif
+
                                                 </div>
-                                                <!--end::Timeline heading-->
+                                                <!--end::Timeline icon-->
+                                                <!--begin::Timeline content-->
+                                                <div class="timeline-content mb-10 mt-n2">
+                                                    <!--begin::Timeline heading-->
+                                                    <div class="overflow-auto pe-3">
+                                                        @if ($lpa[1] == 'cash-store')
+                                                            <!--begin::Title-->
+                                                            <div class="fs-5 fw-bold mb-2">Has <i
+                                                                    class="text-dark fw-bolder">created</i>
+                                                                this
+                                                                cash transaction</div>
+                                                            <!--end::Title-->
+                                                            <!--begin::Description-->
+                                                            <div class="d-flex align-items-center mt-1 fs-6">
+                                                                <!--begin::Info-->
+                                                                <div class="text-muted me-2 fs-7">Created at
+                                                                    {{ $lpa[2]->format('l, jS \of F Y h:i:s A') }} by
+                                                                </div>
+                                                                <!--end::Info-->
+                                                                <!--begin::User-->
+                                                                <div class="symbol symbol-circle symbol-25px"
+                                                                    data-bs-toggle="tooltip" data-bs-boundary="window"
+                                                                    data-bs-placement="top" title="{{ $lpa[0] }}"
+                                                                    data-bs-original-title="{{ $lpa[0] }}">
+                                                                    <span
+                                                                        class="symbol-label bg-success text-inverse-warning fw-bolder">{{ ucfirst($lpa[0][0]) }}</span>
+                                                                </div>
+                                                                <!--end::User-->
+                                                            </div>
+                                                            <!--end::Description-->
+                                                        @elseif ($lpa[1] == 'cash-update')
+                                                            <!--begin::Title-->
+                                                            <div class="fs-5 fw-bold mb-2">Has <i
+                                                                    class="text-dark fw-bolder">updated</i>
+                                                                this
+                                                                cash transaction</div>
+                                                            <!--end::Title-->
+                                                            <!--begin::Description-->
+                                                            <div class="d-flex align-items-center mt-1 fs-6">
+                                                                <!--begin::Info-->
+                                                                <div class="text-muted me-2 fs-7">Updated at
+                                                                    {{ $lpa[2]->format('l, jS \of F Y h:i:s A') }} by
+                                                                </div>
+                                                                <!--end::Info-->
+                                                                <!--begin::User-->
+                                                                <div class="symbol symbol-circle symbol-25px"
+                                                                    data-bs-toggle="tooltip" data-bs-boundary="window"
+                                                                    data-bs-placement="top" title="{{ $lpa[0] }}"
+                                                                    data-bs-original-title="{{ $lpa[0] }}">
+                                                                    <span
+                                                                        class="symbol-label bg-success text-inverse-warning fw-bolder">{{ ucfirst($lpa[0][0]) }}</span>
+                                                                </div>
+                                                                <!--end::User-->
+                                                            </div>
+                                                            <!--end::Description-->
+                                                        @elseif ($lpa[1] == 'cash-delete')
+                                                            <!--begin::Title-->
+                                                            <div class="fs-5 fw-bold mb-2">Has <i
+                                                                    class="text-dark fw-bolder">delated</i>
+                                                                this
+                                                                cash transaction</div>
+                                                            <!--end::Title-->
+                                                            <!--begin::Description-->
+                                                            <div class="d-flex align-items-center mt-1 fs-6">
+                                                                <!--begin::Info-->
+                                                                <div class="text-muted me-2 fs-7">Delated at
+                                                                    {{ $lpa[2]->format('l, jS \of F Y h:i:s A') }} by
+                                                                </div>
+                                                                <!--end::Info-->
+                                                                <!--begin::User-->
+                                                                <div class="symbol symbol-circle symbol-25px"
+                                                                    data-bs-toggle="tooltip" data-bs-boundary="window"
+                                                                    data-bs-placement="top" title="{{ $lpa[0] }}"
+                                                                    data-bs-original-title="{{ $lpa[0] }}">
+                                                                    <span
+                                                                        class="symbol-label bg-success text-inverse-warning fw-bolder">{{ ucfirst($lpa[0][0]) }}</span>
+                                                                </div>
+                                                                <!--end::User-->
+                                                            </div>
+                                                            <!--end::Description-->
+                                                        @elseif ($lpa[1] == 'cash-approved-findir')
+                                                            <!--begin::Title-->
+                                                            <div class="fs-5 fw-bold mb-2">Has <i
+                                                                    class="text-dark fw-bolder">approved</i>
+                                                                this
+                                                                cash transaction</div>
+                                                            <!--end::Title-->
+                                                            <!--begin::Description-->
+                                                            <div class="d-flex align-items-center mt-1 fs-6">
+                                                                <!--begin::Info-->
+                                                                <div class="text-muted me-2 fs-7">Updated at
+                                                                    {{ $lpa[2]->format('l, jS \of F Y h:i:s A') }} by
+                                                                </div>
+                                                                <!--end::Info-->
+                                                                <!--begin::User-->
+                                                                <div class="symbol symbol-circle symbol-25px"
+                                                                    data-bs-toggle="tooltip" data-bs-boundary="window"
+                                                                    data-bs-placement="top" title="{{ $lpa[0] }}"
+                                                                    data-bs-original-title="{{ $lpa[0] }}">
+                                                                    <span
+                                                                        class="symbol-label bg-success text-inverse-warning fw-bolder">{{ ucfirst($lpa[0][0]) }}</span>
+                                                                </div>
+                                                                <!--end::User-->
+                                                            </div>
+                                                            <!--end::Description-->
+                                                        @elseif ($lpa[1] == 'cash-approved-excdir')
+                                                            <!--begin::Title-->
+                                                            <div class="fs-5 fw-bold mb-2">Has <i
+                                                                    class="text-dark fw-bolder">approved</i>
+                                                                this
+                                                                cash transaction</div>
+                                                            <!--end::Title-->
+                                                            <!--begin::Description-->
+                                                            <div class="d-flex align-items-center mt-1 fs-6">
+                                                                <!--begin::Info-->
+                                                                <div class="text-muted me-2 fs-7">Updated at
+                                                                    {{ $lpa[2]->format('l, jS \of F Y h:i:s A') }} by
+                                                                </div>
+                                                                <!--end::Info-->
+                                                                <!--begin::User-->
+                                                                <div class="symbol symbol-circle symbol-25px"
+                                                                    data-bs-toggle="tooltip" data-bs-boundary="window"
+                                                                    data-bs-placement="top" title="{{ $lpa[0] }}"
+                                                                    data-bs-original-title="{{ $lpa[0] }}">
+                                                                    <span
+                                                                        class="symbol-label bg-success text-inverse-warning fw-bolder">{{ ucfirst($lpa[0][0]) }}</span>
+                                                                </div>
+                                                                <!--end::User-->
+                                                            </div>
+                                                            <!--end::Description-->
+                                                        @elseif ($lpa[1] == 'cash-rejected-findir')
+                                                            <!--begin::Title-->
+                                                            <div class="fs-5 fw-bold mb-2">Has <i
+                                                                    class="text-dark fw-bolder">rejected</i>
+                                                                this
+                                                                cash transaction</div>
+                                                            <!--end::Title-->
+                                                            <!--begin::Description-->
+                                                            <div class="d-flex align-items-center mt-1 fs-6">
+                                                                <!--begin::Info-->
+                                                                <div class="text-muted me-2 fs-7">Updated at
+                                                                    {{ $lpa[2]->format('l, jS \of F Y h:i:s A') }} by
+                                                                </div>
+                                                                <!--end::Info-->
+                                                                <!--begin::User-->
+                                                                <div class="symbol symbol-circle symbol-25px"
+                                                                    data-bs-toggle="tooltip" data-bs-boundary="window"
+                                                                    data-bs-placement="top" title="{{ $lpa[0] }}"
+                                                                    data-bs-original-title="{{ $lpa[0] }}">
+                                                                    <span
+                                                                        class="symbol-label bg-success text-inverse-warning fw-bolder">{{ ucfirst($lpa[0][0]) }}</span>
+                                                                </div>
+                                                                <!--end::User-->
+                                                            </div>
+                                                            <!--end::Description-->
+                                                        @elseif ($lpa[1] == 'cash-rejected-excdir')
+                                                            <!--begin::Title-->
+                                                            <div class="fs-5 fw-bold mb-2">Has <i
+                                                                    class="text-dark fw-bolder">rejected</i>
+                                                                this
+                                                                cash transaction</div>
+                                                            <!--end::Title-->
+                                                            <!--begin::Description-->
+                                                            <div class="d-flex align-items-center mt-1 fs-6">
+                                                                <!--begin::Info-->
+                                                                <div class="text-muted me-2 fs-7">Updated at
+                                                                    {{ $lpa[2]->format('l, jS \of F Y h:i:s A') }} by
+                                                                </div>
+                                                                <!--end::Info-->
+                                                                <!--begin::User-->
+                                                                <div class="symbol symbol-circle symbol-25px"
+                                                                    data-bs-toggle="tooltip" data-bs-boundary="window"
+                                                                    data-bs-placement="top" title="{{ $lpa[0] }}"
+                                                                    data-bs-original-title="{{ $lpa[0] }}">
+                                                                    <span
+                                                                        class="symbol-label bg-success text-inverse-warning fw-bolder">{{ ucfirst($lpa[0][0]) }}</span>
+                                                                </div>
+                                                                <!--end::User-->
+                                                            </div>
+                                                            <!--end::Description-->
+                                                        @elseif ($lpa[1] == 'cash-paid')
+                                                            <!--begin::Title-->
+                                                            <div class="fs-5 fw-bold mb-2">Has <i
+                                                                    class="text-dark fw-bolder">paid</i>
+                                                                this
+                                                                cash transaction</div>
+                                                            <!--end::Title-->
+                                                            <!--begin::Description-->
+                                                            <div class="d-flex align-items-center mt-1 fs-6">
+                                                                <!--begin::Info-->
+                                                                <div class="text-muted me-2 fs-7">Updated at
+                                                                    {{ $lpa[2]->format('l, jS \of F Y h:i:s A') }} by
+                                                                </div>
+                                                                <!--end::Info-->
+                                                                <!--begin::User-->
+                                                                <div class="symbol symbol-circle symbol-25px"
+                                                                    data-bs-toggle="tooltip" data-bs-boundary="window"
+                                                                    data-bs-placement="top" title="{{ $lpa[0] }}"
+                                                                    data-bs-original-title="{{ $lpa[0] }}">
+                                                                    <span
+                                                                        class="symbol-label bg-success text-inverse-warning fw-bolder">{{ ucfirst($lpa[0][0]) }}</span>
+                                                                </div>
+                                                                <!--end::User-->
+                                                            </div>
+                                                            <!--end::Description-->
+                                                        @elseif ($lpa[1] == 'operational-store')
+                                                            <!--begin::Title-->
+                                                            <div class="fs-5 fw-bold mb-2">Has <i
+                                                                    class="text-dark fw-bolder">created</i>
+                                                                this
+                                                                mandiri operational transaction</div>
+                                                            <!--end::Title-->
+                                                            <!--begin::Description-->
+                                                            <div class="d-flex align-items-center mt-1 fs-6">
+                                                                <!--begin::Info-->
+                                                                <div class="text-muted me-2 fs-7">Created at
+                                                                    {{ $lpa[2]->format('l, jS \of F Y h:i:s A') }} by
+                                                                </div>
+                                                                <!--end::Info-->
+                                                                <!--begin::User-->
+                                                                <div class="symbol symbol-circle symbol-25px"
+                                                                    data-bs-toggle="tooltip" data-bs-boundary="window"
+                                                                    data-bs-placement="top" title="{{ $lpa[0] }}"
+                                                                    data-bs-original-title="{{ $lpa[0] }}">
+                                                                    <span
+                                                                        class="symbol-label bg-success text-inverse-warning fw-bolder">{{ ucfirst($lpa[0][0]) }}</span>
+                                                                </div>
+                                                                <!--end::User-->
+                                                            </div>
+                                                            <!--end::Description-->
+                                                        @elseif ($lpa[1] == 'operational-update')
+                                                            <!--begin::Title-->
+                                                            <div class="fs-5 fw-bold mb-2">Has <i
+                                                                    class="text-dark fw-bolder">updated</i>
+                                                                this
+                                                                mandiri operational transaction</div>
+                                                            <!--end::Title-->
+                                                            <!--begin::Description-->
+                                                            <div class="d-flex align-items-center mt-1 fs-6">
+                                                                <!--begin::Info-->
+                                                                <div class="text-muted me-2 fs-7">Updated at
+                                                                    {{ $lpa[2]->format('l, jS \of F Y h:i:s A') }} by
+                                                                </div>
+                                                                <!--end::Info-->
+                                                                <!--begin::User-->
+                                                                <div class="symbol symbol-circle symbol-25px"
+                                                                    data-bs-toggle="tooltip" data-bs-boundary="window"
+                                                                    data-bs-placement="top" title="{{ $lpa[0] }}"
+                                                                    data-bs-original-title="{{ $lpa[0] }}">
+                                                                    <span
+                                                                        class="symbol-label bg-success text-inverse-warning fw-bolder">{{ ucfirst($lpa[0][0]) }}</span>
+                                                                </div>
+                                                                <!--end::User-->
+                                                            </div>
+                                                            <!--end::Description-->
+                                                        @elseif ($lpa[1] == 'operational-delete')
+                                                            <!--begin::Title-->
+                                                            <div class="fs-5 fw-bold mb-2">Has <i
+                                                                    class="text-dark fw-bolder">delated</i>
+                                                                this
+                                                                mandiri operational transaction</div>
+                                                            <!--end::Title-->
+                                                            <!--begin::Description-->
+                                                            <div class="d-flex align-items-center mt-1 fs-6">
+                                                                <!--begin::Info-->
+                                                                <div class="text-muted me-2 fs-7">Delated at
+                                                                    {{ $lpa[2]->format('l, jS \of F Y h:i:s A') }} by
+                                                                </div>
+                                                                <!--end::Info-->
+                                                                <!--begin::User-->
+                                                                <div class="symbol symbol-circle symbol-25px"
+                                                                    data-bs-toggle="tooltip" data-bs-boundary="window"
+                                                                    data-bs-placement="top" title="{{ $lpa[0] }}"
+                                                                    data-bs-original-title="{{ $lpa[0] }}">
+                                                                    <span
+                                                                        class="symbol-label bg-success text-inverse-warning fw-bolder">{{ ucfirst($lpa[0][0]) }}</span>
+                                                                </div>
+                                                                <!--end::User-->
+                                                            </div>
+                                                            <!--end::Description-->
+                                                        @elseif ($lpa[1] == 'operational-approved-findir')
+                                                            <!--begin::Title-->
+                                                            <div class="fs-5 fw-bold mb-2">Has <i
+                                                                    class="text-dark fw-bolder">approved</i>
+                                                                this
+                                                                mandiri operational transaction</div>
+                                                            <!--end::Title-->
+                                                            <!--begin::Description-->
+                                                            <div class="d-flex align-items-center mt-1 fs-6">
+                                                                <!--begin::Info-->
+                                                                <div class="text-muted me-2 fs-7">Updated at
+                                                                    {{ $lpa[2]->format('l, jS \of F Y h:i:s A') }} by
+                                                                </div>
+                                                                <!--end::Info-->
+                                                                <!--begin::User-->
+                                                                <div class="symbol symbol-circle symbol-25px"
+                                                                    data-bs-toggle="tooltip" data-bs-boundary="window"
+                                                                    data-bs-placement="top" title="{{ $lpa[0] }}"
+                                                                    data-bs-original-title="{{ $lpa[0] }}">
+                                                                    <span
+                                                                        class="symbol-label bg-success text-inverse-warning fw-bolder">{{ ucfirst($lpa[0][0]) }}</span>
+                                                                </div>
+                                                                <!--end::User-->
+                                                            </div>
+                                                            <!--end::Description-->
+                                                        @elseif ($lpa[1] == 'operational-approved-excdir')
+                                                            <!--begin::Title-->
+                                                            <div class="fs-5 fw-bold mb-2">Has <i
+                                                                    class="text-dark fw-bolder">approved</i>
+                                                                this
+                                                                mandiri operational transaction</div>
+                                                            <!--end::Title-->
+                                                            <!--begin::Description-->
+                                                            <div class="d-flex align-items-center mt-1 fs-6">
+                                                                <!--begin::Info-->
+                                                                <div class="text-muted me-2 fs-7">Updated at
+                                                                    {{ $lpa[2]->format('l, jS \of F Y h:i:s A') }} by
+                                                                </div>
+                                                                <!--end::Info-->
+                                                                <!--begin::User-->
+                                                                <div class="symbol symbol-circle symbol-25px"
+                                                                    data-bs-toggle="tooltip" data-bs-boundary="window"
+                                                                    data-bs-placement="top" title="{{ $lpa[0] }}"
+                                                                    data-bs-original-title="{{ $lpa[0] }}">
+                                                                    <span
+                                                                        class="symbol-label bg-success text-inverse-warning fw-bolder">{{ ucfirst($lpa[0][0]) }}</span>
+                                                                </div>
+                                                                <!--end::User-->
+                                                            </div>
+                                                            <!--end::Description-->
+                                                        @elseif ($lpa[1] == 'operational-rejected-findir')
+                                                            <!--begin::Title-->
+                                                            <div class="fs-5 fw-bold mb-2">Has <i
+                                                                    class="text-dark fw-bolder">rejected</i>
+                                                                this
+                                                                mandiri operational transaction</div>
+                                                            <!--end::Title-->
+                                                            <!--begin::Description-->
+                                                            <div class="d-flex align-items-center mt-1 fs-6">
+                                                                <!--begin::Info-->
+                                                                <div class="text-muted me-2 fs-7">Updated at
+                                                                    {{ $lpa[2]->format('l, jS \of F Y h:i:s A') }} by
+                                                                </div>
+                                                                <!--end::Info-->
+                                                                <!--begin::User-->
+                                                                <div class="symbol symbol-circle symbol-25px"
+                                                                    data-bs-toggle="tooltip" data-bs-boundary="window"
+                                                                    data-bs-placement="top" title="{{ $lpa[0] }}"
+                                                                    data-bs-original-title="{{ $lpa[0] }}">
+                                                                    <span
+                                                                        class="symbol-label bg-success text-inverse-warning fw-bolder">{{ ucfirst($lpa[0][0]) }}</span>
+                                                                </div>
+                                                                <!--end::User-->
+                                                            </div>
+                                                            <!--end::Description-->
+                                                        @elseif ($lpa[1] == 'operational-rejected-excdir')
+                                                            <!--begin::Title-->
+                                                            <div class="fs-5 fw-bold mb-2">Has <i
+                                                                    class="text-dark fw-bolder">rejected</i>
+                                                                this
+                                                                mandiri operational transaction</div>
+                                                            <!--end::Title-->
+                                                            <!--begin::Description-->
+                                                            <div class="d-flex align-items-center mt-1 fs-6">
+                                                                <!--begin::Info-->
+                                                                <div class="text-muted me-2 fs-7">Updated at
+                                                                    {{ $lpa[2]->format('l, jS \of F Y h:i:s A') }} by
+                                                                </div>
+                                                                <!--end::Info-->
+                                                                <!--begin::User-->
+                                                                <div class="symbol symbol-circle symbol-25px"
+                                                                    data-bs-toggle="tooltip" data-bs-boundary="window"
+                                                                    data-bs-placement="top" title="{{ $lpa[0] }}"
+                                                                    data-bs-original-title="{{ $lpa[0] }}">
+                                                                    <span
+                                                                        class="symbol-label bg-success text-inverse-warning fw-bolder">{{ ucfirst($lpa[0][0]) }}</span>
+                                                                </div>
+                                                                <!--end::User-->
+                                                            </div>
+                                                            <!--end::Description-->
+                                                        @elseif ($lpa[1] == 'operational-paid')
+                                                            <!--begin::Title-->
+                                                            <div class="fs-5 fw-bold mb-2">Has <i
+                                                                    class="text-dark fw-bolder">paid</i>
+                                                                this
+                                                                mandiri operational transaction</div>
+                                                            <!--end::Title-->
+                                                            <!--begin::Description-->
+                                                            <div class="d-flex align-items-center mt-1 fs-6">
+                                                                <!--begin::Info-->
+                                                                <div class="text-muted me-2 fs-7">Updated at
+                                                                    {{ $lpa[2]->format('l, jS \of F Y h:i:s A') }} by
+                                                                </div>
+                                                                <!--end::Info-->
+                                                                <!--begin::User-->
+                                                                <div class="symbol symbol-circle symbol-25px"
+                                                                    data-bs-toggle="tooltip" data-bs-boundary="window"
+                                                                    data-bs-placement="top" title="{{ $lpa[0] }}"
+                                                                    data-bs-original-title="{{ $lpa[0] }}">
+                                                                    <span
+                                                                        class="symbol-label bg-success text-inverse-warning fw-bolder">{{ ucfirst($lpa[0][0]) }}</span>
+                                                                </div>
+                                                                <!--end::User-->
+                                                            </div>
+                                                            <!--end::Description-->
+                                                        @elseif ($lpa[1] == 'escrow-store')
+                                                            <!--begin::Title-->
+                                                            <div class="fs-5 fw-bold mb-2">Has <i
+                                                                    class="text-dark fw-bolder">created</i>
+                                                                this
+                                                                mandiri escrow transaction</div>
+                                                            <!--end::Title-->
+                                                            <!--begin::Description-->
+                                                            <div class="d-flex align-items-center mt-1 fs-6">
+                                                                <!--begin::Info-->
+                                                                <div class="text-muted me-2 fs-7">Created at
+                                                                    {{ $lpa[2]->format('l, jS \of F Y h:i:s A') }} by
+                                                                </div>
+                                                                <!--end::Info-->
+                                                                <!--begin::User-->
+                                                                <div class="symbol symbol-circle symbol-25px"
+                                                                    data-bs-toggle="tooltip" data-bs-boundary="window"
+                                                                    data-bs-placement="top" title="{{ $lpa[0] }}"
+                                                                    data-bs-original-title="{{ $lpa[0] }}">
+                                                                    <span
+                                                                        class="symbol-label bg-success text-inverse-warning fw-bolder">{{ ucfirst($lpa[0][0]) }}</span>
+                                                                </div>
+                                                                <!--end::User-->
+                                                            </div>
+                                                            <!--end::Description-->
+                                                        @elseif ($lpa[1] == 'escrow-update')
+                                                            <!--begin::Title-->
+                                                            <div class="fs-5 fw-bold mb-2">Has <i
+                                                                    class="text-dark fw-bolder">updated</i>
+                                                                this
+                                                                mandiri escrow transaction</div>
+                                                            <!--end::Title-->
+                                                            <!--begin::Description-->
+                                                            <div class="d-flex align-items-center mt-1 fs-6">
+                                                                <!--begin::Info-->
+                                                                <div class="text-muted me-2 fs-7">Updated at
+                                                                    {{ $lpa[2]->format('l, jS \of F Y h:i:s A') }} by
+                                                                </div>
+                                                                <!--end::Info-->
+                                                                <!--begin::User-->
+                                                                <div class="symbol symbol-circle symbol-25px"
+                                                                    data-bs-toggle="tooltip" data-bs-boundary="window"
+                                                                    data-bs-placement="top" title="{{ $lpa[0] }}"
+                                                                    data-bs-original-title="{{ $lpa[0] }}">
+                                                                    <span
+                                                                        class="symbol-label bg-success text-inverse-warning fw-bolder">{{ ucfirst($lpa[0][0]) }}</span>
+                                                                </div>
+                                                                <!--end::User-->
+                                                            </div>
+                                                            <!--end::Description-->
+                                                        @elseif ($lpa[1] == 'escrow-delete')
+                                                            <!--begin::Title-->
+                                                            <div class="fs-5 fw-bold mb-2">Has <i
+                                                                    class="text-dark fw-bolder">delated</i>
+                                                                this
+                                                                mandiri escrow transaction</div>
+                                                            <!--end::Title-->
+                                                            <!--begin::Description-->
+                                                            <div class="d-flex align-items-center mt-1 fs-6">
+                                                                <!--begin::Info-->
+                                                                <div class="text-muted me-2 fs-7">Delated at
+                                                                    {{ $lpa[2]->format('l, jS \of F Y h:i:s A') }} by
+                                                                </div>
+                                                                <!--end::Info-->
+                                                                <!--begin::User-->
+                                                                <div class="symbol symbol-circle symbol-25px"
+                                                                    data-bs-toggle="tooltip" data-bs-boundary="window"
+                                                                    data-bs-placement="top" title="{{ $lpa[0] }}"
+                                                                    data-bs-original-title="{{ $lpa[0] }}">
+                                                                    <span
+                                                                        class="symbol-label bg-success text-inverse-warning fw-bolder">{{ ucfirst($lpa[0][0]) }}</span>
+                                                                </div>
+                                                                <!--end::User-->
+                                                            </div>
+                                                            <!--end::Description-->
+                                                        @elseif ($lpa[1] == 'escrow-approved-findir')
+                                                            <!--begin::Title-->
+                                                            <div class="fs-5 fw-bold mb-2">Has <i
+                                                                    class="text-dark fw-bolder">approved</i>
+                                                                this
+                                                                mandiri escrow transaction</div>
+                                                            <!--end::Title-->
+                                                            <!--begin::Description-->
+                                                            <div class="d-flex align-items-center mt-1 fs-6">
+                                                                <!--begin::Info-->
+                                                                <div class="text-muted me-2 fs-7">Updated at
+                                                                    {{ $lpa[2]->format('l, jS \of F Y h:i:s A') }} by
+                                                                </div>
+                                                                <!--end::Info-->
+                                                                <!--begin::User-->
+                                                                <div class="symbol symbol-circle symbol-25px"
+                                                                    data-bs-toggle="tooltip" data-bs-boundary="window"
+                                                                    data-bs-placement="top" title="{{ $lpa[0] }}"
+                                                                    data-bs-original-title="{{ $lpa[0] }}">
+                                                                    <span
+                                                                        class="symbol-label bg-success text-inverse-warning fw-bolder">{{ ucfirst($lpa[0][0]) }}</span>
+                                                                </div>
+                                                                <!--end::User-->
+                                                            </div>
+                                                            <!--end::Description-->
+                                                        @elseif ($lpa[1] == 'escrow-approved-excdir')
+                                                            <!--begin::Title-->
+                                                            <div class="fs-5 fw-bold mb-2">Has <i
+                                                                    class="text-dark fw-bolder">approved</i>
+                                                                this
+                                                                mandiri escrow transaction</div>
+                                                            <!--end::Title-->
+                                                            <!--begin::Description-->
+                                                            <div class="d-flex align-items-center mt-1 fs-6">
+                                                                <!--begin::Info-->
+                                                                <div class="text-muted me-2 fs-7">Updated at
+                                                                    {{ $lpa[2]->format('l, jS \of F Y h:i:s A') }} by
+                                                                </div>
+                                                                <!--end::Info-->
+                                                                <!--begin::User-->
+                                                                <div class="symbol symbol-circle symbol-25px"
+                                                                    data-bs-toggle="tooltip" data-bs-boundary="window"
+                                                                    data-bs-placement="top" title="{{ $lpa[0] }}"
+                                                                    data-bs-original-title="{{ $lpa[0] }}">
+                                                                    <span
+                                                                        class="symbol-label bg-success text-inverse-warning fw-bolder">{{ ucfirst($lpa[0][0]) }}</span>
+                                                                </div>
+                                                                <!--end::User-->
+                                                            </div>
+                                                            <!--end::Description-->
+                                                        @elseif ($lpa[1] == 'escrow-rejected-findir')
+                                                            <!--begin::Title-->
+                                                            <div class="fs-5 fw-bold mb-2">Has <i
+                                                                    class="text-dark fw-bolder">rejected</i>
+                                                                this
+                                                                mandiri escrow transaction</div>
+                                                            <!--end::Title-->
+                                                            <!--begin::Description-->
+                                                            <div class="d-flex align-items-center mt-1 fs-6">
+                                                                <!--begin::Info-->
+                                                                <div class="text-muted me-2 fs-7">Updated at
+                                                                    {{ $lpa[2]->format('l, jS \of F Y h:i:s A') }} by
+                                                                </div>
+                                                                <!--end::Info-->
+                                                                <!--begin::User-->
+                                                                <div class="symbol symbol-circle symbol-25px"
+                                                                    data-bs-toggle="tooltip" data-bs-boundary="window"
+                                                                    data-bs-placement="top" title="{{ $lpa[0] }}"
+                                                                    data-bs-original-title="{{ $lpa[0] }}">
+                                                                    <span
+                                                                        class="symbol-label bg-success text-inverse-warning fw-bolder">{{ ucfirst($lpa[0][0]) }}</span>
+                                                                </div>
+                                                                <!--end::User-->
+                                                            </div>
+                                                            <!--end::Description-->
+                                                        @elseif ($lpa[1] == 'escrow-rejected-excdir')
+                                                            <!--begin::Title-->
+                                                            <div class="fs-5 fw-bold mb-2">Has <i
+                                                                    class="text-dark fw-bolder">rejected</i>
+                                                                this
+                                                                mandiri escrow transaction</div>
+                                                            <!--end::Title-->
+                                                            <!--begin::Description-->
+                                                            <div class="d-flex align-items-center mt-1 fs-6">
+                                                                <!--begin::Info-->
+                                                                <div class="text-muted me-2 fs-7">Updated at
+                                                                    {{ $lpa[2]->format('l, jS \of F Y h:i:s A') }} by
+                                                                </div>
+                                                                <!--end::Info-->
+                                                                <!--begin::User-->
+                                                                <div class="symbol symbol-circle symbol-25px"
+                                                                    data-bs-toggle="tooltip" data-bs-boundary="window"
+                                                                    data-bs-placement="top" title="{{ $lpa[0] }}"
+                                                                    data-bs-original-title="{{ $lpa[0] }}">
+                                                                    <span
+                                                                        class="symbol-label bg-success text-inverse-warning fw-bolder">{{ ucfirst($lpa[0][0]) }}</span>
+                                                                </div>
+                                                                <!--end::User-->
+                                                            </div>
+                                                            <!--end::Description-->
+                                                        @elseif ($lpa[1] == 'escrow-paid')
+                                                            <!--begin::Title-->
+                                                            <div class="fs-5 fw-bold mb-2">Has <i
+                                                                    class="text-dark fw-bolder">paid</i>
+                                                                this
+                                                                mandiri escrow transaction</div>
+                                                            <!--end::Title-->
+                                                            <!--begin::Description-->
+                                                            <div class="d-flex align-items-center mt-1 fs-6">
+                                                                <!--begin::Info-->
+                                                                <div class="text-muted me-2 fs-7">Updated at
+                                                                    {{ $lpa[2]->format('l, jS \of F Y h:i:s A') }} by
+                                                                </div>
+                                                                <!--end::Info-->
+                                                                <!--begin::User-->
+                                                                <div class="symbol symbol-circle symbol-25px"
+                                                                    data-bs-toggle="tooltip" data-bs-boundary="window"
+                                                                    data-bs-placement="top" title="{{ $lpa[0] }}"
+                                                                    data-bs-original-title="{{ $lpa[0] }}">
+                                                                    <span
+                                                                        class="symbol-label bg-success text-inverse-warning fw-bolder">{{ ucfirst($lpa[0][0]) }}</span>
+                                                                </div>
+                                                                <!--end::User-->
+                                                            </div>
+                                                            <!--end::Description-->
+                                                        @endif
+                                                    </div>
+                                                    <!--end::Timeline heading-->
+                                                </div>
+                                                <!--end::Timeline content-->
                                             </div>
-                                            <!--end::Timeline content-->
-                                        </div>
-                                        <!--end::Timeline item-->
+                                            <!--end::Timeline item-->
+                                        @endforeach
                                     </div>
                                     <!--end::Timeline-->
                                 </div>
