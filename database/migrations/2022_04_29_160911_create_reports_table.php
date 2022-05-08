@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateBalancesTable extends Migration
+class CreateReportsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,11 +13,15 @@ class CreateBalancesTable extends Migration
      */
     public function up()
     {
-        Schema::create('balances', function (Blueprint $table) {
+        Schema::create('reports', function (Blueprint $table) {
             $table->id();
-            $table->string('category');
-            $table->bigInteger('balance');
-            $table->string('year');
+            $table->uuid('uuid');
+            $table->string('start_date');
+            $table->string('end_date');
+            $table->integer('report_type');
+            $table->integer('type');
+            $table->integer('status');
+            $table->integer('is_active');
             $table->timestamps();
         });
     }
@@ -29,6 +33,6 @@ class CreateBalancesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('balances');
+        Schema::dropIfExists('reports');
     }
 }

@@ -18,9 +18,11 @@ class Project extends Model
         'category_id',
         'status',
         'contract',
+        'project_manager',
         'start_date',
         'end_date',
         'priority',
+        'is_active',
     ];
 
     /**

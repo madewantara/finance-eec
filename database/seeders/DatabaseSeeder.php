@@ -20,8 +20,6 @@ class DatabaseSeeder extends Seeder
             ProjectSeeder::class,
             CategoryProjectSeeder::class,
             LocationProjectSeeder::class,
-            TransactionSeeder::class,
-            TransactionFilesSeeder::class,
             BalanceSeeder::class,
         ]);
     }

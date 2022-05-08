@@ -21,9 +21,11 @@ class CreateProjectsTable extends Migration
             $table->foreignId('category_id');
             $table->integer('status');
             $table->bigInteger('contract');
+            $table->string('project_manager');
             $table->string('start_date');
             $table->string('end_date');
             $table->integer('priority')->nullable();
+            $table->integer('is_active');
             $table->timestamps();
         });
     }

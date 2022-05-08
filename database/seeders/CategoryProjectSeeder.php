@@ -17,28 +17,33 @@ class CategoryProjectSeeder extends Seeder
     {
         DB::table('category_projects')->insert([
             [
-                'id' => 4,
+                'id' => 5,
                 'category' => 'New Radar',
                 'uuid' => Str::uuid(),
             ],
             [
-                'id' => 3,
+                'id' => 4,
                 'category' => 'Preventive Maintenance',
                 'uuid' => Str::uuid(),
             ],
             [
-                'id' => 5,
+                'id' => 6,
                 'category' => 'Corrective Maintenance',
                 'uuid' => Str::uuid(),
             ],
             [
+                'id' => 3,
+                'category' => 'Radar Reinstallation',
+                'uuid' => Str::uuid(),
+            ],
+            [
                 'id' => 2,
-                'category' => 'Reinstallation',
+                'category' => 'Radar Spare Part',
                 'uuid' => Str::uuid(),
             ],
             [
                 'id' => 1,
-                'category' => 'Bongkar Radar',
+                'category' => 'Radar Upgrade',
                 'uuid' => Str::uuid(),
             ],
         ]);
