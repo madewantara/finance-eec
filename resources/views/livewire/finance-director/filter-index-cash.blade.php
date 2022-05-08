@@ -59,8 +59,6 @@
                     <h1 class="text-gray-800 mb-5 mb-lg-10" style="font-size: 450%; font-weight: 400;">
                         Rp. {{ number_format($cashBalance[0]->balance, 0, ',', '.') }}
                     </h1>
-                    <button data-bs-toggle="modal" data-bs-target="#update_balance"
-                        class="btn btn-primary fw-bolder fs-8 fs-lg-base">Update balance</button>
                 </div>
                 <!--end::Wrapper-->
                 <!--begin::Wrapper-->
@@ -75,77 +73,6 @@
             <!--end::Hero content-->
         </div>
         <!--end::Hero body-->
-    </div>
-    <div class="modal fade" id="update_balance" tabindex="-1" aria-modal="true" role="dialog" aria-hidden="true">
-        <!--begin::Modal dialog-->
-        <div class="modal-dialog modal-dialog-centered mw-750px">
-            <!--begin::Modal content-->
-            <div class="modal-content rounded">
-                <!--begin::Modal header-->
-                <div class="modal-header pb-0 border-0 justify-content-end">
-                    <!--begin::Close-->
-                    <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
-                        <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
-                        <span class="svg-icon svg-icon-1">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-                                fill="none">
-                                <rect opacity="0.5" x="6" y="17.3137" width="16" height="2" rx="1"
-                                    transform="rotate(-45 6 17.3137)" fill="currentColor"></rect>
-                                <rect x="7.41422" y="6" width="16" height="2" rx="1" transform="rotate(45 7.41422 6)"
-                                    fill="currentColor"></rect>
-                            </svg>
-                        </span>
-                        <!--end::Svg Icon-->
-                    </div>
-                    <!--end::Close-->
-                </div>
-                <!--begin::Modal header-->
-                <!--begin::Modal body-->
-                <div class="modal-body scroll-y px-10 px-lg-15 pt-0 pb-15">
-                    <!--begin:Form-->
-                    <form wire:submit.prevent="submitUpdateBalance">
-                        <!--begin::Heading-->
-                        <div class="mb-13 text-center">
-                            <!--begin::Title-->
-                            <h1 class="mb-3">Update Balance</h1>
-                            <!--end::Title-->
-                            <!--begin::Description-->
-                            <div class="text-gray-400 fw-bold fs-5">If you update this balance, all paid transactions
-                                still substract the updated balance. But if you <b><i>change status paid to other status
-                                        after updated balance, it will not substract the balance</i></b>.
-                            </div>
-                            <!--end::Description-->
-                        </div>
-                        <!--end::Heading-->
-                        <!--begin::Input group-->
-                        <div class="d-flex flex-column mb-8 fv-row fv-plugins-icon-container">
-                            <!--begin::Label-->
-                            <label class="d-flex align-items-center fs-6 fw-bold mb-2">
-                                <span class="required">Balance</span>
-                            </label>
-                            <!--end::Label-->
-                            <input type="text" type-currency="IDR" class="form-control form-control-solid"
-                                placeholder="Enter your balance" name="balance" wire:model.defer="balance">
-                            <div class="fv-plugins-message-container invalid-feedback"></div>
-                        </div>
-                        <!--end::Input group-->
-                        <!--begin::Actions-->
-                        <div class="text-center">
-                            <button type="button" data-bs-dismiss="modal" class="btn btn-light me-3">Cancel</button>
-                            <button type="submit" class="btn btn-primary">
-                                <span class="indicator-label">Submit</span>
-                            </button>
-                        </div>
-                        <!--end::Actions-->
-                        <div></div>
-                    </form>
-                    <!--end:Form-->
-                </div>
-                <!--end::Modal body-->
-            </div>
-            <!--end::Modal content-->
-        </div>
-        <!--end::Modal dialog-->
     </div>
     <div class="card">
         <!--begin::Card header-->
@@ -220,7 +147,7 @@
                         <!--end::Separator-->
                         <!--begin::Content-->
                         <div class="px-7 py-5" data-kt-subscription-table-filter="form">
-                            <form wire:submit.prevent="submitfiltercash">
+                            <form wire:submit.prevent="submitfiltercash" autocomplete="off">
                                 <!--begin::Input group-->
                                 <div class="fv-row mb-5">
                                     <!--begin::Label-->
@@ -346,35 +273,8 @@
                         <!--end::Svg Icon-->Export
                     </button>
                     <!--end::Export-->
-                    <!--begin::Add account-->
-
-                    <a href="{{ route('findiv.cash-create') }}" class="btn btn-primary">
-                        <!--begin::Svg Icon | path: icons/duotone/Navigation/Plus.svg-->
-                        <span class="svg-icon svg-icon-2">
-                            <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
-                                width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
-                                <rect fill="#000000" x="4" y="11" width="16" height="2" rx="1" />
-                                <rect fill="#000000" opacity="0.5"
-                                    transform="translate(12.000000, 12.000000) rotate(-270.000000) translate(-12.000000, -12.000000)"
-                                    x="4" y="11" width="16" height="2" rx="1" />
-                            </svg>
-                        </span>
-                        <!--end::Svg Icon-->Add Transaction
-                    </a>
-                    <!--end::Add account-->
                 </div>
                 <!--end::Toolbar-->
-                <!--begin::Group actions-->
-                <div class="d-flex justify-content-end align-items-center d-none"
-                    data-kt-subscription-table-toolbar="selected">
-                    <div class="fw-bolder me-5">
-                        <span class="me-2" data-kt-subscription-table-select="selected_count"></span>Selected
-                    </div>
-                    <button type="button" class="btn btn-danger"
-                        data-kt-subscription-table-select="delete_selected">Delete
-                        Selected</button>
-                </div>
-                <!--end::Group actions-->
             </div>
             <!--end::Card toolbar-->
         </div>
@@ -387,23 +287,17 @@
                 <thead>
                     <!--begin::Table row-->
                     <tr class="text-center text-muted fw-bolder fs-7 text-uppercase gs-0">
-                        <th class="w-10px pe-2">
-                            <div class="form-check form-check-sm form-check-custom form-check-solid me-3">
-                                <input class="form-check-input" type="checkbox" data-kt-check="true"
-                                    data-kt-check-target="#kt_subscriptions_table .form-check-input" value="1" />
-                            </div>
-                        </th>
                         <th class="min-w-20px">Date</th>
                         <th class="min-w-70px">Token</th>
-                        <th class="min-w-175px">Description</th>
+                        <th class="min-w-150px">Description</th>
                         <th class="min-w-70px">Referral</th>
-                        <th class="min-w-70px">Debit</th>
-                        <th class="min-w-70px">Credit</th>
+                        <th class="min-w-150px">Debit</th>
+                        <th class="min-w-150px">Credit</th>
                         <th class="min-w-70px">PIC</th>
                         <th class="min-w-70px">Project</th>
                         <th class="min-w-70px">Paid To</th>
-                        <th class="min-w-70px">Type</th>
-                        <th class="min-w-70px">Status</th>
+                        <th class="min-w-50px">Type</th>
+                        <th class="min-w-50px">Status</th>
                         <th class="text-end min-w-20px"></th>
                     </tr>
                     <!--end::Table row-->
@@ -413,13 +307,8 @@
                 <tbody class="text-gray-600 fw-bold">
                     @foreach ($transaction as $trans)
                         <tr>
-                            <td>
-                                <div class="form-check form-check-sm form-check-custom form-check-solid">
-                                    <input class="form-check-input" type="checkbox" value="1" />
-                                </div>
-                            </td>
                             <td class="text-center">
-                                {{ date('Y-m-d', strtotime($trans[0][0]->date)) }}
+                                {{ $trans[0][0]->date }}
                             </td>
                             <td class="text-center">{{ $trans[0][0]->token }}</td>
                             <td>
@@ -501,33 +390,22 @@
                                     data-kt-menu="true">
                                     <!--begin::Menu item-->
                                     <div class="menu-item px-3">
-                                        <a href="{{ route('findiv.cash-detail', ['uuid' => $trans[0][0]->uuid]) }}"
+                                        <a href="{{ route('findir.cash-detail', ['uuid' => $trans[0][0]->uuid]) }}"
                                             class="menu-link px-3">View</a>
                                     </div>
                                     <!--end::Menu item-->
-                                    <!--begin::Menu item-->
-                                    <div class="menu-item px-3">
-                                        <a href="{{ route('findiv.cash-edit', ['uuid' => $trans[0][0]->uuid]) }}"
-                                            class="menu-link px-3">Edit</a>
-                                    </div>
-                                    <!--end::Menu item-->
-                                    <!--begin::Menu item-->
-                                    <div class="menu-item px-3">
-                                        <button type="submit" class="btn-delete menu-link px-3 fw-bold"
-                                            wire:click="confirmDelete('{{ $trans[0][0]->uuid }}')">Delete</button>
-                                    </div>
 
                                     <div class="separator border-gray-200"></div>
                                     <div class="menu-item px-3">
                                         <div class="text-start">
                                             <label class="px-3 fw-bold mt-5"
-                                                @if ($trans[0][0]->status == 1 || $trans[0][0]->status == 2 || $trans[0][0]->status == 4 || $trans[0][0]->status == 5) style="color:#7e829978;" @endif>Paid?</label>
-                                            <label class="switch">
+                                                @if ($trans[0][0]->status == 2 || $trans[0][0]->status == 3 || $trans[0][0]->status == 4 || $trans[0][0]->status == 5) style="color:#7e829978;" @endif>Approved?</label>
+                                            <label class="switch ms-3 mt-2">
                                                 <input wire:click="confirmUpdateStatus('{{ $trans[0][0]->uuid }}')"
                                                     type="checkbox" class="checkbox-status"
-                                                    @if ($trans[0][0]->status == 1 || $trans[0][0]->status == 2 || $trans[0][0]->status == 5) disabled @elseif ($trans[0][0]->status == 4) disabled checked @endif>
+                                                    @if ($trans[0][0]->status == 3 || $trans[0][0]->status == 4 || $trans[0][0]->status == 5 || $trans[0][0]->status == 2) disabled checked @endif>
                                                 <span class="slider round"
-                                                    @if ($trans[0][0]->status == 1 || $trans[0][0]->status == 2 || $trans[0][0]->status == 4 || $trans[0][0]->status == 5) style="background-color:#7e829930;" @endif></span>
+                                                    @if ($trans[0][0]->status == 2 || $trans[0][0]->status == 3 || $trans[0][0]->status == 4 || $trans[0][0]->status == 5) style="background-color:#7e829930;" @endif></span>
                                             </label>
                                         </div>
                                     </div>
@@ -705,60 +583,12 @@
             });
         });
     </script>
-    <script>
-        window.addEventListener('closeModal', event => {
-            $('#update_balance').modal('hide')
-        })
-    </script>
-    <script type="text/javascript">
-        document.querySelectorAll('input[type-currency="IDR"]').forEach((element) => {
-            element.addEventListener('keyup', function(e) {
-                let cursorPostion = this.selectionStart;
-                let value = parseInt(this.value.replace(/[^,\d]/g, ''));
-                let originalLenght = this.value.length;
-                if (isNaN(value)) {
-                    this.value = "";
-                } else {
-                    this.value = value.toLocaleString('id-ID', {
-                        currency: 'IDR',
-                        style: 'currency',
-                        minimumFractionDigits: 0
-                    });
-                    cursorPostion = this.value.length - originalLenght + cursorPostion;
-                    this.setSelectionRange(cursorPostion, cursorPostion);
-                }
-            });
-        });
-        document.addEventListener('livewire:load', function(event) {
-            @this.on('refreshNominal', function() {
-                document.querySelectorAll('input[type-currency="IDR"]').forEach((element) => {
-                    element.addEventListener('keyup', function(e) {
-                        let cursorPostion = this.selectionStart;
-                        let value = parseInt(this.value.replace(/[^,\d]/g, ''));
-                        let originalLenght = this.value.length;
-                        if (isNaN(value)) {
-                            this.value = "";
-                        } else {
-                            this.value = value.toLocaleString('id-ID', {
-                                currency: 'IDR',
-                                style: 'currency',
-                                minimumFractionDigits: 0
-                            });
-                            cursorPostion = this.value.length - originalLenght +
-                                cursorPostion;
-                            this.setSelectionRange(cursorPostion, cursorPostion);
-                        }
-                    });
-                });
-            });
-        });
-    </script>
     <script type="text/javascript">
         document.addEventListener('DOMContentLoaded', function(event) {
             @this.on('triggerUpdateStatus', uuid => {
                 Swal.fire({
                     title: "Are you sure?",
-                    text: "If you update this transaction status to paid, it cannot be undone.",
+                    text: "If you update this transaction status to approved by finance director, it cannot be undone.",
                     icon: "warning",
                     showCancelButton: true,
                     confirmButtonColor: '#3085d6',
@@ -770,26 +600,6 @@
                         @this.call('updateStatus', uuid)
                     } else if (result.dismiss == 'cancel') {
                         $('.checkbox-status').prop('checked', false);
-                    }
-                });
-            });
-        })
-    </script>
-    <script type="text/javascript">
-        document.addEventListener('DOMContentLoaded', function(event) {
-            @this.on('triggerDelete', uuid => {
-                Swal.fire({
-                    title: "Are you sure?",
-                    text: "If you delete this transaction, it will be permanently deleted.",
-                    icon: "warning",
-                    showCancelButton: true,
-                    confirmButtonColor: '#3085d6',
-                    cancelButtonColor: '#e4e6ef',
-                    cancelButtonText: '<span style="color:#7e8299">Cancel</span>',
-                    confirmButtonText: 'Yes, delete it!',
-                }).then((result) => {
-                    if (result.value) {
-                        @this.call('destroy', uuid)
                     }
                 });
             });
