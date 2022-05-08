@@ -19,7 +19,7 @@ class AuthenticateFinanceDirector
     public function handle(Request $request, Closure $next)
     {
         if(empty(auth()->user())){
-            return redirect()->route('login')->with('error', 'Your session has expired! Please login to your account.');
+            return redirect()->route('login')->withError('Your session has expired! Please login to your account.');
         }
         
         $user = auth()->user()->userRole()->first()->user_id;
@@ -30,6 +30,6 @@ class AuthenticateFinanceDirector
             return $next($request);
         }
 
-        return redirect()->route('login')->with('error', 'You do not have finance director access');
+        return redirect()->back()->withError('You do not have finance director access');
     }
 }
