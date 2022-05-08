@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Livewire;
+namespace App\Http\Livewire\FinanceDirector;
 
 use Livewire\Component;
 use Livewire\WithPagination;
@@ -39,47 +39,18 @@ class FilterIndexAccount extends Component
             $account = Account::where('is_active', 1)->where('category', $this->filtercategory)->where(function($query){
                 $query->where('referral', 'like', '%'.$this->search.'%')
                 ->orWhere('name', 'like', '%'.$this->search.'%');
-            })->paginate($this->pagesize);
+            })->orderBy('category', 'asc')->paginate($this->pagesize);
         }
         else{
             $account = Account::where('is_active', 1)->where(function($query){
                 $query->where('referral', 'like', '%'.$this->search.'%')
                 ->orWhere('name', 'like', '%'.$this->search.'%')
                 ->orWhere('category', 'like', '%'.$this->search.'%');
-            })->paginate($this->pagesize);
+            })->orderBy('category', 'asc')->paginate($this->pagesize);
         }
         $this->emit('refreshFilterCategory');
         $this->emit('refreshNotification');
 
-        return view('livewire.filter-index-account', ['account' => $account, 'category' => $category, 'allAccount' => $allAccount]);
-    }
-
-    public function confirmDelete($uuid){
-        $this->emit('triggerDelete', ['uuid' => $uuid]);
-    }
-
-    public function destroy($uuid){
-        $checkAccount = Account::where([
-            ["uuid", $uuid['uuid']],
-            ["is_active", 1],
-        ])->get();
-
-        if(empty($checkAccount)){
-            session()->flash('error','Financial account does not exists');
-        }
-        else{
-            $deleteAccount = Account::where([
-                ["uuid", $uuid['uuid']],
-                ["is_active", 1],
-            ])->update(['is_active' => 0, 'referral' => NULL]);
-    
-            $log = ActivityLog::create([
-                'user_id' => Auth::id(),
-                'category' => 'account-delete',
-                'activity_id' => $uuid['uuid'],
-            ]);
-    
-            session()->flash('success', 'Financial account successfully deleted');
-        }
+        return view('livewire.finance-director.filter-index-account', ['account' => $account, 'category' => $category, 'allAccount' => $allAccount]);
     }
 }
