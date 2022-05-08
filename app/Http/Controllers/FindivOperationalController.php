@@ -10,7 +10,7 @@ use App\Models\Account;
 use App\Models\Balance;
 use App\Models\ActivityLog;
 use App\Models\User;
-use App\Exports\FinanceDivision\CashExport;
+use App\Exports\FinanceDivision\OperationalExport;
 use Maatwebsite\Excel\Facades\Excel;
 use Carbon\Carbon;
 use Barryvdh\DomPDF\Facade\Pdf;
@@ -19,7 +19,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Arr;
 use Storage;
 
-class FindivCashController extends Controller
+class FindivOperationalController extends Controller
 {
     public function __construct()
     {
@@ -33,12 +33,12 @@ class FindivCashController extends Controller
      */
     public function index()
     {
-        $picex = Transaction::select('pic')->where([['category', 'cash'],['is_active', 1],['pic', '<>', NULL]])->distinct()->get();
-        $paidtoex = Transaction::select('paid_to')->where('is_active', 1)->where('category', 'cash')->where('paid_to', '<>', NULL)->distinct()->get();
-        $projectex = Transaction::select('project_id')->where([['category', 'cash'],['is_active', 1],['project_id', '<>', NULL]])->with('transactionProject')->distinct()->get();
+        $picex = Transaction::select('pic')->where([['category', 'operational'],['is_active', 1],['pic', '<>', NULL]])->distinct()->get();
+        $paidtoex = Transaction::select('paid_to')->where('is_active', 1)->where('category', 'operational')->where('paid_to', '<>', NULL)->distinct()->get();
+        $projectex = Transaction::select('project_id')->where([['category', 'operational'],['is_active', 1],['project_id', '<>', NULL]])->with('transactionProject')->distinct()->get();
         $accountex = Account::where('is_active', 1)->get();
 
-        return view('finance-division.cash.index', compact('picex', 'projectex', 'accountex', 'paidtoex'));
+        return view('finance-division.operational.index', compact('picex', 'projectex', 'accountex', 'paidtoex'));
     }
 
     /**
@@ -48,7 +48,7 @@ class FindivCashController extends Controller
      */
     public function create()
     {
-        return view('finance-division.cash.create');
+        return view('finance-division.operational.create');
     }
 
     /**
@@ -62,13 +62,13 @@ class FindivCashController extends Controller
         $validated = $request->validated();
 
         $checkExist = Transaction::where([
-            ['category', 'cash'],
+            ['category', 'operational'],
             ['is_active', 1],
             ['token', $validated['token']],
         ])->first();
 
         if($checkExist){
-            return redirect()->back()->withError('Cash transaction already exists');
+            return redirect()->back()->withError('Mandiri operational transaction already exists');
         }
 
         foreach($validated['transDebit'] as $td){
@@ -100,7 +100,7 @@ class FindivCashController extends Controller
                 'is_active' => 1,
                 'type' => $validated['type'],
                 'status' => 1,
-                'category' => 'cash',
+                'category' => 'operational',
             ]);
         }
 
@@ -119,7 +119,7 @@ class FindivCashController extends Controller
                 'is_active' => 1,
                 'type' => $validated['type'],
                 'status' => 1,
-                'category' => 'cash',
+                'category' => 'operational',
             ]);
         }
 
@@ -128,11 +128,11 @@ class FindivCashController extends Controller
             $reportName = $report->getClientOriginalName();
             $reportStore = TransactionFile::create([
                 'transaction_id' => $transactionUuid,
-                'category' => 'cash',
+                'category' => 'operational',
                 'type' => 1,
                 'name' => $reportName,
             ]);
-            $reportPath = $report->storeAs('public/Cash/'.$transactionUuid, $reportName);
+            $reportPath = $report->storeAs('public/Operational/'.$transactionUuid, $reportName);
         }
 
         $arrAttachments = json_decode($validated['arrattachments']);
@@ -143,11 +143,11 @@ class FindivCashController extends Controller
                     if($attachName == $atc){
                         $attachStore = TransactionFile::create([
                             'transaction_id' => $transactionUuid,
-                            'category' => 'cash',
+                            'category' => 'operational',
                             'type' => 2,
                             'name' => $attachName,
                         ]);
-                        $attachPath = $attach->storeAs('public/Cash/'.$transactionUuid, $attachName);
+                        $attachPath = $attach->storeAs('public/Operational/'.$transactionUuid, $attachName);
                     }
                 }          
             }
@@ -155,11 +155,11 @@ class FindivCashController extends Controller
 
         $log = ActivityLog::create([
             'user_id' => Auth::id(),
-            'category' => 'cash-store',
+            'category' => 'operational-store',
             'activity_id' => $transactionUuid,
         ]);
 
-        return redirect()->route('findiv.cash-index')->withSuccess('Cash transaction successfully added');
+        return redirect()->route('findiv.operational-index')->withSuccess('Mandiri operational transaction successfully added');
     }
 
     /**
@@ -171,32 +171,32 @@ class FindivCashController extends Controller
     public function show($uuid)
     {
         $transaction = Transaction::where([
-            ['category', 'cash'],
+            ['category', 'operational'],
             ['is_active', 1],
             ['uuid', $uuid],
         ])->with(['transactionFiles', 'transactionAccount', 'transactionProject'])->get();
 
         $report = TransactionFile::where([
-            ['category', 'cash'],
+            ['category', 'operational'],
             ['transaction_id', $transaction[0]->uuid],
             ['type', 1],
         ])->get();
 
         $attach = TransactionFile::where([
-            ['category', 'cash'],
+            ['category', 'operational'],
             ['transaction_id', $transaction[0]->uuid],
             ['type', 2],
         ])->get();
 
         $log = ActivityLog::where('activity_id', $transaction[0]->uuid)->where(function($query){
-            $query->where('category', 'cash-store')
-                ->orWhere('category', 'cash-update')
-                ->orWhere('category', 'cash-delete')
-                ->orWhere('category', 'cash-approved-findir')
-                ->orWhere('category', 'cash-approved-excdir')
-                ->orWhere('category', 'cash-rejected-findir')
-                ->orWhere('category', 'cash-rejected-excdir')
-                ->orWhere('category', 'cash-paid');
+            $query->where('category', 'operational-store')
+                ->orWhere('category', 'operational-update')
+                ->orWhere('category', 'operational-delete')
+                ->orWhere('category', 'operational-approved-findir')
+                ->orWhere('category', 'operational-approved-excdir')
+                ->orWhere('category', 'operational-rejected-findir')
+                ->orWhere('category', 'operational-rejected-excdir')
+                ->orWhere('category', 'operational-paid');
             })->get();
         
         $user = [];
@@ -209,7 +209,7 @@ class FindivCashController extends Controller
             array_push($activity, ['log' => $log[$i], 'user' => $user[$i]]);
         }
 
-        return view('finance-division.cash.show', compact('transaction', 'report', 'attach', 'activity'));
+        return view('finance-division.operational.show', compact('transaction', 'report', 'attach', 'activity'));
     }
 
     /**
@@ -221,14 +221,14 @@ class FindivCashController extends Controller
     public function edit($uuid)
     {
         $log = ActivityLog::where('activity_id', $uuid)->where(function($query){
-            $query->where('category', 'cash-store')
-                ->orWhere('category', 'cash-update')
-                ->orWhere('category', 'cash-delete')
-                ->orWhere('category', 'cash-approved-findir')
-                ->orWhere('category', 'cash-approved-excdir')
-                ->orWhere('category', 'cash-rejected-findir')
-                ->orWhere('category', 'cash-rejected-excdir')
-                ->orWhere('category', 'cash-paid');
+            $query->where('category', 'operational-store')
+                ->orWhere('category', 'operational-update')
+                ->orWhere('category', 'operational-delete')
+                ->orWhere('category', 'operational-approved-findir')
+                ->orWhere('category', 'operational-approved-excdir')
+                ->orWhere('category', 'operational-rejected-findir')
+                ->orWhere('category', 'operational-rejected-excdir')
+                ->orWhere('category', 'operational-paid');
             })->get();
         
         $user = [];
@@ -241,7 +241,7 @@ class FindivCashController extends Controller
             array_push($activity, ['log' => $log[$i], 'user' => $user[$i]]);
         }
 
-        return view('finance-division.cash.edit', compact('activity', 'uuid'));
+        return view('finance-division.operational.edit', compact('activity', 'uuid'));
     }
 
     /**
@@ -258,14 +258,14 @@ class FindivCashController extends Controller
         $checkExist = NULL;
         if($validated['token'] != $validated['oldToken']){
             $checkExist = Transaction::where([
-                ['category', 'cash'],
+                ['category', 'operational'],
                 ['is_active', 1],
                 ['token', $validated['token']],
             ])->first();
         }
         
         if($checkExist) {
-            return redirect()->back()->with('token', true)->withError('Cash transaction already exists');
+            return redirect()->back()->with('token', true)->withError('Mandiri operational transaction already exists');
         }
 
         foreach($validated['transDebit'] as $td){
@@ -281,7 +281,7 @@ class FindivCashController extends Controller
         }
 
         $curTrans = Transaction::where([
-            ['category', 'cash'],
+            ['category', 'operational'],
             ['is_active', 1],
             ['token', $validated['oldToken']],
         ])->update(['is_active' => 0]);
@@ -289,14 +289,14 @@ class FindivCashController extends Controller
         $transUuid = Str::uuid()->toString();
 
         $dataLog = ActivityLog::where('activity_id', $uuid)->where(function($query){
-                    $query->where('category', 'cash-store')
-                        ->orWhere('category', 'cash-update')
-                        ->orWhere('category', 'cash-delete')
-                        ->orWhere('category', 'cash-approved-findir')
-                        ->orWhere('category', 'cash-approved-excdir')
-                        ->orWhere('category', 'cash-rejected-findir')
-                        ->orWhere('category', 'cash-rejected-excdir')
-                        ->orWhere('category', 'cash-paid');
+                    $query->where('category', 'operational-store')
+                        ->orWhere('category', 'operational-update')
+                        ->orWhere('category', 'operational-delete')
+                        ->orWhere('category', 'operational-approved-findir')
+                        ->orWhere('category', 'operational-approved-excdir')
+                        ->orWhere('category', 'operational-rejected-findir')
+                        ->orWhere('category', 'operational-rejected-excdir')
+                        ->orWhere('category', 'operational-paid');
                     })->get();
         
         foreach($dataLog as $dl){
@@ -308,20 +308,20 @@ class FindivCashController extends Controller
         }
 
         $oldTrans = Transaction::where([
-            ['category', 'cash'],
+            ['category', 'operational'],
             ['is_active', 0],
             ['token', $validated['oldToken']],
             ['uuid', $uuid],
         ])->get();
 
         $oldReport = TransactionFile::where([
-            ['category', 'cash'],
+            ['category', 'operational'],
             ['transaction_id', $oldTrans[0]->uuid],
             ['type', 1],
         ])->get();
         
         $oldAttach = TransactionFile::where([
-            ['category', 'cash'],
+            ['category', 'operational'],
             ['transaction_id', $oldTrans[0]->uuid],
             ['type', 2],
         ])->get();
@@ -342,7 +342,7 @@ class FindivCashController extends Controller
                     'is_active' => 1,
                     'type' => $validated['type'],
                     'status' => $validated['status'],
-                    'category' => 'cash',
+                    'category' => 'operational',
                 ]);
             }else{
                 $transaction = Transaction::create([
@@ -359,7 +359,7 @@ class FindivCashController extends Controller
                     'is_active' => 1,
                     'type' => $validated['type'],
                     'status' => $oldTrans[0]->status,
-                    'category' => 'cash',
+                    'category' => 'operational',
                 ]);
             }
         }
@@ -380,7 +380,7 @@ class FindivCashController extends Controller
                     'is_active' => 1,
                     'type' => $validated['type'],
                     'status' => $validated['status'],
-                    'category' => 'cash',
+                    'category' => 'operational',
                 ]);
             }
             else{
@@ -398,32 +398,32 @@ class FindivCashController extends Controller
                     'is_active' => 1,
                     'type' => $validated['type'],
                     'status' => $oldTrans[0]->status,
-                    'category' => 'cash',
+                    'category' => 'operational',
                 ]);
             }
         }
-        
+
         if(Arr::exists($validated, 'status')){
             if($validated['status'] == '4'){
                 $transubs = Transaction::where([
                     ['is_active', 1],
-                    ['category', 'cash'],
+                    ['category', 'operational'],
                     ['status', 4],
                     ['uuid', $transUuid],
                     ['debit', 0],
                 ])->get();
         
-                $curBalance = Balance::where('category', 'cash')->pluck('balance');
-                $cashBalance = $curBalance[0];
+                $curBalance = Balance::where('category', 'operational')->pluck('balance');
+                $operationalBalance = $curBalance[0];
                 foreach($transubs as $ts){
-                    $cashBalance = $cashBalance - $ts->credit;
+                    $operationalBalance = $operationalBalance - $ts->credit;
                 }
         
-                Balance::where('category', 'cash')->update(['balance' => $cashBalance]);
+                Balance::where('category', 'operational')->update(['balance' => $operationalBalance]);
 
                 $log = ActivityLog::create([
                     'user_id' => Auth::id(),
-                    'category' => 'cash-paid',
+                    'category' => 'operational-paid',
                     'activity_id' => $transUuid,
                 ]);
             }
@@ -434,20 +434,20 @@ class FindivCashController extends Controller
             $reportName = $report->getClientOriginalName();
             $reportStore = TransactionFile::create([
                 'transaction_id' => $transUuid,
-                'category' => 'cash',
+                'category' => 'operational',
                 'type' => 1,
                 'name' => $reportName,
             ]);
-            $reportPath = $report->storeAs('public/Cash/'.$transUuid, $reportName);
+            $reportPath = $report->storeAs('public/Operational/'.$transUuid, $reportName);
         }else{
             if(count($oldReport) != 0){
                 $reportStore = TransactionFile::create([
                     'transaction_id' => $transUuid,
-                    'category' => 'cash',
+                    'category' => 'operational',
                     'type' => 1,
                     'name' => $oldReport[0]->name,
                 ]);
-                Storage::copy('public/Cash/'.$oldTrans[0]->uuid.'/'.$oldReport[0]->name, 'public/Cash/'.$transUuid.'/'.$oldReport[0]->name);
+                Storage::copy('public/Operational/'.$oldTrans[0]->uuid.'/'.$oldReport[0]->name, 'public/Operational/'.$transUuid.'/'.$oldReport[0]->name);
             }
         }
 
@@ -459,7 +459,7 @@ class FindivCashController extends Controller
                     if($attachName == $atc){
                         $checkExistTempAttach = TransactionFile::where([
                             'transaction_id' => $transUuid,
-                            'category' => 'cash',
+                            'category' => 'operational',
                             'type' => 2,
                             'name' => $attachName,
                         ])->get();
@@ -467,16 +467,16 @@ class FindivCashController extends Controller
                         if(count($checkExistTempAttach) == 0){
                             $attachStore = TransactionFile::create([
                                 'transaction_id' => $transUuid,
-                                'category' => 'cash',
+                                'category' => 'operational',
                                 'type' => 2,
                                 'name' => $attachName,
                             ]);
                         }
 
-                        if(Storage::exists('public/Cash/'.$transUuid.'/'.$attachName)) {
+                        if(Storage::exists('public/Operational/'.$transUuid.'/'.$attachName)) {
                             continue;
                         }else{
-                            $attachPath = $attach->storeAs('public/Cash/'.$transUuid, $attachName);
+                            $attachPath = $attach->storeAs('public/Operational/'.$transUuid, $attachName);
                         }
                     }
                 }         
@@ -486,7 +486,7 @@ class FindivCashController extends Controller
                     if($oa->name == $atc){
                         $checkExistTempAttach = TransactionFile::where([
                             'transaction_id' => $transUuid,
-                            'category' => 'cash',
+                            'category' => 'operational',
                             'type' => 2,
                             'name' => $oa->name,
                         ])->get();
@@ -494,16 +494,16 @@ class FindivCashController extends Controller
                         if(count($checkExistTempAttach) == 0){
                             $attachStore = TransactionFile::create([
                                 'transaction_id' => $transUuid,
-                                'category' => 'cash',
+                                'category' => 'operational',
                                 'type' => 2,
                                 'name' => $oa->name,
                             ]);
                         }
 
-                        if(Storage::exists('public/Cash/'.$transUuid.'/'.$oa->name)) {
+                        if(Storage::exists('public/Operational/'.$transUuid.'/'.$oa->name)) {
                             continue;
                         }else{
-                            Storage::copy('public/Cash/'.$oldTrans[0]->uuid.'/'.$oa->name, 'public/Cash/'.$transUuid.'/'.$oa->name);
+                            Storage::copy('public/Operational/'.$oldTrans[0]->uuid.'/'.$oa->name, 'public/Operational/'.$transUuid.'/'.$oa->name);
                         }
                     }
                 }
@@ -514,7 +514,7 @@ class FindivCashController extends Controller
                     if($oa->name == $atc){
                         $checkExistTempAttach = TransactionFile::where([
                             'transaction_id' => $transUuid,
-                            'category' => 'cash',
+                            'category' => 'operational',
                             'type' => 2,
                             'name' => $oa->name,
                         ])->get();
@@ -522,16 +522,16 @@ class FindivCashController extends Controller
                         if(count($checkExistTempAttach) == 0){
                             $attachStore = TransactionFile::create([
                                 'transaction_id' => $transUuid,
-                                'category' => 'cash',
+                                'category' => 'operational',
                                 'type' => 2,
                                 'name' => $oa->name,
                             ]);
                         }
 
-                        if(Storage::exists('public/Cash/'.$transUuid.'/'.$oa->name)) {
+                        if(Storage::exists('public/Operational/'.$transUuid.'/'.$oa->name)) {
                             continue;
                         }else{
-                            Storage::copy('public/Cash/'.$oldTrans[0]->uuid.'/'.$oa->name, 'public/Cash/'.$transUuid.'/'.$oa->name);
+                            Storage::copy('public/Operational/'.$oldTrans[0]->uuid.'/'.$oa->name, 'public/Operational/'.$transUuid.'/'.$oa->name);
                         }
                     }
                 }
@@ -540,11 +540,11 @@ class FindivCashController extends Controller
 
         $log = ActivityLog::create([
             'user_id' => Auth::id(),
-            'category' => 'cash-update',
+            'category' => 'operational-update',
             'activity_id' => $transUuid,
         ]);
 
-        return redirect()->route('findiv.cash-index')->withSuccess('Cash transaction successfully updated');
+        return redirect()->route('findiv.operational-index')->withSuccess('Mandiri operational transaction successfully updated');
     }
 
     /**
@@ -566,17 +566,17 @@ class FindivCashController extends Controller
         $todayDate = Carbon::now()->format('Y-m-d');
 
         if($request->format == 'excel'){
-            $filename = $todayDate .' Cash Transaction.xlsx';
-            return Excel::download(new CashExport($request), $filename);
+            $filename = $todayDate .' Mandiri Operational Transaction.xlsx';
+            return Excel::download(new OperationalExport($request), $filename);
         }
 
         if($request->format == 'csv'){
-            $filename = $todayDate .' Cash Transaction.csv';
-            return Excel::download(new CashExport($request), $filename);
+            $filename = $todayDate .' Mandiri Operational Transaction.csv';
+            return Excel::download(new OperationalExport($request), $filename);
         }
         
         if($request->format == 'pdf'){
-            $transaction = Transaction::select('uuid')->where('is_active', 1)->where('category', 'cash')->where(function($query){
+            $transaction = Transaction::select('uuid')->where('is_active', 1)->where('category', 'operational')->where(function($query){
                 $query->where('status', 3)
                 ->orWhere('status', 4);
             })->where(function($query) use($request){
@@ -605,7 +605,7 @@ class FindivCashController extends Controller
 
             $dataTrans = [];
             foreach($tempTrans as $tr){
-                $model = Transaction::where('is_active', 1)->where('category', 'cash')->where('uuid', $tr)->where(function($query){
+                $model = Transaction::where('is_active', 1)->where('category', 'operational')->where('uuid', $tr)->where(function($query){
                     $query->where('status', 3)
                     ->orWhere('status', 4);
                 })->with(['transactionAccount', 'transactionProject'])->orderBy('updated_at', 'desc')->get();
@@ -614,9 +614,9 @@ class FindivCashController extends Controller
                 array_push($dataTrans, $transUuid);
             }
                 
-            $pdf = PDF::loadView('finance-division.cash.pdf', ['dataTrans' => $dataTrans, 'todayDate' => $todayDate]);
+            $pdf = PDF::loadView('finance-division.operational.pdf', ['dataTrans' => $dataTrans, 'todayDate' => $todayDate]);
             $pdf->setPaper('A4', 'landscape');
-            $filename = $todayDate .' Cash Transaction.pdf';
+            $filename = $todayDate .' Mandiri Operational Transaction.pdf';
             return $pdf->download($filename);
         }
     }
@@ -629,7 +629,7 @@ class FindivCashController extends Controller
         $todayDate = Carbon::now()->format('Y-m-d');
 
         $transactionDebit = Transaction::where([
-            ['category', 'cash'],
+            ['category', 'operational'],
             ['is_active', 1],
             ['uuid', $uuid],
             ['credit', 0],
@@ -644,9 +644,9 @@ class FindivCashController extends Controller
         }
         $inWords = $this->inWords($sum);
 
-        $pdf = PDF::loadView('finance-division.cash.pdfDetail', ['transactionDebit' => $transactionDebit, 'sum' => $sum, 'inWords' => $inWords, 'todayDate' => $todayDate]);
+        $pdf = PDF::loadView('finance-division.operational.pdfDetail', ['transactionDebit' => $transactionDebit, 'sum' => $sum, 'inWords' => $inWords, 'todayDate' => $todayDate]);
         $pdf->setPaper('A4', 'landscape');
-        $filename = $todayDate.' ('.$transactionDebit[0]->token.') Cash Transaction.pdf';
+        $filename = $todayDate.' ('.$transactionDebit[0]->token.') Mandiri Operational Transaction.pdf';
         return $pdf->download($filename);
     }
 

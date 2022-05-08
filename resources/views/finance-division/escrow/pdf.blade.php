@@ -35,8 +35,8 @@
                         <td colspan="10">
                             <div class="content-head" style="text-align: center;">
                                 <h3><b>PT. Era Elektra Corpora Indonesia</b></h3>
-                                <h3 style="margin-top: -10px; padding-bottom:15px;"><b>Cash Transaction</b>
-                                </h3>
+                                <h3 style="margin-top: -10px; padding-bottom:15px;"><b>Mandiri Escrow
+                                        Transaction</b></h3>
                             </div>
                         </td>
                     </tr>

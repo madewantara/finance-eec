@@ -1,11 +1,12 @@
 @extends('layouts.app-findiv')
 
-@section('title', 'Add Cash Transaction | Finance Division')
+@section('title', 'Edit Mandiri Operational Transaction | Finance Division')
 
-@section('page-title') <a href="{{ route('findiv.cash-index') }}" class="text-dark text-hover-primary">Cash Journal</a>
+@section('page-title') <a href="{{ route('findiv.operational-index') }}" class="text-dark text-hover-primary">Mandiri
+        Operational</a>
 @endsection
 
-@section('sub-page-title', 'Add Cash Transaction')
+@section('sub-page-title', 'Edit Mandiri Operational Transaction')
 
 @section('active-icon', 'active-sidebar-icon')
 
@@ -68,7 +69,7 @@
                     <div class="card">
                         <!--begin::Card body-->
                         <div class="card-body p-12">
-                            @livewire('finance-division.create-cash')
+                            @livewire('finance-division.edit-operational', ['uuid' => $uuid])
                         </div>
                         <!--end::Card body-->
                     </div>
@@ -92,11 +93,72 @@
                         <div class="card-body p-0 ps-10 pe-10 pb-10">
                             <div class="scroll-y me-n5 pe-5 h-550px" data-kt-scroll="true"
                                 data-kt-scroll-activate="{default: false, lg: true}" data-kt-scroll-offset="5px">
-                                <div class="row mt-7">
-                                    <div class="col-lg-12">
-                                        <p><i>There are no activities for this transaction</i></p>
+                                @if (count($activity) == 0)
+                                    <div class="row mt-7">
+                                        <div class="col-lg-12">
+                                            <p><i>There are no activities for this transaction</i></p>
+                                        </div>
                                     </div>
-                                </div>
+                                @else
+                                    @foreach ($activity as $a)
+                                        <div class="row mt-7">
+                                            <div class="col-lg-1">
+                                                <div class="symbol-group symbol-hover">
+                                                    <!--begin::User-->
+                                                    <div class="symbol symbol-35px symbol-circle" data-bs-toggle="tooltip"
+                                                        title="" data-bs-original-title="{{ $a['user'][0]->email }}">
+                                                        <img class="img img-fluid"
+                                                            src="{{ asset('assets/image/avatar/150-13.jpg') }}"
+                                                            alt="image" style="max-width: 100%; height:auto;">
+                                                    </div>
+                                                    <!--end::User-->
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-11">
+                                                <div class="symbol-group symbol-hover">
+                                                    <div>
+                                                        <p class="mb-0 fw-bolder">{{ $a['user'][0]->email }}
+                                                        </p>
+                                                        @if ($a['log']->category == 'operational-store')
+                                                            <span>Has <i class="text-dark fw-bolder">created</i>
+                                                                this
+                                                                transaction on
+                                                                {{ $a['log']->created_at->format('l, jS \of F Y h:i:s A') }}</span>
+                                                        @elseif ($a['log']->category == 'operational-update')
+                                                            <span>Has <b><i class="text-dark fw-bolder">updated</i></b>
+                                                                this transaction on
+                                                                {{ $a['log']->updated_at->format('l, jS \of F Y h:i:s A') }}</span>
+                                                        @elseif ($a['log']->category == 'operational-delete')
+                                                            <span>Has <b><i class="text-dark fw-bolder">deleted</i></b>
+                                                                this transaction on
+                                                                {{ $a['log']->updated_at->format('l, jS \of F Y h:i:s A') }}</span>
+                                                        @elseif ($a['log']->category == 'operational-approved-findir')
+                                                            <span>Has <b><i class="text-dark fw-bolder">approved</i></b>
+                                                                this transaction on
+                                                                {{ $a['log']->updated_at->format('l, jS \of F Y h:i:s A') }}</span>
+                                                        @elseif ($a['log']->category == 'operational-approved-excdir')
+                                                            <span>Has <b><i class="text-dark fw-bolder">approved</i></b>
+                                                                this transaction on
+                                                                {{ $a['log']->updated_at->format('l, jS \of F Y h:i:s A') }}</span>
+                                                        @elseif ($a['log']->category == 'operational-rejected-findir')
+                                                            <span>Has <b><i class="text-dark fw-bolder">rejected</i></b>
+                                                                this transaction on
+                                                                {{ $a['log']->updated_at->format('l, jS \of F Y h:i:s A') }}</span>
+                                                        @elseif ($a['log']->category == 'operational-rejected-excdir')
+                                                            <span>Has <b><i class="text-dark fw-bolder">rejected</i></b>
+                                                                this transaction on
+                                                                {{ $a['log']->updated_at->format('l, jS \of F Y h:i:s A') }}</span>
+                                                        @elseif ($a['log']->category == 'operational-paid')
+                                                            <span>Has <b><i class="text-dark fw-bolder">paid</i></b>
+                                                                this transaction on
+                                                                {{ $a['log']->updated_at->format('l, jS \of F Y h:i:s A') }}</span>
+                                                        @endif
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    @endforeach
+                                @endif
                             </div>
                         </div>
                         <!--end::Card body-->

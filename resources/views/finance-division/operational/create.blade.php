@@ -1,11 +1,12 @@
 @extends('layouts.app-findiv')
 
-@section('title', 'Add Cash Transaction | Finance Division')
+@section('title', 'Add Mandiri Operational Transaction | Finance Division')
 
-@section('page-title') <a href="{{ route('findiv.cash-index') }}" class="text-dark text-hover-primary">Cash Journal</a>
+@section('page-title') <a href="{{ route('findiv.operational-index') }}" class="text-dark text-hover-primary">Mandiri
+        Operational</a>
 @endsection
 
-@section('sub-page-title', 'Add Cash Transaction')
+@section('sub-page-title', 'Add Mandiri Operational Transaction')
 
 @section('active-icon', 'active-sidebar-icon')
 
@@ -68,7 +69,7 @@
                     <div class="card">
                         <!--begin::Card body-->
                         <div class="card-body p-12">
-                            @livewire('finance-division.create-cash')
+                            @livewire('finance-division.create-operational')
                         </div>
                         <!--end::Card body-->
                     </div>

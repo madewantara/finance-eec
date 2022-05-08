@@ -45,8 +45,8 @@
     @endif
 
     <!--begin::Form-->
-    <form action="{{ route('findiv.cash-update', ['uuid' => $uuid]) }}" novalidate method="post" id="needs-validation"
-        enctype="multipart/form-data" onkeydown="return event.key != 'Enter';">
+    <form action="{{ route('findiv.operational-update', ['uuid' => $uuid]) }}" novalidate method="post"
+        id="needs-validation" enctype="multipart/form-data" onkeydown="return event.key != 'Enter';" autocomplete="off">
         @csrf
         <!--begin::Wrapper-->
         <div class="d-flex flex-column align-items-start flex-xxl-row">
@@ -69,7 +69,7 @@
             </div>
             <!--end::Input group-->
             <!--begin::Input group-->
-            <div class="d-flex flex-column flex-equal fw-row text-nowrap order-1 order-xxl-2 me-4 text-center"
+            <div class="d-flex flex-column flex-equal fw-row text-nowrap order-1 order-xxl-2 me-4 text-center align-items-center"
                 data-bs-toggle="tooltip" data-bs-trigger="hover" title="Enter transaction token">
                 <span class="fs-3 fw-bolder text-gray-700"><span class="required"></span> Token</span>
                 <div wire:ignore>
@@ -177,7 +177,7 @@
                     <!--begin::Input group-->
                     <div class="mb-5">
                         <!--begin::select-->
-                        @if ($this->status == 1 || $this->status == 2)
+                        @if ($this->status == 1 || $this->status == 2 || $this->status == 4)
                             <select
                                 class="form-control form-control-white custom-select fw-bolder pe-5 form-select status add disabled @error('status') is-invalid @enderror"
                                 data-pharaonic="select2" data-component-id="{{ $this->id }}" id="status"
@@ -190,25 +190,25 @@
                         @endif
                         <option></option>
                         @if ($this->status == 1 || $this->status == 2)
-                            <option value="1" selected>Pending</option>
+                            <option value="1" selected disabled>Pending</option>
                             <option value="3" disabled>Accepted</option>
                             <option value="5" disabled>Rejected</option>
-                            <option value="4">Paid</option>
+                            <option value="4" disabled>Paid</option>
                         @elseif ($this->status == 3)
                             <option value="1">Pending</option>
                             <option value="3" disabled selected>Accepted</option>
                             <option value="5" disabled>Rejected</option>
                             <option value="4">Paid</option>
                         @elseif ($this->status == 4)
-                            <option value="1">Pending</option>
+                            <option value="1" disabled>Pending</option>
                             <option value="3" disabled>Accepted</option>
                             <option value="5" disabled>Rejected</option>
-                            <option value="4" selected>Paid</option>
+                            <option value="4" disabled selected>Paid</option>
                         @else
                             <option value="1">Pending</option>
                             <option value="3" disabled>Accepted</option>
                             <option value="5" disabled selected>Rejected</option>
-                            <option value="4">Paid</option>
+                            <option value="4" disabled>Paid</option>
                         @endif
                         </select>
                         <div class="invalid-feedback">*Status is required.</div>
@@ -551,8 +551,6 @@
             <!--start::Submit-->
             <div class="row text-end mt-10">
                 <div class="col-md-12">
-                    <button type="reset" class="btn btn-light btn-active-light-primary fw-bold float-right mt-7"
-                        wire:click="resetcash()">Reset</button>
                     <button type="submit" class="btn btn-primary float-right mt-7">Submit</button>
                 </div>
             </div>

@@ -44,8 +44,8 @@
         </div>
     @endif
     <!--begin::Form-->
-    <form action="{{ route('findiv.cash-post') }}" novalidate method="post" id="needs-validation"
-        enctype="multipart/form-data" onkeydown="return event.key != 'Enter';">
+    <form action="{{ route('findiv.operational-post') }}" novalidate method="post" id="needs-validation"
+        enctype="multipart/form-data" onkeydown="return event.key != 'Enter';" autocomplete="off">
         @csrf
         <!--begin::Wrapper-->
         <div class="d-flex flex-column align-items-start flex-xxl-row">
@@ -68,7 +68,7 @@
             </div>
             <!--end::Input group-->
             <!--begin::Input group-->
-            <div class="d-flex align-items-baseline flex-equal fw-row text-nowrap order-1 order-xxl-2 me-4 text-center"
+            <div class="d-flex justify-content-center align-items-baseline flex-equal fw-row text-nowrap order-1 order-xxl-2 me-4 text-center"
                 data-bs-toggle="tooltip" data-bs-trigger="hover" title="Enter transaction token">
                 <span class="fs-3 fw-bolder text-gray-700"><span class="required"></span>Token
                     <div wire:ignore>
@@ -463,7 +463,7 @@
             <div class="row text-end mt-10">
                 <div class="col-md-12">
                     <button type="reset" class="btn btn-light btn-active-light-primary fw-bold float-right mt-7"
-                        wire:click="resetcash()">Reset</button>
+                        wire:click="resetoperational()">Reset</button>
                     <button type="submit" id="submitTrans" class="btn btn-primary float-right mt-7">Submit</button>
                 </div>
             </div>

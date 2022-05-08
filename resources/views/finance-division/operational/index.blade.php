@@ -1,11 +1,12 @@
 @extends('layouts.app-findiv')
 
-@section('title', 'Cash Journal | Finance Division')
+@section('title', 'Mandiri Operational | Finance Division')
 
-@section('page-title') <a href="{{ route('findiv.cash-index') }}" class="text-dark text-hover-primary">Cash Journal</a>
+@section('page-title') <a href="{{ route('findiv.operational-index') }}" class="text-dark text-hover-primary">Mandiri
+        Operational</a>
 @endsection
 
-@section('sub-page-title', 'Cash Transaction List')
+@section('sub-page-title', 'Mandiri Operational Transaction List')
 
 @section('active-icon', 'active-sidebar-icon')
 
@@ -65,7 +66,7 @@
         <!--begin::Container-->
         <div class="container" id="kt_content_container">
             <!--begin::Card-->
-            @livewire('finance-division.filter-index-cash')
+            @livewire('finance-division.filter-index-operational')
             <!--end::Card-->
             <!--begin::Modals-->
             <!--begin::Modal - Adjust Balance-->
@@ -77,7 +78,7 @@
                         <!--begin::Modal header-->
                         <div class="modal-header">
                             <!--begin::Modal title-->
-                            <h2 class="fw-bolder">Export Cash Transaction</h2>
+                            <h2 class="fw-bolder">Export Mandiri Operational Transaction</h2>
                             <!--end::Modal title-->
                             <!--begin::Close-->
                             <div class="btn btn-icon btn-sm btn-active-icon-primary" data-bs-dismiss="modal"
@@ -103,7 +104,8 @@
                         <!--begin::Modal body-->
                         <div class="modal-body scroll-y mx-5 mx-xl-15 my-7">
                             <!--begin::Form-->
-                            <form action="{{ route('findiv.cash-export') }}" method="POST" id="export" autocomplete="off">
+                            <form action="{{ route('findiv.operational-export') }}" method="POST" id="export"
+                                autocomplete="off">
                                 @csrf
                                 <!--begin::Input group-->
                                 <div class="fv-row mb-5">

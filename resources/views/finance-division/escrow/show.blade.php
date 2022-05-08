@@ -1,11 +1,12 @@
 @extends('layouts.app-findiv')
 
-@section('title', 'Detail Cash Transaction | Finance Division')
+@section('title', 'Detail Mandiri Escrow Transaction | Finance Division')
 
-@section('page-title') <a href="{{ route('findiv.cash-index') }}" class="text-dark text-hover-primary">Cash Journal</a>
+@section('page-title') <a href="{{ route('findiv.escrow-index') }}" class="text-dark text-hover-primary">Mandiri
+        Escrow Journal</a>
 @endsection
 
-@section('sub-page-title', 'Detail Cash Transaction')
+@section('sub-page-title', 'Detail Mandiri Escrow Transaction')
 
 @section('active-icon', 'active-sidebar-icon')
 
@@ -254,7 +255,7 @@
                                                                     </a>
                                                                 @elseif(pathinfo($report[0]->name, PATHINFO_EXTENSION) == 'pdf')
                                                                     <a type="button"
-                                                                        href="{{ asset('storage/Cash/' . $transaction[0]->uuid . '/' . $report[0]->name) }}"
+                                                                        href="{{ asset('storage/Escrow/' . $transaction[0]->uuid . '/' . $report[0]->name) }}"
                                                                         target="_blank">
                                                                         <div class="mt-5"> <i
                                                                                 class="bi bi-file-earmark-pdf-fill text-danger attach-cash"
@@ -298,7 +299,7 @@
                                                                         </a>
                                                                     @elseif(pathinfo($atc->name, PATHINFO_EXTENSION) == 'pdf')
                                                                         <a type="button"
-                                                                            href="{{ asset('storage/Cash/' . $transaction[0]->uuid . '/' . $atc->name) }}"
+                                                                            href="{{ asset('storage/Escrow/' . $transaction[0]->uuid . '/' . $atc->name) }}"
                                                                             target="_blank">
                                                                             <div class="mt-5"> <i
                                                                                     class="bi bi-file-earmark-pdf-fill text-danger attach-cash"
@@ -327,12 +328,12 @@
                                                                                 <div class="modal-body text-center">
                                                                                     @if (pathinfo($atc->name, PATHINFO_EXTENSION) == 'doc' || pathinfo($atc->name, PATHINFO_EXTENSION) == 'docx')
                                                                                         <iframe
-                                                                                            src='https://view.officeapps.live.com/op/embed.aspx?src={{ asset('storage/Cash/' . $transaction[0]->uuid . '/' . $atc->name) }}'
+                                                                                            src='https://view.officeapps.live.com/op/embed.aspx?src={{ asset('storage/Escrow/' . $transaction[0]->uuid . '/' . $atc->name) }}'
                                                                                             width='100%' height='100%'
                                                                                             frameborder='0'></iframe>
                                                                                     @elseif(pathinfo($atc->name, PATHINFO_EXTENSION) == 'jpg' || pathinfo($atc->name, PATHINFO_EXTENSION) == 'png' || pathinfo($atc->name, PATHINFO_EXTENSION) == 'jpeg')
                                                                                         <img class="img img-fluid"
-                                                                                            src="{{ asset('storage/Cash/' . $transaction[0]->uuid . '/' . $atc->name) }}"
+                                                                                            src="{{ asset('storage/Escrow/' . $transaction[0]->uuid . '/' . $atc->name) }}"
                                                                                             alt="{{ $atc->name }}"
                                                                                             style="max-width: 100%; height: auto;">
                                                                                     @endif
@@ -343,7 +344,7 @@
                                                                                         data-bs-dismiss="modal">Close</button>
                                                                                     <a type="button"
                                                                                         class="btn btn-primary"
-                                                                                        href="{{ asset('storage/Cash/' . $transaction[0]->uuid . '/' . $atc->name) }}"
+                                                                                        href="{{ asset('storage/Escrow/' . $transaction[0]->uuid . '/' . $atc->name) }}"
                                                                                         download="">Download</a>
                                                                                 </div>
                                                                             </div>
@@ -369,7 +370,7 @@
                                     <div class="my-1 me-5">
                                         <!-- begin::Print-->
                                         <form method="post"
-                                            action="{{ route('findiv.cash-detail-export', ['uuid' => $transaction[0]->uuid]) }}">
+                                            action="{{ route('findiv.escrow-detail-export', ['uuid' => $transaction[0]->uuid]) }}">
                                             @csrf
                                             <button type="submit" class="btn btn-success my-1 me-12">Print
                                                 Transaction</button>
@@ -378,7 +379,7 @@
                                     </div>
                                     <!-- end::Actions-->
                                     <!-- begin::Action-->
-                                    <a href="{{ route('findiv.cash-create') }}" class="btn btn-primary my-1">Create
+                                    <a href="{{ route('findiv.escrow-create') }}" class="btn btn-primary my-1">Create
                                         Transaction</a>
                                     <!-- end::Action-->
                                 </div>
@@ -434,36 +435,36 @@
                                                     <div>
                                                         <p class="mb-0 fw-bolder">{{ $a['user'][0]->email }}
                                                         </p>
-                                                        @if ($a['log']->category == 'cash-store')
+                                                        @if ($a['log']->category == 'escrow-store')
                                                             <span>Has <i class="text-dark fw-bolder">created</i>
                                                                 this
                                                                 transaction on
                                                                 {{ $a['log']->created_at->format('l, jS \of F Y h:i:s A') }}</span>
-                                                        @elseif ($a['log']->category == 'cash-update')
+                                                        @elseif ($a['log']->category == 'escrow-update')
                                                             <span>Has <b><i class="text-dark fw-bolder">updated</i></b>
                                                                 this transaction on
                                                                 {{ $a['log']->updated_at->format('l, jS \of F Y h:i:s A') }}</span>
-                                                        @elseif ($a['log']->category == 'cash-delete')
+                                                        @elseif ($a['log']->category == 'escrow-delete')
                                                             <span>Has <b><i class="text-dark fw-bolder">deleted</i></b>
                                                                 this transaction on
                                                                 {{ $a['log']->updated_at->format('l, jS \of F Y h:i:s A') }}</span>
-                                                        @elseif ($a['log']->category == 'cash-approved-findir')
+                                                        @elseif ($a['log']->category == 'escrow-approved-findir')
                                                             <span>Has <b><i class="text-dark fw-bolder">approved</i></b>
                                                                 this transaction on
                                                                 {{ $a['log']->updated_at->format('l, jS \of F Y h:i:s A') }}</span>
-                                                        @elseif ($a['log']->category == 'cash-approved-excdir')
+                                                        @elseif ($a['log']->category == 'escrow-approved-excdir')
                                                             <span>Has <b><i class="text-dark fw-bolder">approved</i></b>
                                                                 this transaction on
                                                                 {{ $a['log']->updated_at->format('l, jS \of F Y h:i:s A') }}</span>
-                                                        @elseif ($a['log']->category == 'cash-rejected-findir')
+                                                        @elseif ($a['log']->category == 'escrow-rejected-findir')
                                                             <span>Has <b><i class="text-dark fw-bolder">rejected</i></b>
                                                                 this transaction on
                                                                 {{ $a['log']->updated_at->format('l, jS \of F Y h:i:s A') }}</span>
-                                                        @elseif ($a['log']->category == 'cash-rejected-excdir')
+                                                        @elseif ($a['log']->category == 'escrow-rejected-excdir')
                                                             <span>Has <b><i class="text-dark fw-bolder">rejected</i></b>
                                                                 this transaction on
                                                                 {{ $a['log']->updated_at->format('l, jS \of F Y h:i:s A') }}</span>
-                                                        @elseif ($a['log']->category == 'cash-paid')
+                                                        @elseif ($a['log']->category == 'escrow-paid')
                                                             <span>Has <b><i class="text-dark fw-bolder">paid</i></b>
                                                                 this transaction on
                                                                 {{ $a['log']->updated_at->format('l, jS \of F Y h:i:s A') }}</span>
@@ -518,18 +519,18 @@
                     <div class="modal-body text-center">
                         @if (pathinfo($report[0]->name, PATHINFO_EXTENSION) == 'doc' || pathinfo($report[0]->name, PATHINFO_EXTENSION) == 'docx')
                             <iframe
-                                src='https://view.officeapps.live.com/op/embed.aspx?src={{ asset('storage/Cash/' . $transaction[0]->uuid . '/' . $report[0]->name) }}'
+                                src='https://view.officeapps.live.com/op/embed.aspx?src={{ asset('storage/Escrow/' . $transaction[0]->uuid . '/' . $report[0]->name) }}'
                                 width='100%' height='100%' frameborder='0'></iframe>
                         @elseif(pathinfo($report[0]->name, PATHINFO_EXTENSION) == 'jpg' || pathinfo($report[0]->name, PATHINFO_EXTENSION) == 'png' || pathinfo($report[0]->name, PATHINFO_EXTENSION) == 'jpeg')
                             <img class="img img-fluid"
-                                src="{{ asset('storage/Cash/' . $transaction[0]->uuid . '/' . $report[0]->name) }}"
+                                src="{{ asset('storage/Escrow/' . $transaction[0]->uuid . '/' . $report[0]->name) }}"
                                 alt="{{ $report[0]->name }}" style="max-width: 100%; height: auto;">
                         @endif
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                         <a type="button" class="btn btn-primary"
-                            href="{{ asset('storage/Cash/' . $transaction[0]->uuid . '/' . $report[0]->name) }}"
+                            href="{{ asset('storage/Escrow/' . $transaction[0]->uuid . '/' . $report[0]->name) }}"
                             download="">Download</a>
                     </div>
                 </div>

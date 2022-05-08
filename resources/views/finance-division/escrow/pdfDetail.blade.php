@@ -17,8 +17,8 @@
                                 style="width: 120px">
                         </th>
                         <th style="width:50%;text-align: center; padding-top:20px;">
-                            <b>Cash Disbursement Voucher</b><br>
-                            <i style="font-weight: 500">Bukti Pengeluaran Kas</i>
+                            <b>Mandiri Escrow Disbursement Voucher</b><br>
+                            <i style="font-weight: 500">Bukti Pengeluaran Mandiri Operasional</i>
                         </th>
                         <th style="width:25%; height: 15px;text-align: left; font-size:11pt; padding-top:20px;">
                             <p style="margin-bottom: -10px;"><b>No :</b>

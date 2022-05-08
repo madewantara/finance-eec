@@ -13,7 +13,7 @@
             <tr>
                 <th colspan=10 rowspan=2 style="text-align: center">
                     <h1><b>PT. Era Elektra Corpora Indonesia</b></h1>
-                    <h1><b>Cash Transaction</b></h1>
+                    <h1><b>Mandiri Operational Transaction</b></h1>
                 </th>
             </tr>
             <tr></tr>
