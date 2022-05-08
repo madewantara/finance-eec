@@ -47,7 +47,7 @@ class AuthenticatedSessionController extends Controller
                 return redirect()->route('findiv.dashboard')->withSuccess('You have successfully logged into finance division portal.');
             }
             elseif($role == 'financedirector'){
-                return view('test2');
+                return redirect()->route('findir.dashboard')->withSuccess('You have successfully logged into finance director portal.');
             }
             elseif($role == 'executivedirector'){
                 return view('test3');
