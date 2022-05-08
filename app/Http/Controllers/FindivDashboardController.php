@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Project;
 
 class FindivDashboardController extends Controller
 {
@@ -23,7 +24,18 @@ class FindivDashboardController extends Controller
      */
     public function index()
     {
-        return view('finance-division.dashboard');
+        $projLocation = Project::where('is_active', 1)->with('projectLocation')->get();
+        $activeProj = Project::where('is_active', 1)->where(function($query){
+            $query->where('status', 1)
+            ->orWhere('status', 2);
+        })->with('projectLocation', 'projectCategory')->get();
+
+        $allProjLoc = [];
+        foreach($projLocation as $pl){
+            array_push($allProjLoc, ['name' => $pl->name, 'lat' => $pl->projectLocation->latitude, 'long' => $pl->projectLocation->longitude]);
+        }
+
+        return view('finance-division.dashboard', compact('projLocation','allProjLoc', 'activeProj'));
     }
 
     /**
