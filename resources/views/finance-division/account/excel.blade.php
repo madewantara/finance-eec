@@ -13,7 +13,7 @@
             <tr>
                 <th colspan=3 rowspan=2 style="text-align: center">
                     <h1><b>PT. Era Elektra Corpora Indonesia</b></h1>
-                    <h1><b>Financial Account List</b></h1>
+                    <h1><b>Financial Account</b></h1>
                 </th>
             </tr>
             <tr></tr>

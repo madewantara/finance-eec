@@ -33,7 +33,7 @@
                         <td colspan="4">
                             <div class="content-head" style="text-align: center;">
                                 <h3><b>PT. Era Elektra Corpora Indonesia</b></h3>
-                                <h3 style="margin-top: -10px; padding-bottom:15px;"><b>Financial Account List</b></h3>
+                                <h3 style="margin-top: -10px; padding-bottom:15px;"><b>Financial Account</b></h3>
                             </div>
                         </td>
                     </tr>
@@ -65,7 +65,8 @@
                         </tr>
                     @endforeach
                     <tr>
-                        <td colspan="4" style="padding: 10px 0"><i>Printed on {{ $todayDate }}</i>
+                        <td colspan="4" style="padding: 10px 0"><i>Printed on
+                                <b>{{ date('d F, Y', strtotime($todayDate)) }}</b></i>
                         </td>
                     </tr>
                 </tbody>

@@ -9,7 +9,7 @@ use App\Models\ActivityLog;
 use Illuminate\Support\Str;
 use App\Http\Requests\AccountRequest;
 use App\Http\Requests\CategoryRequest;
-use App\Exports\AccountExport;
+use App\Exports\FinanceDivision\AccountExport;
 use Maatwebsite\Excel\Facades\Excel;
 use Carbon\Carbon;
 use Barryvdh\DomPDF\Facade\Pdf;
@@ -184,7 +184,15 @@ class FindivAccountController extends Controller
                     ->where(function($query){
                         $query->where('category', 'like', '%account%')
                         ->orWhere('category', 'system');
-                    })->update(['activity_id' => $accountUuid]);
+                    })->get();
+
+        foreach($dataLog as $dl){
+            ActivityLog::create([
+                'user_id' => $dl->user_id,
+                'category' => $dl->category,
+                'activity_id' => $accountUuid,
+            ]);
+        }
 
         $account = Account::create([
             'uuid' => $accountUuid,
@@ -238,9 +246,10 @@ class FindivAccountController extends Controller
             if(!empty($request->exportcategory)){
                 foreach($request->exportcategory as $category){
                     if(!empty($category)){
-                        array_push($collectionData, $accountData->where('is_active' , 1)->where('category', $category)->distinct()->get());
+                        array_push($collectionData, $accountData->where('is_active' , 1)->where('category', $category)->orderBy('category', 'asc')->distinct()->get());
                     }
                 }
+
                 $arrayData = array();
                 $accountArray = array('Referral Code', 'Name', 'Category');
                 foreach($collectionData as $account){
@@ -255,18 +264,16 @@ class FindivAccountController extends Controller
                 }
             }
             else{
-                $collectionData = $accountData->where('is_active' , 1)->get()->groupBy('category')->toArray();
+                $collectionData = $accountData->where('is_active' , 1)->orderBy('category', 'asc')->get()->toArray();
                 $arrayData = array();
                 $accountArray = array('Referral Code', 'Name', 'Category');
                 foreach($collectionData as $account){
-                    foreach($account as $acc){
-                        $accountArray = array(
-                            'Referral Code' => $acc['referral'],
-                            'Name' => $acc['name'],
-                            'Category' => $acc['category'],
-                        );
-                        array_push($arrayData, $accountArray);
-                    }
+                    $accountArray = array(
+                        'Referral Code' => $account['referral'],
+                        'Name' => $account['name'],
+                        'Category' => $account['category'],
+                    );
+                    array_push($arrayData, $accountArray);
                 }
             }
             

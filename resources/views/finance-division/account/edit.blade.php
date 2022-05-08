@@ -81,7 +81,8 @@
                         <!--begin::Card body-->
                         <div class="card-body pt-0">
                             <form class="form-create" method="POST" id="form-account"
-                                action="{{ route('findiv.account-update', ['uuid' => $uuid]) }}" novalidate>
+                                action="{{ route('findiv.account-update', ['uuid' => $uuid]) }}" autocomplete="off"
+                                novalidate>
                                 @csrf
                                 <div class="form-group">
                                     <label for="referral"

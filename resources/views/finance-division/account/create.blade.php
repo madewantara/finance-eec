@@ -64,7 +64,7 @@
             <!--begin::Content-->
             <div class="row me-lg-5 order-2 order-lg-1 mb-10 mb-lg-0">
                 <div class="col-lg-4 mt-2">
-                    @livewire('filter-create-account')
+                    @livewire('finance-division.filter-create-account')
                 </div>
                 <div class="col-lg-5 mt-2">
                     <!--begin::Card-->
@@ -81,7 +81,7 @@
                         <!--begin::Card body-->
                         <div class="card-body pt-0">
                             <form class="form-create" method="POST" action="{{ route('findiv.account-post') }}"
-                                id="form-account" novalidate>
+                                id="form-account" autocomplete="off" novalidate>
                                 @csrf
                                 <div class="form-group">
                                     <label for="referral"

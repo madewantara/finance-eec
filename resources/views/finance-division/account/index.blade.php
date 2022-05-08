@@ -85,7 +85,7 @@
 
             <!--begin::Card-->
             <div class="card">
-                @livewire('filter-index-account')
+                @livewire('finance-division.filter-index-account')
             </div>
             <!--end::Card-->
             <!--begin::Modals-->
@@ -124,7 +124,7 @@
                         <div class="modal-body scroll-y mx-5 mx-xl-15 my-7">
                             <!--begin::Form-->
                             <form id="kt_subscriptions_export_form" action="{{ route('findiv.account-export') }}"
-                                method="GET">
+                                method="GET" autocomplete="off">
                                 <!--begin::Input group-->
                                 <div class="fv-row mb-10">
                                     <!--begin::Label-->
@@ -171,8 +171,8 @@
                                 <!--end::Row-->
                                 <!--begin::Actions-->
                                 <div class="text-center">
-                                    <button type="reset" class="btn btn-light me-3"
-                                        id="kt_subscriptions_export_cancel">Discard</button>
+                                    <button type="reset" class="btn btn-light me-3" id="kt_subscriptions_export_cancel"
+                                        data-bs-dismiss="modal">Cancel</button>
                                     <button type="submit" class="btn btn-primary" id="submit">
                                         <span class="indicator-label">Submit</span>
                                         <span class="indicator-progress">Please wait...
