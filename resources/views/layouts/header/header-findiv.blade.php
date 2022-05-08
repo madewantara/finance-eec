@@ -45,56 +45,69 @@
                         id="#kt_header_menu" data-kt-menu="true">
                         <div class="menu-item menu-lg-down-accordion me-lg-1">
                             <a class="menu-link py-3" href="{{ route('findiv.dashboard') }}">
-                                <span class="menu-title">Dashboards</span>
+                                <span
+                                    class="menu-title @if (Route::currentRouteName() == 'findiv.dashboard') text-primary fw-bolder @endif">Dashboard</span>
                             </a>
                         </div>
                         <div class="menu-item menu-lg-down-accordion me-lg-1">
                             <a class="menu-link py-3" href="{{ route('findiv.account-index') }}">
-                                <span class="menu-title">Accounts</span>
+                                <span
+                                    class="menu-title @if (Route::currentRouteName() == 'findiv.account-create' || Route::currentRouteName() == 'findiv.account-index' || Route::currentRouteName() == 'findiv.account-edit') text-primary fw-bolder @endif">Accounts</span>
                             </a>
                         </div>
                         <div data-kt-menu-trigger="click" data-kt-menu-placement="bottom-start"
                             class="menu-item menu-lg-down-accordion me-lg-1">
                             <span class="menu-link py-3">
-                                <span class="menu-title">Journals</span>
+                                <span
+                                    class="menu-title @if (Route::currentRouteName() == 'findiv.cash-index' || Route::currentRouteName() == 'findiv.cash-create' || Route::currentRouteName() == 'findiv.cash-detail' || Route::currentRouteName() == 'findiv.cash-edit' || Route::currentRouteName() == 'findiv.operational-index' || Route::currentRouteName() == 'findiv.operational-create' || Route::currentRouteName() == 'findiv.operational-detail' || Route::currentRouteName() == 'findiv.operational-edit' || Route::currentRouteName() == 'findiv.escrow-index' || Route::currentRouteName() == 'findiv.escrow-create' || Route::currentRouteName() == 'findiv.escrow-detail' || Route::currentRouteName() == 'findiv.escrow-edit') text-primary fw-bolder @endif">Journals</span>
                                 <span class="menu-arrow d-lg-none"></span>
                             </span>
                             <div
                                 class="menu-sub menu-sub-lg-down-accordion menu-sub-lg-dropdown menu-rounded-0 py-lg-4 w-lg-225px">
                                 <div class="menu-item">
                                     <a class="menu-link py-3" href="{{ route('findiv.cash-index') }}"
-                                        title="Check out over 200 in-house components, plugins and ready for use solutions"
-                                        data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-dismiss="click"
-                                        data-bs-placement="right">
+                                        title="Manage all transaction on Cash" data-bs-toggle="tooltip"
+                                        data-bs-trigger="hover" data-bs-dismiss="click" data-bs-placement="right">
                                         <span class="menu-icon">
                                             <i class="bi bi-dot fs-3"></i>
                                         </span>
-                                        <span class="menu-title">Cash</span>
+                                        <span
+                                            class="menu-title @if (Route::currentRouteName() == 'findiv.cash-index' || Route::currentRouteName() == 'findiv.cash-create' || Route::currentRouteName() == 'findiv.cash-detail' || Route::currentRouteName() == 'findiv.cash-edit') text-primary @endif">Cash
+                                            Journal</span>
                                     </a>
-                                    <a class="menu-link py-3" href="../../demo6/dist/documentation/base/utilities.html"
-                                        title="Check out over 200 in-house components, plugins and ready for use solutions"
-                                        data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-dismiss="click"
-                                        data-bs-placement="right">
+                                    <a class="menu-link py-3" href="{{ route('findiv.operational-index') }}"
+                                        title="Manage all transaction on Mandiri Operational" data-bs-toggle="tooltip"
+                                        data-bs-trigger="hover" data-bs-dismiss="click" data-bs-placement="right">
                                         <span class="menu-icon">
                                             <i class="bi bi-dot fs-3"></i>
                                         </span>
-                                        <span class="menu-title">Mandiri Operational</span>
+                                        <span
+                                            class="menu-title @if (Route::currentRouteName() == 'findiv.operational-index' || Route::currentRouteName() == 'findiv.operational-create' || Route::currentRouteName() == 'findiv.operational-detail' || Route::currentRouteName() == 'findiv.operational-edit') text-primary @endif ">Mandiri
+                                            Operational Journal</span>
                                     </a>
-                                    <a class="menu-link py-3" href="../../demo6/dist/documentation/base/utilities.html"
-                                        title="Check out over 200 in-house components, plugins and ready for use solutions"
-                                        data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-dismiss="click"
-                                        data-bs-placement="right">
+                                    <a class="menu-link py-3" href="{{ route('findiv.escrow-index') }}"
+                                        title="Manage all transaction on Mandiri Escrow" data-bs-toggle="tooltip"
+                                        data-bs-trigger="hover" data-bs-dismiss="click" data-bs-placement="right">
                                         <span class="menu-icon">
                                             <i class="bi bi-dot fs-3"></i>
                                         </span>
-                                        <span class="menu-title">Mandiri Escrow</span>
+                                        <span
+                                            class="menu-title @if (Route::currentRouteName() == 'findiv.escrow-index' || Route::currentRouteName() == 'findiv.escrow-create' || Route::currentRouteName() == 'findiv.escrow-detail' || Route::currentRouteName() == 'findiv.escrow-edit') text-primary @endif">Mandiri
+                                            Escrow Journal</span>
                                     </a>
                                 </div>
                             </div>
                         </div>
                         <div class="menu-item menu-lg-down-accordion me-lg-1">
                             <a class="menu-link py-3" href="{{ route('findiv.project-index') }}">
-                                <span class="menu-title">Projects</span>
+                                <span
+                                    class="menu-title @if (Route::currentRouteName() == 'findiv.project-index' || Route::currentRouteName() == 'findiv.project-detail') text-primary fw-bolder @endif">Projects</span>
+                            </a>
+                        </div>
+                        <div class="menu-item menu-lg-down-accordion me-lg-1">
+                            <a class="menu-link py-3" href="{{ route('findiv.report-index') }}">
+                                <span
+                                    class="menu-title @if (Route::currentRouteName() == 'findiv.report-index' || Route::currentRouteName() == 'findiv.report-detail') text-primary fw-bolder @endif">Reports</span>
                             </a>
                         </div>
                     </div>

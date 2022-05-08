@@ -24,7 +24,7 @@
                 <div class="menu-item py-2 text-hover-primary">
                     <a class="menu-link menu-center" href="{{ route('findiv.dashboard') }}" data-bs-trigger="hover"
                         data-bs-dismiss="click" data-bs-placement="right">
-                        
+
                         <span class="menu-icon me-0">
                             <i class="bi bi-house fs-2 @if (Route::currentRouteName() == 'findiv.dashboard') @yield('active-icon') @endif"
                                 style="color: #f5f5f58a"></i>
@@ -49,9 +49,12 @@
                     <span class="menu-link menu-center" data-bs-trigger="hover" data-bs-dismiss="click"
                         data-bs-placement="right">
                         <span class="menu-icon me-0">
-                            <i class="bi bi-journals fs-2 @if (Route::currentRouteName() == 'findiv.cash-index' || Route::currentRouteName() == 'findiv.cash-create' || Route::currentRouteName() == 'findiv.cash-detail' || Route::currentRouteName() == 'findiv.cash-edit') @yield('active-icon') @endif" style="color: #f5f5f58a"></i>
+                            <i class="bi bi-journals fs-2 
+                            @if (Route::currentRouteName() == 'findiv.cash-index' || Route::currentRouteName() == 'findiv.cash-create' || Route::currentRouteName() == 'findiv.cash-detail' || Route::currentRouteName() == 'findiv.cash-edit' || Route::currentRouteName() == 'findiv.operational-index' || Route::currentRouteName() == 'findiv.operational-create' || Route::currentRouteName() == 'findiv.operational-detail' || Route::currentRouteName() == 'findiv.operational-edit' || Route::currentRouteName() == 'findiv.escrow-index' || Route::currentRouteName() == 'findiv.escrow-create' || Route::currentRouteName() == 'findiv.escrow-detail' || Route::currentRouteName() == 'findiv.escrow-edit') @yield('active-icon') @endif"
+                                style="color: #f5f5f58a"></i>
                         </span>
-                        <span class="menu-title @if (Route::currentRouteName() == 'findiv.cash-index' || Route::currentRouteName() == 'findiv.cash-create' || Route::currentRouteName() == 'findiv.cash-detail' || Route::currentRouteName() == 'findiv.cash-edit') @yield('active-link') @endif">Journals</span>
+                        <span
+                            class="menu-title @if (Route::currentRouteName() == 'findiv.cash-index' || Route::currentRouteName() == 'findiv.cash-create' || Route::currentRouteName() == 'findiv.cash-detail' || Route::currentRouteName() == 'findiv.cash-edit' || Route::currentRouteName() == 'findiv.operational-index' || Route::currentRouteName() == 'findiv.operational-create' || Route::currentRouteName() == 'findiv.operational-detail' || Route::currentRouteName() == 'findiv.operational-edit' || Route::currentRouteName() == 'findiv.escrow-index' || Route::currentRouteName() == 'findiv.escrow-create' || Route::currentRouteName() == 'findiv.escrow-detail' || Route::currentRouteName() == 'findiv.escrow-edit') @yield('active-link') @endif">Journals</span>
                     </span>
                     <div class="menu-sub menu-sub-dropdown w-225px px-1 py-4">
                         <div class="menu-item">
@@ -64,23 +67,26 @@
                                 <span class="menu-bullet">
                                     <span class="bullet bullet-dot"></span>
                                 </span>
-                                <span class="menu-title">Cash</span>
+                                <span class="menu-title @if (Route::currentRouteName() == 'findiv.cash-index' || Route::currentRouteName() == 'findiv.cash-create' || Route::currentRouteName() == 'findiv.cash-detail' || Route::currentRouteName() == 'findiv.cash-edit') text-primary @endif">Cash
+                                    Journal</span>
                             </a>
                         </div>
                         <div class="menu-item">
-                            <a class="menu-link" href="#">
+                            <a class="menu-link" href="{{ route('findiv.operational-index') }}">
                                 <span class="menu-bullet">
                                     <span class="bullet bullet-dot"></span>
                                 </span>
-                                <span class="menu-title">Mandiri Operational</span>
+                                <span class="menu-title @if (Route::currentRouteName() == 'findiv.operational-index' || Route::currentRouteName() == 'findiv.operational-create' || Route::currentRouteName() == 'findiv.operational-detail' || Route::currentRouteName() == 'findiv.operational-edit') text-primary @endif">Mandiri
+                                    Operational Journal</span>
                             </a>
                         </div>
                         <div class="menu-item">
-                            <a class="menu-link" href="#">
+                            <a class="menu-link" href="{{ route('findiv.escrow-index') }}">
                                 <span class="menu-bullet">
                                     <span class="bullet bullet-dot"></span>
                                 </span>
-                                <span class="menu-title">Mandiri Escrow</span>
+                                <span class="menu-title @if (Route::currentRouteName() == 'findiv.escrow-index' || Route::currentRouteName() == 'findiv.escrow-create' || Route::currentRouteName() == 'findiv.escrow-detail' || Route::currentRouteName() == 'findiv.escrow-edit') text-primary @endif">Mandiri
+                                    Escrow Journal</span>
                             </a>
                         </div>
                     </div>
@@ -92,7 +98,19 @@
                             <i class="bi bi-patch-check fs-2 text-hover-primary @if (Route::currentRouteName() == 'findiv.project-index' || Route::currentRouteName() == 'findiv.project-detail') @yield('active-icon') @endif"
                                 style="color: #f5f5f58a"></i>
                         </span>
-                        <span class="menu-title @if (Route::currentRouteName() == 'findiv.project-index' || Route::currentRouteName() == 'findiv.project-detail') @yield('active-link') @endif">Projects</span>
+                        <span
+                            class="menu-title @if (Route::currentRouteName() == 'findiv.project-index' || Route::currentRouteName() == 'findiv.project-detail') @yield('active-link') @endif">Projects</span>
+                    </a>
+                </div>
+                <div class="menu-item py-2 text-hover-primary">
+                    <a class="menu-link menu-center" href="{{ route('findiv.report-index') }}" data-bs-trigger="hover"
+                        data-bs-dismiss="click" data-bs-placement="right">
+                        <span class="menu-icon me-0">
+                            <i class="bi bi-book-half fs-2 text-hover-primary @if (Route::currentRouteName() == 'findiv.report-index' || Route::currentRouteName() == 'findiv.report-detail') @yield('active-icon') @endif"
+                                style="color: #f5f5f58a"></i>
+                        </span>
+                        <span
+                            class="menu-title @if (Route::currentRouteName() == 'findiv.report-index' || Route::currentRouteName() == 'findiv.report-detail') @yield('active-link') @endif">Reports</span>
                     </a>
                 </div>
             </div>
@@ -138,57 +156,24 @@
                 <!--end::Menu separator-->
                 <!--begin::Menu item-->
                 <div class="menu-item px-3">
-                    <a href="#" class="menu-link px-3">New Ticket</a>
+                    <a href="{{ route('findiv.account-create') }}" class="menu-link px-3">New Account</a>
                 </div>
                 <!--end::Menu item-->
                 <!--begin::Menu item-->
                 <div class="menu-item px-3">
-                    <a href="#" class="menu-link px-3">New Customer</a>
-                </div>
-                <!--end::Menu item-->
-                <!--begin::Menu item-->
-                <div class="menu-item px-3" data-kt-menu-trigger="hover" data-kt-menu-placement="right-start"
-                    data-kt-menu-flip="bottom, top">
-                    <!--begin::Menu item-->
-                    <a href="#" class="menu-link px-3">
-                        <span class="menu-title">New Group</span>
-                        <span class="menu-arrow"></span>
-                    </a>
-                    <!--end::Menu item-->
-                    <!--begin::Menu sub-->
-                    <div class="menu-sub menu-sub-dropdown w-175px py-4">
-                        <!--begin::Menu item-->
-                        <div class="menu-item px-3">
-                            <a href="#" class="menu-link px-3">Admin Group</a>
-                        </div>
-                        <!--end::Menu item-->
-                        <!--begin::Menu item-->
-                        <div class="menu-item px-3">
-                            <a href="#" class="menu-link px-3">Staff Group</a>
-                        </div>
-                        <!--end::Menu item-->
-                        <!--begin::Menu item-->
-                        <div class="menu-item px-3">
-                            <a href="#" class="menu-link px-3">Member Group</a>
-                        </div>
-                        <!--end::Menu item-->
-                    </div>
-                    <!--end::Menu sub-->
+                    <a href="{{ route('findiv.cash-create') }}" class="menu-link px-3">New Cash Transaction</a>
                 </div>
                 <!--end::Menu item-->
                 <!--begin::Menu item-->
                 <div class="menu-item px-3">
-                    <a href="#" class="menu-link px-3">New Contact</a>
+                    <a href="{{ route('findiv.operational-create') }}" class="menu-link px-3">New Mandiri Operational
+                        Transaction</a>
                 </div>
                 <!--end::Menu item-->
-                <!--begin::Menu separator-->
-                <div class="separator mt-3 opacity-75"></div>
-                <!--end::Menu separator-->
                 <!--begin::Menu item-->
-                <div class="menu-item px-3">
-                    <div class="menu-content px-3 py-3">
-                        <a class="btn btn-primary btn-sm px-4" href="#">Generate Reports</a>
-                    </div>
+                <div class="menu-item px-3 mb-2">
+                    <a href="{{ route('findiv.escrow-create') }}" class="menu-link px-3">New Mandiri Escrow
+                        Transaction</a>
                 </div>
                 <!--end::Menu item-->
             </div>
