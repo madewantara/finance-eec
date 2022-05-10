@@ -11,8 +11,7 @@ class Report extends Model
 
     protected $fillable = [
         'uuid',
-        'start_date',
-        'end_date',
+        'year',
         'report_type',
         'type',
         'status',
