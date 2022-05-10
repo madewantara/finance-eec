@@ -24,7 +24,11 @@ class FindirDashboardController extends Controller
      */
     public function index()
     {
-        $projLocation = Project::where('is_active', 1)->with('projectLocation')->get();
+        $projLocation = Project::where('is_active', 1)->where(function($query){
+            $query->where('status', 1)
+            ->orWhere('status', 2);
+        })->with('projectLocation')->get();
+        
         $activeProj = Project::where('is_active', 1)->where(function($query){
             $query->where('status', 1)
             ->orWhere('status', 2);
