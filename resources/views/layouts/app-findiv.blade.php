@@ -24,6 +24,7 @@
     <link href="{{ asset('assets/css/plugins.bundle.css') }}" rel="stylesheet" type="text/css" />
     <link href="{{ asset('assets/css/style.bundle.css') }}" rel="stylesheet" type="text/css" />
 
+    @stack('css')
     @livewireStyles
 </head>
 
