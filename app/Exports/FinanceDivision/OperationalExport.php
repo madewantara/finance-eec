@@ -15,10 +15,7 @@ class OperationalExport implements FromView
 
     public function view(): View
     {
-        $transaction = Transaction::select('uuid')->where('is_active', 1)->where('category', 'operational')->where(function($query){
-                $query->where('status', 3)
-                ->orWhere('status', 4);
-            })->where(function($query){
+        $transaction = Transaction::select('uuid')->where('is_active', 1)->where('category', 'operational')->where('status', 4)->where(function($query){
                 if($this->request->datefilterex){
                     $expDate = explode(' -> ', $this->request->datefilterex);
                     $query->whereBetween('date', [$expDate[0],$expDate[1]]);
@@ -44,10 +41,7 @@ class OperationalExport implements FromView
 
         $dataTrans = [];
         foreach($tempTrans as $tr){
-            $model = Transaction::where('is_active', 1)->where('category', 'operational')->where('uuid', $tr)->where(function($query){
-                $query->where('status', 3)
-                ->orWhere('status', 4);
-            })->with(['transactionAccount', 'transactionProject'])->orderBy('updated_at', 'desc')->get();
+            $model = Transaction::where('is_active', 1)->where('category', 'operational')->where('uuid', $tr)->where('status', 4)->with(['transactionAccount', 'transactionProject'])->orderBy('updated_at', 'desc')->get();
             $transUuid = [];
             array_push($transUuid, $model);
             array_push($dataTrans, $transUuid);
