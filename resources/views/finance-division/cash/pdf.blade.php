@@ -21,7 +21,7 @@
     </footer>
 
     <main class="content" style="margin-left: 80px; margin-right: 80px;">
-        <div class=" content-main">
+        <div class="content-main">
             <table style="margin-bottom: 90px; width:100%;">
                 <thead>
                     <tr>
