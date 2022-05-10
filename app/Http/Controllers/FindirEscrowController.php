@@ -167,10 +167,7 @@ class FindirEscrowController extends Controller
         }
         
         if($request->format == 'pdf'){
-            $transaction = Transaction::select('uuid')->where('is_active', 1)->where('type', 2)->where('category', 'escrow')->where(function($query){
-                $query->where('status', 3)
-                ->orWhere('status', 4);
-            })->where(function($query) use($request){
+            $transaction = Transaction::select('uuid')->where('is_active', 1)->where('type', 2)->where('category', 'escrow')->where('status', 4)->where(function($query) use($request){
                     if($request->datefilterex){
                         $expDate = explode(' -> ', $request->datefilterex);
                         $query->whereBetween('date', [$expDate[0],$expDate[1]]);
@@ -196,10 +193,7 @@ class FindirEscrowController extends Controller
 
             $dataTrans = [];
             foreach($tempTrans as $tr){
-                $model = Transaction::where('is_active', 1)->where('type', 2)->where('category', 'escrow')->where('uuid', $tr)->where(function($query){
-                    $query->where('status', 3)
-                    ->orWhere('status', 4);
-                })->with(['transactionAccount', 'transactionProject'])->orderBy('updated_at', 'desc')->get();
+                $model = Transaction::where('is_active', 1)->where('type', 2)->where('category', 'escrow')->where('uuid', $tr)->where('status', 4)->with(['transactionAccount', 'transactionProject'])->orderBy('updated_at', 'desc')->get();
                 $transUuid = [];
                 array_push($transUuid, $model);
                 array_push($dataTrans, $transUuid);
