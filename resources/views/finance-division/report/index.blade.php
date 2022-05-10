@@ -12,7 +12,7 @@
 @section('active-link', 'active-sidebar-link')
 
 @push('css')
-    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
+    <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/finance-division/yearpicker.css') }}">
 @endpush
 
 @section('content')

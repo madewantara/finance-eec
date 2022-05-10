@@ -49,18 +49,10 @@
             <!--begin::Card title-->
             <div class="card-title flex-row-fluid justify-content-start gap-5">
                 <div class="w-150px mb-2">
-                    <!--begin::Startdate-->
-                    <input class="form-control form-control-solid pe-3" type="text" placeholder="Select start date"
-                        name="startDate" wire:model="startDate" onfocus="(this.type='date')"
-                        onblur="if(!this.value) this.type='text'" />
-                    <!--end::Startdate-->
-                </div>
-                <div class="w-150px mb-2">
-                    <!--begin::Enddate-->
-                    <input class="form-control form-control-solid pe-3" type="text" placeholder="Select end date"
-                        name="endDate" wire:model="endDate" onfocus="(this.type='date')"
-                        onblur="if(!this.value) this.type='text'" />
-                    <!--end::Enddate-->
+                    <!--begin::date-->
+                    <input class="form-control form-control-solid pe-3" type="text" placeholder="Search report year"
+                        name="yearFil" id="yearFil" wire:model="yearFil" />
+                    <!--end::date-->
                 </div>
                 <div class="w-150px mb-2">
                     <!--begin::Select2-->
@@ -84,16 +76,6 @@
                     </select>
                     <!--end::Select2-->
                 </div>
-                <div class="w-150px me-3 mb-2">
-                    <!--begin::Select2-->
-                    <select class="form-select form-select-solid" name="type" id="type" wire:model="type"
-                        data-pharaonic="select2" data-component-id="{{ $this->id }}">
-                        <option></option>
-                        <option value="1">Draft</option>
-                        <option value="2">Posted</option>
-                    </select>
-                    <!--end::Select2-->
-                </div>
                 <!--end::Filter-->
             </div>
             <!--end::Card title-->
@@ -112,17 +94,12 @@
                             <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
                                 <th class="min-w-100px sorting" tabindex="0" rowspan="1" colspan="1"
                                     style="width: 20%;">
-                                    Start Date</th>
-                                <th class="min-w-100px sorting" tabindex="0" rowspan="1" colspan="1"
-                                    style="width: 20%;">
-                                    End Date</th>
+                                    Report Year</th>
                                 <th class="min-w-100px sorting" tabindex="0" rowspan="1" colspan="1" style="width: 25%">
                                     Report Type</th>
                                 <th class="min-w-100px sorting" tabindex="0" rowspan="1" colspan="1"
                                     style="width: 15%;">
                                     Status</th>
-                                <th class="text-center min-w-75px sorting" tabindex="0" rowspan="1" colspan="1"
-                                    style="width: 15%;">Type</th>
                                 <th class="text-end min-w-100px sorting" tabindex="0" rowspan="1" colspan="1"
                                     style="width: 5%;"></th>
                             </tr>
@@ -134,12 +111,9 @@
                             <!--end::Table row-->
                             @foreach ($report as $index => $r)
                                 <tr>
-                                    <!--begin::startDate=-->
-                                    <td>{{ $r->start_date }}</td>
-                                    <!--end::startDate=-->
-                                    <!--begin::endDate=-->
-                                    <td>{{ $r->end_date }}</td>
-                                    <!--end::endDate=-->
+                                    <!--begin::startDate-->
+                                    <td>{{ $r->year }}</td>
+                                    <!--end::startDate-->
                                     <!--begin::Report Type=-->
                                     <td>
                                         @if ($r->report_type == 1)
@@ -160,21 +134,6 @@
                                         @endif
                                     </td>
                                     <!--end::Status-->
-                                    <!--begin::Type=-->
-                                    <td class="text-center">
-                                        <!--begin::Badges-->
-                                        @if ($r->type == 1)
-                                            <div class="badge badge-light fw-bolder text-white"
-                                                style="background-color: rgb(232, 123, 51);">
-                                                Draft</div>
-                                        @else
-                                            <div class="badge badge-light fw-bolder text-white"
-                                                style="background-color: #3498DB;">Posted
-                                            </div>
-                                        @endif
-                                        <!--end::Badges-->
-                                    </td>
-                                    <!--end::Type=-->
                                     <!--begin::Actions=-->
                                     <td class="text-end pe-0">
                                         <a href="#" class="btn btn-light btn-active-light-primary btn-sm"
@@ -363,7 +322,6 @@
 
 @push('js')
     <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
-    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
     <script type="text/javascript" src="{{ asset('vendor/pharaonic/pharaonic.select2.min.js') }}"></script>
     <script>
         window.setTimeout(function() {
@@ -379,42 +337,6 @@
                         $(this).remove();
                     });
                 }, 5000);
-            });
-        });
-    </script>
-    <script>
-        $(document).ready(function() {
-            $('#typeReport').select2({
-                placeholder: "Select type",
-                closeOnSelect: true,
-                minimumResultsForSearch: -1,
-            });
-        });
-        document.addEventListener('livewire:load', function(event) {
-            @this.on('refreshDropdown', function() {
-                $('#typeReport').select2({
-                    placeholder: "Select type",
-                    closeOnSelect: true,
-                    minimumResultsForSearch: -1,
-                });
-            });
-        });
-    </script>
-    <script>
-        $(document).ready(function() {
-            $('#typeUpdateReport').select2({
-                placeholder: "Select type",
-                closeOnSelect: true,
-                minimumResultsForSearch: -1,
-            });
-        });
-        document.addEventListener('livewire:load', function(event) {
-            @this.on('refreshDropdown', function() {
-                $('#typeUpdateReport').select2({
-                    placeholder: "Select type",
-                    closeOnSelect: true,
-                    minimumResultsForSearch: -1,
-                });
             });
         });
     </script>

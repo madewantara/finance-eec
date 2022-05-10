@@ -11,10 +11,6 @@
 
 @section('active-link', 'active-sidebar-link')
 
-@push('css')
-    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
-@endpush
-
 @section('content')
     @if (Session::has('success'))
         <div class="position-relative">

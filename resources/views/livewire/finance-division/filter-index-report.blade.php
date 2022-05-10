@@ -49,18 +49,10 @@
             <!--begin::Card title-->
             <div class="card-title flex-row-fluid justify-content-start gap-5">
                 <div class="w-150px mb-2">
-                    <!--begin::Startdate-->
-                    <input class="form-control form-control-solid pe-3" type="text" placeholder="Select start date"
-                        name="startDate" wire:model="startDate" onfocus="(this.type='date')"
-                        onblur="if(!this.value) this.type='text'" />
-                    <!--end::Startdate-->
-                </div>
-                <div class="w-150px mb-2">
-                    <!--begin::Enddate-->
-                    <input class="form-control form-control-solid pe-3" type="text" placeholder="Select end date"
-                        name="endDate" wire:model="endDate" onfocus="(this.type='date')"
-                        onblur="if(!this.value) this.type='text'" />
-                    <!--end::Enddate-->
+                    <!--begin::date-->
+                    <input class="form-control form-control-solid pe-3" type="text" placeholder="Search report year"
+                        name="yearFil" id="yearFil" wire:model="yearFil" />
+                    <!--end::date-->
                 </div>
                 <div class="w-150px mb-2">
                     <!--begin::Select2-->
@@ -129,10 +121,7 @@
                             <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
                                 <th class="min-w-100px sorting" tabindex="0" rowspan="1" colspan="1"
                                     style="width: 20%;">
-                                    Start Date</th>
-                                <th class="min-w-100px sorting" tabindex="0" rowspan="1" colspan="1"
-                                    style="width: 20%;">
-                                    End Date</th>
+                                    Report Year</th>
                                 <th class="min-w-100px sorting" tabindex="0" rowspan="1" colspan="1" style="width: 25%">
                                     Report Type</th>
                                 <th class="min-w-100px sorting" tabindex="0" rowspan="1" colspan="1"
@@ -151,12 +140,9 @@
                             <!--end::Table row-->
                             @foreach ($report as $index => $r)
                                 <tr>
-                                    <!--begin::startDate=-->
-                                    <td>{{ $r->start_date }}</td>
-                                    <!--end::startDate=-->
-                                    <!--begin::endDate=-->
-                                    <td>{{ $r->end_date }}</td>
-                                    <!--end::endDate=-->
+                                    <!--begin::startDate-->
+                                    <td>{{ $r->year }}</td>
+                                    <!--end::startDate-->
                                     <!--begin::Report Type=-->
                                     <td>
                                         @if ($r->report_type == 1)
@@ -488,20 +474,20 @@
                             <!--begin::Col-->
                             <div class="col-md-3 d-flex align-items-center">
                                 <!--begin::Label-->
-                                <label class="fs-6 fw-bold mb-2"><span class="required">Date
-                                        Range</span></label>
+                                <label class="fs-6 fw-bold mb-2"><span class="required">Report
+                                        Year</span></label>
                                 <!--end::Label-->
                             </div>
                             <!--end::Col-->
                             <!--begin::Col-->
-                            <div class="col-md-9">
+                            <div class="col-md-9" wire:ignore>
                                 <!--begin::Input-->
-                                <input name="date" id="date" type="text"
-                                    class="form-control form-control-solid mb-2 @error('date') is-invalid @enderror"
-                                    @error('date') style="border-color:#f1416c;" @enderror
-                                    placeholder="Pick a date range" wire:model="date" required>
+                                <input readonly name="year" id="year" type="text"
+                                    class="form-control form-control-solid mb-2 yearpicker @error('year') is-invalid @enderror"
+                                    @error('year') style="border-color:#f1416c;" @enderror
+                                    placeholder="Pick a report year" wire:model="year" required>
                                 <!--end::Input-->
-                                @error('date')
+                                @error('year')
                                     <span class="invalid-feedback">{{ $message }}</span>
                                 @enderror
                             </div>
@@ -654,8 +640,8 @@
                             <!--begin::Col-->
                             <div class="col-md-3 d-flex align-items-center">
                                 <!--begin::Label-->
-                                <label class="fs-6 fw-bold mb-2"><span class="required">Date
-                                        Range</span></label>
+                                <label class="fs-6 fw-bold mb-2"><span class="required">Report
+                                        Year</span></label>
                                 <!--end::Label-->
                             </div>
                             <!--end::Col-->
@@ -663,12 +649,14 @@
                             <div class="col-md-9">
                                 <!--begin::Input-->
                                 <input type="hidden" wire:model="uuid">
-                                <input name="date" id="date" type="text"
-                                    class="form-control form-control-solid mb-2 @error('date') is-invalid @enderror"
-                                    @error('date') style="border-color:#f1416c;" @enderror
-                                    placeholder="Pick a date range" wire:model="date" required>
+                                <div wire:ignore>
+                                    <input name="year" id="year" type="text"
+                                        class="form-control form-control-solid mb-2 yearpicker @error('year') is-invalid @enderror"
+                                        @error('year') style="border-color:#f1416c;" @enderror
+                                        placeholder="Pick a report year" wire:model="year" required>
+                                </div>
                                 <!--end::Input-->
-                                @error('date')
+                                @error('year')
                                     <span class="invalid-feedback">{{ $message }}</span>
                                 @enderror
                             </div>
@@ -721,33 +709,24 @@
 </div>
 
 @push('js')
+    <script type="text/javascript" src="{{ asset('assets/js/finance-division/yearpicker.js') }}"></script>
     <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
-    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
     <script type="text/javascript" src="{{ asset('vendor/pharaonic/pharaonic.select2.min.js') }}"></script>
     <script type="text/javascript">
-        $(function() {
-            $('input[name="date"]').daterangepicker({
-                autoUpdateInput: false,
-                locale: {
-                    cancelLabel: 'Clear'
-                },
-                autoApply: true,
-                autoClose: true,
-            }).on('click', function() {
-                $('.daterangepicker').click(function(e) {
-                    e.stopPropagation();
-                });
+        $(document).ready(function() {
+            $('.yearpicker').yearpicker({
+                onChange: function(value) {
+                    @this.set('year', value, true)
+                }
             });
-            $('input[name="date"]').on('apply.daterangepicker', function(ev, picker) {
-                $(this).val(picker.startDate.format('YYYY-MM-DD') + ' -> ' + picker.endDate.format(
-                    'YYYY-MM-DD'));
-                @this.set('date', picker.startDate.format('YYYY-MM-DD') + ' -> ' + picker.endDate
-                    .format(
-                        'YYYY-MM-DD'), true);
-            })
-            $('input[name="date"]').on('cancel.daterangepicker', function(ev, picker) {
-                $(this).val('');
-                @this.set('date', '', true);
+        });
+        document.addEventListener('livewire:load', function(event) {
+            @this.on('refreshDate', function() {
+                $('.yearpicker').yearpicker({
+                    onChange: function(value) {
+                        @this.set('year', value, true)
+                    }
+                });
             });
         });
     </script>
@@ -883,17 +862,6 @@
     <script>
         window.livewire.on('openEditReport', function() {
             $('#updateReport').modal('show');
-        })
-    </script>
-    <script>
-        $(document).ready(function() {
-            $('input[name="date"]').on('apply.daterangepicker', function(ev, picker) {
-                if (picker.startDate.format('YYYY-MM-DD') != '') {
-                    $('input[name="date"]').removeClass('is-invalid');
-                    $('input[name="date"]').addClass('is-valid');
-                    $('input[name="date"]').css("border-color", "#50cd89");
-                }
-            });
         })
     </script>
     <script type="text/javascript">

@@ -88,27 +88,12 @@
                                                     <span class="svg-icon svg-icon-2 me-4">
                                                         <i class="bi bi-calendar-check fs-3"></i>
                                                     </span>
-                                                    <!--end::Svg Icon-->Start Date
+                                                    <!--end::Svg Icon-->Report Year
                                                 </div>
                                             </td>
                                             <td class="fw-bolder text-end">
-                                                {{ date('d F Y', strtotime($report->start_date)) }}
+                                                {{ $report->year }}
                                             </td>
-                                        </tr>
-                                        <!--end::Date-->
-                                        <!--begin::Date-->
-                                        <tr>
-                                            <td class="text-muted">
-                                                <div class="d-flex align-items-center">
-                                                    <!--begin::Svg Icon | path: icons/duotune/files/fil002.svg-->
-                                                    <span class="svg-icon svg-icon-2 me-4">
-                                                        <i class="bi bi-calendar-check-fill fs-3"></i>
-                                                    </span>
-                                                    <!--end::Svg Icon-->End Date
-                                                </div>
-                                            </td>
-                                            <td class="fw-bolder text-end">
-                                                {{ date('d F Y', strtotime($report->end_date)) }}</td>
                                         </tr>
                                         <!--end::Date-->
                                         <!--begin::Payment method-->
@@ -153,30 +138,6 @@
                                             </td>
                                         </tr>
                                         <!--end::Date-->
-                                        <!--begin::Date-->
-                                        <tr>
-                                            <td class="text-muted">
-                                                <div class="d-flex align-items-center">
-                                                    <!--begin::Svg Icon | path: icons/duotune/ecommerce/ecm006.svg-->
-                                                    <span class="svg-icon svg-icon-2 me-4">
-                                                        <i class="bi bi-mailbox2 fs-3"></i>
-                                                    </span>
-                                                    <!--end::Svg Icon-->Type
-                                                </div>
-                                            </td>
-                                            <td class="fw-bolder text-end">
-                                                @if ($report->type == 1)
-                                                    <div class="badge badge-light fw-bolder text-white"
-                                                        style="background-color: rgb(232, 123, 51);">
-                                                        Draft</div>
-                                                @else
-                                                    <div class="badge badge-light fw-bolder text-white"
-                                                        style="background-color: #3498DB;">Posted
-                                                    </div>
-                                                @endif
-                                            </td>
-                                        </tr>
-                                        <!--end::Date-->
                                     </tbody>
                                     <!--end::Table body-->
                                 </table>
@@ -193,9 +154,7 @@
                             <!--begin::Card header-->
                             <div class="card-header">
                                 <div class="card-title">
-                                    <h2>Report Summary <i
-                                            class="text-muted">({{ date('d F Y', strtotime($report->start_date)) }} ->
-                                            {{ date('d F Y', strtotime($report->end_date)) }})</i></h2>
+                                    <h2>Report Summary <i class="text-muted">( In {{ $report->year }} )</i></h2>
                                 </div>
                             </div>
                             <!--end::Card header-->
@@ -230,7 +189,8 @@
                                                             <td class="fw-bolder">AKTIVA LANCAR</td>
                                                             <!--end::SKU-->
                                                             <!--begin::Quantity-->
-                                                            <td class="fw-bolder">RP. 10.000.000</td>
+                                                            <td class="fw-bolder">RP.
+                                                                {{ number_format($aktivalancar, 0, ',', '.') }}</td>
                                                             <!--end::Quantity-->
                                                         </tr>
                                                         <tr>
@@ -239,7 +199,8 @@
                                                                 1.1. Kas
                                                             </td>
                                                             <td class="ps-10">
-                                                                Rp. 5.000.000
+                                                                Rp.
+                                                                {{ number_format($kas, 0, ',', '.') }}</td>
                                                             </td>
                                                         </tr>
                                                         <tr>
@@ -248,52 +209,38 @@
                                                                 1.2. Bank
                                                             </td>
                                                             <td class="ps-10">
-                                                                Rp. 5.000.000
+                                                                Rp.
+                                                                {{ number_format($bank, 0, ',', '.') }}</td>
                                                             </td>
                                                         </tr>
                                                         <tr>
                                                             <td></td>
                                                             <td class="ps-10">
-                                                                1.3. Piutang Dagang
+                                                                1.3. Biaya Dibayar Di Muka
                                                             </td>
                                                             <td class="ps-10">
-                                                                Rp. 5.000.000
-                                                            </td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td></td>
-                                                            <td class="ps-10">
-                                                                1.4. Biaya Dibayar Di Muka
-                                                            </td>
-                                                            <td class="ps-10">
-                                                                Rp. 5.000.000
+                                                                Rp.
+                                                                {{ number_format($biayamuka, 0, ',', '.') }}</td>
                                                             </td>
                                                         </tr>
                                                         <tr>
                                                             <td></td>
                                                             <td class="ps-10">
-                                                                1.5. Pajak Dibayar Di Muka
+                                                                1.4. Pajak Dibayar Di Muka
                                                             </td>
                                                             <td class="ps-10">
-                                                                Rp. 5.000.000
-                                                            </td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td></td>
-                                                            <td class="ps-10">
-                                                                1.6. <span class="fst-italic">Stock</span>
-                                                            </td>
-                                                            <td class="ps-10">
-                                                                Rp. 5.000.000
+                                                                Rp.
+                                                                {{ number_format($pajakmuka, 0, ',', '.') }}
                                                             </td>
                                                         </tr>
                                                         <tr>
                                                             <td></td>
                                                             <td class="ps-10">
-                                                                1.7. Collateral Bank Garansi
+                                                                1.5. <span class="fst-italic">Stock</span>
                                                             </td>
                                                             <td class="ps-10">
-                                                                Rp. 5.000.000
+                                                                Rp.
+                                                                {{ number_format($stock, 0, ',', '.') }}
                                                             </td>
                                                         </tr>
 
@@ -309,7 +256,8 @@
                                                             </td>
                                                             <!--end::SKU-->
                                                             <!--begin::Quantity-->
-                                                            <td class="fw-bolder">RP. 10.000.000</td>
+                                                            <td class="fw-bolder">RP.
+                                                                {{ number_format($aktivalain, 0, ',', '.') }}</td>
                                                             <!--end::Quantity-->
                                                         </tr>
                                                         <tr>
@@ -318,7 +266,8 @@
                                                                 2.1. <span class="fst-italic">Test Equipment</span>
                                                             </td>
                                                             <td class="ps-10">
-                                                                Rp. 5.000.000
+                                                                Rp.
+                                                                {{ number_format($test, 0, ',', '.') }}
                                                             </td>
                                                         </tr>
                                                         <tr>
@@ -328,7 +277,8 @@
                                                                 Kerja
                                                             </td>
                                                             <td class="ps-10">
-                                                                Rp. 5.000.000
+                                                                Rp.
+                                                                {{ number_format($tools, 0, ',', '.') }}
                                                             </td>
                                                         </tr>
 
@@ -342,7 +292,8 @@
                                                             <td class="fw-bolder">AKTIVA TETAP</td>
                                                             <!--end::SKU-->
                                                             <!--begin::Quantity-->
-                                                            <td class="fw-bolder">RP. 10.000.000</td>
+                                                            <td class="fw-bolder">RP.
+                                                                {{ number_format($aktivatetap, 0, ',', '.') }}</td>
                                                             <!--end::Quantity-->
                                                         </tr>
                                                         <tr>
@@ -351,7 +302,8 @@
                                                                 3.1. Tanah
                                                             </td>
                                                             <td class="ps-10">
-                                                                Rp. 5.000.000
+                                                                Rp.
+                                                                {{ number_format($tanah, 0, ',', '.') }}
                                                             </td>
                                                         </tr>
                                                         <tr>
@@ -360,7 +312,8 @@
                                                                 3.2. Bangunan
                                                             </td>
                                                             <td class="ps-10">
-                                                                Rp. 5.000.000
+                                                                Rp.
+                                                                {{ number_format($bangunan, 0, ',', '.') }}
                                                             </td>
                                                         </tr>
                                                         <tr>
@@ -369,7 +322,8 @@
                                                                 3.3. Kendaraan
                                                             </td>
                                                             <td class="ps-10">
-                                                                Rp. 5.000.000
+                                                                Rp.
+                                                                {{ number_format($kendaraan, 0, ',', '.') }}
                                                             </td>
                                                         </tr>
                                                         <tr>
@@ -378,7 +332,8 @@
                                                                 3.4. Peralatan Kantor
                                                             </td>
                                                             <td class="ps-10">
-                                                                Rp. 5.000.000
+                                                                Rp.
+                                                                {{ number_format($inventaris, 0, ',', '.') }}
                                                             </td>
                                                         </tr>
                                                         <tr>
@@ -387,7 +342,8 @@
                                                                 3.5. Amortisasi
                                                             </td>
                                                             <td class="ps-10">
-                                                                Rp. 5.000.000
+                                                                Rp.
+                                                                {{ number_format($amortisasi, 0, ',', '.') }}
                                                             </td>
                                                         </tr>
                                                         <!--end::Products-->
@@ -424,7 +380,8 @@
                                                             <td class="fw-bolder">HUTANG LANCAR</td>
                                                             <!--end::SKU-->
                                                             <!--begin::Quantity-->
-                                                            <td class="fw-bolder">RP. 10.000.000</td>
+                                                            <td class="fw-bolder">RP.
+                                                                {{ number_format($hutanglancar, 0, ',', '.') }}</td>
                                                             <!--end::Quantity-->
                                                         </tr>
                                                         <tr>
@@ -433,7 +390,8 @@
                                                                 4.1. Hutang Dagang
                                                             </td>
                                                             <td class="ps-10">
-                                                                Rp. 5.000.000
+                                                                Rp.
+                                                                {{ number_format($hutangusaha, 0, ',', '.') }}
                                                             </td>
                                                         </tr>
                                                         <tr>
@@ -442,7 +400,8 @@
                                                                 4.2. Hutang kepada Bank
                                                             </td>
                                                             <td class="ps-10">
-                                                                Rp. 5.000.000
+                                                                Rp.
+                                                                {{ number_format($hutangbank, 0, ',', '.') }}
                                                             </td>
                                                         </tr>
                                                         <tr>
@@ -451,7 +410,8 @@
                                                                 4.3. Hutang Biaya
                                                             </td>
                                                             <td class="ps-10">
-                                                                Rp. 5.000.000
+                                                                Rp.
+                                                                {{ number_format($hutangbiaya, 0, ',', '.') }}
                                                             </td>
                                                         </tr>
                                                         <tr>
@@ -460,7 +420,18 @@
                                                                 4.4. Hutang Pajak
                                                             </td>
                                                             <td class="ps-10">
-                                                                Rp. 5.000.000
+                                                                Rp.
+                                                                {{ number_format($hutangpajak, 0, ',', '.') }}
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td></td>
+                                                            <td class="ps-10">
+                                                                4.5. Hutang Lain - Lain
+                                                            </td>
+                                                            <td class="ps-10">
+                                                                Rp.
+                                                                {{ number_format($hutanglain, 0, ',', '.') }}
                                                             </td>
                                                         </tr>
 
@@ -476,7 +447,9 @@
                                                             </td>
                                                             <!--end::SKU-->
                                                             <!--begin::Quantity-->
-                                                            <td class="fw-bolder">RP. 10.000.000</td>
+                                                            <td class="fw-bolder">RP.
+                                                                {{ number_format($hutangjangkapanjang, 0, ',', '.') }}
+                                                            </td>
                                                             <!--end::Quantity-->
                                                         </tr>
                                                         <tr>
@@ -485,7 +458,8 @@
                                                                 5.1. Hutang <span class="fst-italic">Leasing</span>
                                                             </td>
                                                             <td class="ps-10">
-                                                                Rp. 5.000.000
+                                                                Rp.
+                                                                {{ number_format($hutangleasing, 0, ',', '.') }}
                                                             </td>
                                                         </tr>
                                                         <tr>
@@ -494,7 +468,8 @@
                                                                 5.2. Hutang Jangka Panjang Lain
                                                             </td>
                                                             <td class="ps-10">
-                                                                Rp. 5.000.000
+                                                                Rp.
+                                                                {{ number_format($hutangpanjang, 0, ',', '.') }}
                                                             </td>
                                                         </tr>
 
@@ -508,7 +483,8 @@
                                                             <td class="fw-bolder">MODAL DAN LABA</td>
                                                             <!--end::SKU-->
                                                             <!--begin::Quantity-->
-                                                            <td class="fw-bolder">RP. 10.000.000</td>
+                                                            <td class="fw-bolder">RP.
+                                                                {{ number_format($modaldanlaba, 0, ',', '.') }}</td>
                                                             <!--end::Quantity-->
                                                         </tr>
                                                         <tr>
@@ -517,7 +493,8 @@
                                                                 6.1. Modal Disetor
                                                             </td>
                                                             <td class="ps-10">
-                                                                Rp. 5.000.000
+                                                                Rp.
+                                                                {{ number_format($modal, 0, ',', '.') }}
                                                             </td>
                                                         </tr>
                                                         <tr>
@@ -526,7 +503,8 @@
                                                                 6.2. Laba Ditahan
                                                             </td>
                                                             <td class="ps-10">
-                                                                Rp. 5.000.000
+                                                                Rp.
+                                                                {{ number_format($labaditahan, 0, ',', '.') }}
                                                             </td>
                                                         </tr>
                                                         <tr>
@@ -535,7 +513,8 @@
                                                                 6.3. Laba Tahun
                                                             </td>
                                                             <td class="ps-10">
-                                                                Rp. 5.000.000
+                                                                Rp.
+                                                                {{ number_format($laba, 0, ',', '.') }}
                                                             </td>
                                                         </tr>
                                                         <!--end::Products-->
@@ -563,7 +542,9 @@
                                                         <tr>
                                                             <td colspan="2" class="text-center fs-3 fw-bolder">TOTAL AKTIVA
                                                             </td>
-                                                            <td class="fs-3 fw-bolder">Rp. 5.000.000</td>
+                                                            <td class="fs-3 fw-bolder">Rp.
+                                                                {{ number_format($aktivalancar + $aktivalain + $aktivatetap, 0, ',', '.') }}
+                                                            </td>
                                                         </tr>
                                                     </tbody>
                                                     <!--end::Table head-->
@@ -587,7 +568,9 @@
                                                         <tr>
                                                             <td colspan="2" class="text-center fs-3 fw-bolder">TOTAL PASIVA
                                                             </td>
-                                                            <td class="fs-3 fw-bolder">Rp. 5.000.000</td>
+                                                            <td class="fs-3 fw-bolder">Rp.
+                                                                {{ number_format($hutanglancar + $hutangjangkapanjang + $modaldanlaba, 0, ',', '.') }}
+                                                            </td>
                                                         </tr>
                                                     </tbody>
                                                     <!--end::Table head-->
@@ -624,7 +607,8 @@
                                                     <td class="fw-bolder">PENDAPATAN</td>
                                                     <!--end::SKU-->
                                                     <!--begin::Quantity-->
-                                                    <td class="fw-bolder">RP. 10.000.000</td>
+                                                    <td class="fw-bolder">Rp.
+                                                        {{ number_format($pendapatan, 0, ',', '.') }}</td>
                                                     <!--end::Quantity-->
                                                 </tr>
 
@@ -641,7 +625,8 @@
                                                     </td>
                                                     <!--end::SKU-->
                                                     <!--begin::Quantity-->
-                                                    <td class="fw-bolder">RP. 10.000.000</td>
+                                                    <td class="fw-bolder">Rp.
+                                                        {{ number_format($biayalangsung, 0, ',', '.') }}</td>
                                                     <!--end::Quantity-->
                                                 </tr>
 
@@ -656,7 +641,8 @@
                                                     </td>
                                                     <!--end::SKU-->
                                                     <!--begin::Quantity-->
-                                                    <td class="fw-bolder">RP. 10.000.000</td>
+                                                    <td class="fw-bolder">Rp.
+                                                        {{ number_format($gross, 0, ',', '.') }}</td>
                                                     <!--end::Quantity-->
                                                 </tr>
 
@@ -670,7 +656,8 @@
                                                     <td class="fw-bolder">BIAYA OPERASIONAL</td>
                                                     <!--end::SKU-->
                                                     <!--begin::Quantity-->
-                                                    <td class="fw-bolder">RP. 10.000.000</td>
+                                                    <td class="fw-bolder">Rp.
+                                                        {{ number_format($operasional, 0, ',', '.') }}</td>
                                                     <!--end::Quantity-->
                                                 </tr>
                                                 <tr>
@@ -679,7 +666,7 @@
                                                         4.1. Biaya Karyawan
                                                     </td>
                                                     <td class="ps-10">
-                                                        Rp. 5.000.000
+                                                        Rp. {{ number_format($karyawan, 0, ',', '.') }}
                                                     </td>
                                                 </tr>
                                                 <tr>
@@ -688,7 +675,7 @@
                                                         4.2. Biaya Kantor
                                                     </td>
                                                     <td class="ps-10">
-                                                        Rp. 5.000.000
+                                                        Rp. {{ number_format($kantor, 0, ',', '.') }}
                                                     </td>
                                                 </tr>
                                                 <tr>
@@ -697,7 +684,7 @@
                                                         4.3. Biaya Pemasaran
                                                     </td>
                                                     <td class="ps-10">
-                                                        Rp. 5.000.000
+                                                        Rp. {{ number_format($pemasaran, 0, ',', '.') }}
                                                     </td>
                                                 </tr>
                                                 <tr>
@@ -706,7 +693,7 @@
                                                         4.4. Adm, Legal & <span class="fst-italic">Finance Cost</span>
                                                     </td>
                                                     <td class="ps-10">
-                                                        Rp. 5.000.000
+                                                        Rp. {{ number_format($adm, 0, ',', '.') }}
                                                     </td>
                                                 </tr>
                                                 <tr>
@@ -715,7 +702,7 @@
                                                         4.5. Biaya Penyusutan & Amortisasi
                                                     </td>
                                                     <td class="ps-10">
-                                                        Rp. 5.000.000
+                                                        Rp. {{ number_format($penyusutan, 0, ',', '.') }}
                                                     </td>
                                                 </tr>
 
@@ -729,7 +716,8 @@
                                                     <td class="fw-bolder">PELUNASAN PEMBAYARAN PAJAK</td>
                                                     <!--end::SKU-->
                                                     <!--begin::Quantity-->
-                                                    <td class="fw-bolder">RP. 10.000.000</td>
+                                                    <td class="fw-bolder">Rp.
+                                                        {{ number_format($pajak, 0, ',', '.') }}</td>
                                                     <!--end::Quantity-->
                                                 </tr>
                                                 <!--end::Products-->
@@ -738,7 +726,9 @@
                                                 <tr class="text-grey-600">
                                                     <td></td>
                                                     <td class="fs-3 fw-bolder">LABA BERSIH </td>
-                                                    <td class="fs-3 fw-bolder">RP. 10.000.000</td>
+                                                    <td class="fs-3 fw-bolder">Rp.
+                                                        {{ number_format($gross - $operasional - $pajak, 0, ',', '.') }}
+                                                    </td>
                                                 </tr>
                                                 <!--end::Subtotal-->
                                             </tbody>

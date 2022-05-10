@@ -8,6 +8,7 @@ use App\Models\Report;
 use App\Models\ActivityLog;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
+use Carbon\Carbon;
 
 class FilterIndexReport extends Component
 {
@@ -16,25 +17,24 @@ class FilterIndexReport extends Component
     protected $paginationTheme = "bootstrap";
 
     public $uuid; 
-    public $startDate; 
-    public $endDate; 
+    public $yearFil;
     public $type; 
     public $status; 
     public $reportCat;
-    public $date; 
+    public $year; 
     public $typeReport = 1; 
     public $reportType = 1; 
     public $pagesize = 10; 
     public $updateMode = false;
 
     protected $rules = [
-        'date' => 'required',
+        'year' => 'required',
         'reportType' => 'required',
         'typeReport' => 'required',
     ];
 
     protected $messages = [
-        'date.required' => '*Date range is required.',
+        'year.required' => '*Report year is required.',
         'reportType.required' => '*Report type is required.',
         'typeReport.required' => '*Type is required.',
     ];
@@ -46,7 +46,7 @@ class FilterIndexReport extends Component
 
     public function resetInputFields()
     {
-        $this->date = '';
+        $this->year = Carbon::now()->year;
         $this->typeReport = 1;
         $this->reportType = 1;
     }
@@ -55,14 +55,9 @@ class FilterIndexReport extends Component
     {
         $validated = $this->validate();
 
-        $dateRange = explode(' -> ', $validated['date']);
-        $startDate = $dateRange[0];
-        $endDate = $dateRange[1];
-
         $checkReport = Report::where([
                         ['is_active', 1],
-                        ['start_date', $startDate],
-                        ['end_date', $endDate],
+                        ['year', $validated['year']],
                         ['report_type', $validated['reportType']],
                     ])->first();
 
@@ -73,8 +68,7 @@ class FilterIndexReport extends Component
     
             $report = Report::create([
                 'uuid' => $reportUuid,
-                'start_date' => $startDate,
-                'end_date' => $endDate,
+                'year' => $validated['year'],
                 'report_type' => $validated['reportType'],
                 'type' => $validated['typeReport'],
                 'status' => 1,
@@ -90,6 +84,7 @@ class FilterIndexReport extends Component
             $this->resetInputFields();
             $this->emit('closeReport');
             $this->emit('refreshDropdown');
+            $this->emit('refreshDate');
             $this->emit('refreshNotification');
     
             session()->flash('success', 'Report successfully added.');
@@ -100,7 +95,7 @@ class FilterIndexReport extends Component
     {
         $this->updateMode = true;
         $report = Report::where('uuid',$uuid)->first();
-        $this->date = $report->start_date.' -> '.$report->end_date;
+        $this->year = $report->year;
         $this->typeReport = $report->type;
         $this->reportType = $report->report_type;
         $this->uuid = $uuid;
@@ -111,21 +106,16 @@ class FilterIndexReport extends Component
     public function cancel()
     {
         $this->updateMode = false;
-        $this->reset();
+        $this->resetInputFields();
     }
 
     public function updatereport()
     {
         $validated = $this->validate();
 
-        $dateRange = explode(' -> ', $validated['date']);
-        $startDate = $dateRange[0];
-        $endDate = $dateRange[1];
-
         $checkReport = Report::where([
                             ['is_active', 1],
-                            ['start_date', $startDate],
-                            ['end_date', $endDate],
+                            ['year', $validated['year']],
                             ['report_type', $validated['reportType']]
                         ])->first();
 
@@ -135,6 +125,7 @@ class FilterIndexReport extends Component
             $this->resetInputFields();
             $this->emit('closeReport');
             $this->emit('refreshDropdown');
+            $this->emit('refreshDate');
             $this->emit('refreshNotification');
         }else{
             $curReport = Report::where([
@@ -146,8 +137,7 @@ class FilterIndexReport extends Component
     
             $report = Report::create([
                 'uuid' => $reportUuid,
-                'start_date' => $startDate,
-                'end_date' => $endDate,
+                'year' => $validated['year'],
                 'report_type' => $validated['reportType'],
                 'type' => $validated['typeReport'],
                 'status' => 1,
@@ -179,6 +169,7 @@ class FilterIndexReport extends Component
             $this->resetInputFields();
             $this->emit('closeReport');
             $this->emit('refreshDropdown');
+            $this->emit('refreshDate');
             $this->emit('refreshNotification');
         }
     }
@@ -226,16 +217,14 @@ class FilterIndexReport extends Component
             if($this->reportCat){
                 $query->where('report_type', $this->reportCat);
             }
-            if($this->startDate){
-                $query->where('start_date', $this->startDate);
-            }
-            if($this->endDate){
-                $query->where('end_date', $this->endDate);
+            if($this->yearFil){
+                $query->where('year', 'like', '%'.$this->yearFil.'%');
             }
         })->orderBy('updated_at', 'desc')->paginate($this->pagesize);
 
         $this->emit('refreshDropdown');
         $this->emit('refreshNotification');
+        $this->emit('refreshDate');
 
         return view('livewire.finance-division.filter-index-report',['report' => $report, 'allReport' => $allreport]);
     }
