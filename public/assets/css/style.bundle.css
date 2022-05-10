@@ -49570,3 +49570,38 @@ span.select2-selection.select2-selection--single.form-control.form-control-white
 span.select2-selection.select2-selection--single.form-control.form-control-white.fw-bolder.pe-5.form-select.status.edit{
     background-color: #f5f8fa !important;
 }
+
+.yearpicker-container{
+    border: none !important;
+    border-radius: 0.5rem !important;
+    box-shadow: 0 0 50px 0 rgb(82 63 105 / 10%) !important;
+}
+
+.yearpicker-header{
+    border-bottom: 1px solid #f5f8fa !important;
+    margin-top: 0.1rem !important;
+    margin-bottom: 0.5rem !important;
+    height: auto !important;
+}
+
+.yearpicker-prev:hover, .yearpicker-next:hover{
+    color: #009ef7 !important;
+}
+
+.yearpicker-year {
+    padding: 0rem 0rem !important;
+}
+
+.yearpicker-items {
+    padding: 0.7rem 0.5rem !important;
+}
+
+.yearpicker-items:hover {
+    background-color: transparent !important;
+    color: #009ef7 !important;
+    cursor: pointer !important;
+}
+
+.yearpicker-items.selected {
+    color: #009ef7 !important;
+}
