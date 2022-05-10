@@ -37,6 +37,15 @@ class FindirProjectController extends Controller
         $maxContract = Project::where('is_active', 1)->max('contract');
         $projectActive = Project::where('is_active', 1)->where('status', 1)->orWhere('status', 2)->with('projectTransaction')->orderBy('id', 'desc')->get();
         $projectActiveLim = Project::where('is_active', 1)->where('status', 1)->orWhere('status', 2)->orderBy('id', 'desc')->limit(4)->get();
+        $projLocation = Project::where('is_active', 1)->where(function($query){
+            $query->where('status', 1)
+            ->orWhere('status', 2);
+        })->with('projectLocation')->get();
+
+        $allProjLoc = [];
+        foreach($projLocation as $pl){
+            array_push($allProjLoc, ['name' => $pl->name, 'lat' => $pl->projectLocation->latitude, 'long' => $pl->projectLocation->longitude]);
+        }
 
         $tempArrExp = [];
         foreach($project as $p){
@@ -219,7 +228,7 @@ class FindirProjectController extends Controller
         }
         //End K-Means Clustering
 
-        return view('finance-director.project.index', compact('project', 'projPerStat', 'totalContract', 'avgContract', 'maxContract', 'minContract', 'projectActive', 'projectActiveLim', 'highProjectExpanse', 'lowProjectExpanse', 'arrhighProjectExpanse'));
+        return view('finance-director.project.index', compact('project', 'projPerStat', 'totalContract', 'avgContract', 'maxContract', 'minContract', 'projectActive', 'projectActiveLim', 'highProjectExpanse', 'lowProjectExpanse', 'arrhighProjectExpanse', 'projLocation','allProjLoc'));
     }
 
     /**

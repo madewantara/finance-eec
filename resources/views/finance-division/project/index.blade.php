@@ -64,6 +64,27 @@
     <div class="content d-flex flex-column flex-column-fluid" id="kt_content">
         <!--begin::Container-->
         <div id="kt_content_container" class="container-xxl">
+            <div class="row g-6 g-xl-9">
+                <div class="col-lg-12">
+                    <!--begin::Tables Widget 9-->
+                    <div class="card card-xxl-stretch mb-5 mb-xl-8">
+                        <!--begin::Header-->
+                        <div class="card-header border-0 pt-5">
+                            <h3 class="card-title align-items-start flex-column">
+                                <span class="card-label fw-bolder fs-3 mb-1">EEC Indonesia Active Project</span>
+                                <span class="text-muted mt-1 fw-bold fs-7">Total {{ count($allProjLoc) }} Projects</span>
+                            </h3>
+                        </div>
+                        <!--end::Header-->
+                        <!--begin::Body-->
+                        <div class="card-body py-3 h-500px">
+                            <div id="map" style="width: 100%; height:96%;"></div>
+                        </div>
+                        <!--begin::Body-->
+                    </div>
+                    <!--end::Tables Widget 9-->
+                </div>
+            </div>
             <!--begin::Stats-->
             <div class="row g-6 g-xl-9">
                 <div class="col-lg-6 col-xxl-4">
@@ -355,16 +376,16 @@
                 ['Status', 'Project Count'],
 
                 @php
-                foreach ($projPerStat as $pps) {
-                    if ($pps['status'] == 1) {
-                        $status = 'To Do';
-                    } elseif ($pps['status'] == 2) {
-                        $status = 'In Progress';
-                    } else {
-                        $status = 'Completed';
+                    foreach ($projPerStat as $pps) {
+                        if ($pps['status'] == 1) {
+                            $status = 'To Do';
+                        } elseif ($pps['status'] == 2) {
+                            $status = 'In Progress';
+                        } else {
+                            $status = 'Completed';
+                        }
+                        echo "['" . $status . "', " . $pps['amount'] . '],';
                     }
-                    echo "['" . $status . "', " . $pps['amount'] . '],';
-                }
                 @endphp
             ]);
             var options = {
@@ -387,6 +408,35 @@
             };
             var chart = new google.visualization.PieChart(document.getElementById('piechart'));
             chart.draw(data, options);
+        }
+    </script>
+    <script src="http://maps.google.com/maps/api/js?key=AIzaSyDi6oRMzsrth0JpkfYQQzwnv7FCvYfWwKA" type="text/javascript">
+    </script>
+    <script type="text/javascript">
+        var locations = {!! json_encode($allProjLoc) !!};
+
+        var map = new google.maps.Map(document.getElementById('map'), {
+            zoom: 4,
+            center: new google.maps.LatLng(-0.5093411, 117.0354433),
+            mapTypeId: google.maps.MapTypeId.ROADMAP
+        });
+
+        var infowindow = new google.maps.InfoWindow();
+
+        var marker, i;
+
+        for (i = 0; i < locations.length; i++) {
+            marker = new google.maps.Marker({
+                position: new google.maps.LatLng(locations[i].lat, locations[i].long),
+                map: map
+            });
+
+            google.maps.event.addListener(marker, 'click', (function(marker, i) {
+                return function() {
+                    infowindow.setContent(locations[i].name);
+                    infowindow.open(map, marker);
+                }
+            })(marker, i));
         }
     </script>
 @endpush
