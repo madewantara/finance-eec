@@ -176,6 +176,8 @@ return [
         // App\Providers\BroadcastServiceProvider::class,
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
+        App\Providers\FindivContentServiceProvider::class,
+        App\Providers\FindirContentServiceProvider::class,
 
     ],
 

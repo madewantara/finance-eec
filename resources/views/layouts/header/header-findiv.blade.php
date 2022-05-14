@@ -120,6 +120,348 @@
             <div class="d-flex align-items-stretch flex-shrink-0">
                 <!--begin::Toolbar wrapper-->
                 <div class="d-flex align-items-stretch flex-shrink-0">
+                    <div class="d-flex align-items-center ms-1 ms-lg-3">
+                        <!--begin::Menu wrapper-->
+                        <div class="btn btn-icon btn-active-light-primary w-30px h-30px w-md-40px h-md-40px"
+                            data-kt-menu-trigger="click" data-kt-menu-attach="parent"
+                            data-kt-menu-placement="bottom-end" data-bs-toggle="tooltip" data-bs-trigger="hover"
+                            data-bs-placement="bottom" title="Quick Links">
+                            <i class=" bi bi-grid fs-2"></i>
+                        </div>
+                        <!--begin::Menu-->
+                        <div class="menu menu-sub menu-sub-dropdown menu-column w-250px w-lg-325px" data-kt-menu="true"
+                            style="">
+                            <!--begin::Heading-->
+                            <div class="d-flex flex-column flex-center bgi-no-repeat rounded-top px-9 py-10"
+                                style="background-image:url('{{ asset('assets/image/random/notification.jpg') }}')">
+                                <!--begin::Title-->
+                                <h3 class="text-white fw-bold mb-3">Quick Links</h3>
+                                <!--end::Title-->
+                                <!--begin::Status-->
+                                <span class="badge bg-primary py-2 px-3">Shortcut to create account and
+                                    transaction</span>
+                                <!--end::Status-->
+                            </div>
+                            <!--end::Heading-->
+                            <!--begin:Nav-->
+                            <div class="row g-0">
+                                <!--begin:Item-->
+                                <div class="col-6">
+                                    <a href="{{ route('findiv.account-create') }}"
+                                        class="d-flex flex-column flex-center h-100 p-6 bg-hover-light border-end border-bottom text-center">
+                                        <i class="bi bi-file-text text-primary mb-2" style="font-size:3rem;"></i>
+                                        <span class="fs-5 fw-bold text-gray-800 mb-0">New Account</span>
+                                        <span class="fs-7 text-gray-400">Account</span>
+                                    </a>
+                                </div>
+                                <!--end:Item-->
+                                <!--begin:Item-->
+                                <div class="col-6">
+                                    <a href="{{ route('findiv.cash-create') }}"
+                                        class="d-flex flex-column flex-center h-100 p-6 bg-hover-light border-bottom text-center">
+                                        <i class="bi bi-cash-stack text-primary mb-2" style="font-size:3rem;"></i>
+                                        <span class="fs-5 fw-bold text-gray-800 mb-0">New Cash Transaction</span>
+                                        <span class="fs-7 text-gray-400">Cash Journal</span>
+                                    </a>
+                                </div>
+                                <!--end:Item-->
+                                <!--begin:Item-->
+                                <div class="col-6">
+                                    <a href="{{ route('findiv.operational-create') }}"
+                                        class="d-flex flex-column flex-center h-100 p-6 bg-hover-light border-end text-center">
+                                        <i class="bi bi-bank text-primary mb-2" style="font-size:3rem;"></i>
+                                        <span class="fs-5 fw-bold text-gray-800 mb-0">New Mandiri Operational
+                                            Transaction</span>
+                                        <span class="fs-7 text-gray-400">Mandiri Operational Journal</span>
+                                    </a>
+                                </div>
+                                <!--end:Item-->
+                                <!--begin:Item-->
+                                <div class="col-6">
+                                    <a href="{{ route('findiv.escrow-create') }}"
+                                        class="d-flex flex-column flex-center h-100 p-6 bg-hover-light text-center">
+                                        <i class="bi bi-bank2 text-primary mb-2" style="font-size:3rem;"></i>
+                                        <span class="fs-5 fw-bold text-gray-800 mb-0">New Mandiri Escrow
+                                            Transaction</span>
+                                        <span class="fs-7 text-gray-400">Mandiri Escrow Journal</span>
+                                    </a>
+                                </div>
+                                <!--end:Item-->
+                            </div>
+                            <!--end:Nav-->
+                        </div>
+                        <!--end::Menu-->
+                        <!--end::Menu wrapper-->
+                    </div>
+                    <div class="d-flex align-items-center">
+                        <!--begin::Menu- wrapper-->
+                        <div class="btn btn-icon btn-active-light-primary w-30px h-30px w-md-40px h-md-40px position-relative pulse pulse-primary"
+                            data-kt-menu-trigger="click" data-kt-menu-attach="parent"
+                            data-kt-menu-placement="bottom-end" data-bs-toggle="tooltip" data-bs-trigger="hover"
+                            data-bs-placement="bottom" title="Activity Logs">
+                            <i class="bi bi-app-indicator fs-2"></i>
+                            <span class="pulse-ring w-45px h-45px"></span>
+                        </div>
+                        <!--begin::Menu-->
+                        <div class="menu menu-sub menu-sub-dropdown menu-column w-350px w-lg-375px" data-kt-menu="true"
+                            style="">
+                            <!--begin::Heading-->
+                            <div class="bgi-no-repeat rounded-top"
+                                style="background-image:url('{{ asset('assets/image/random/notification.jpg') }}')">
+                                <!--begin::Title-->
+                                <h3 class="text-white fw-bold px-9 mt-10">Activity Logs</h3>
+                                <div class="text-white px-9 fs-8 opacity-75">{{ count($notifTrans) }}
+                                    transaction activities
+                                    & {{ count($notifReport) }} report activities</div>
+                                <div class="text-white px-9 mb-6 mt-1 fs-8 opacity-75 fst-italic">For the last 7 days
+                                </div>
+                                <!--end::Title-->
+                                <ul class="nav nav-line-tabs nav-line-tabs-2x nav-stretch fw-bold px-9">
+                                    <li class="nav-item">
+                                        <a class="nav-link text-white opacity-75 opacity-state-100 pb-4 active"
+                                            data-bs-toggle="tab" href="#kt_topbar_notifications_1">Transaction</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link text-white opacity-75 opacity-state-100 pb-4"
+                                            data-bs-toggle="tab" href="#kt_topbar_notifications_2">Report</a>
+                                    </li>
+                                </ul>
+                            </div>
+                            <!--end::Heading-->
+                            <!--begin::Tab content-->
+                            <div class="tab-content">
+                                <div class="tab-pane fade active show" id="kt_topbar_notifications_1" role="tabpanel">
+                                    <!--begin::Items-->
+                                    <div class="scroll-y mh-325px my-5 px-8">
+                                        @if (count($notifTrans) == 0)
+                                            <div class="row py-4">
+                                                <div class="col-lg-12 text-center">
+                                                    <div class="text-muted fst-italic">
+                                                        There are no activities
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        @else
+                                            @foreach ($notifTrans as $nt)
+                                                <!--begin::Item-->
+                                                <div class="row py-4">
+                                                    <div class="col-lg-8">
+                                                        <!--begin::Section-->
+                                                        <div class="row align-items-center me-2">
+                                                            <div class="col-lg-3">
+                                                                <div class="symbol-group symbol-hover me-3">
+                                                                    <!--begin::User-->
+                                                                    <div class="symbol symbol-35px symbol-circle"
+                                                                        data-bs-toggle="tooltip" title="Name"
+                                                                        data-bs-original-title="Name">
+                                                                        {{-- <span
+                                                                        class="symbol-label bg-primary text-inverse-primary fw-bolder">im</span> --}}
+                                                                        <img class="img img-fluid"
+                                                                            src="{{ asset('assets/image/avatar/150-13.jpg') }}"
+                                                                            alt="image"
+                                                                            style="max-width: 100%; height:auto;">
+                                                                    </div>
+                                                                    <!--end::User-->
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-lg-9">
+                                                                @if ($nt['category'] == 'cash')
+                                                                    @if ($nt['status'] == 3)
+                                                                        <!--begin::Title-->
+                                                                        <span class="text-gray-800 ">
+                                                                            Has approved this
+                                                                            <a href="{{ route('findiv.cash-detail', ['uuid' => $nt['uuid']]) }}"
+                                                                                class="text-hover-primary"
+                                                                                style="color: #009ef7e0">
+                                                                                #{{ $nt['token'] }}</a>
+                                                                            cash transaction.
+                                                                        </span>
+                                                                        <!--end::Title-->
+                                                                    @elseif ($nt['status'] == 5)
+                                                                        <!--begin::Title-->
+                                                                        <span class="text-gray-800 ">
+                                                                            Has rejected this
+                                                                            <a href="{{ route('findiv.cash-detail', ['uuid' => $nt['uuid']]) }}"
+                                                                                class="text-hover-primary"
+                                                                                style="color: #009ef7e0">
+                                                                                #{{ $nt['token'] }}</a>
+                                                                            cash transaction.
+                                                                        </span>
+                                                                        <!--end::Title-->
+                                                                    @endif
+                                                                @elseif ($nt['category'] == 'operational')
+                                                                    @if ($nt['status'] == 3)
+                                                                        <!--begin::Title-->
+                                                                        <span class="text-gray-800 ">
+                                                                            Has approved this
+                                                                            <a href="{{ route('findiv.operational-detail', ['uuid' => $nt['uuid']]) }}"
+                                                                                class="text-hover-primary"
+                                                                                style="color: #009ef7e0">
+                                                                                #{{ $nt['token'] }}</a>
+                                                                            mandiri operational transaction.
+                                                                        </span>
+                                                                        <!--end::Title-->
+                                                                    @elseif ($nt['status'] == 5)
+                                                                        <!--begin::Title-->
+                                                                        <span class="text-gray-800 ">
+                                                                            Has rejected this
+                                                                            <a href="{{ route('findiv.operational-detail', ['uuid' => $nt['uuid']]) }}"
+                                                                                class="text-hover-primary"
+                                                                                style="color: #009ef7e0">
+                                                                                #{{ $nt['token'] }}</a>
+                                                                            mandiri operational transaction.
+                                                                        </span>
+                                                                        <!--end::Title-->
+                                                                    @endif
+                                                                @else
+                                                                    @if ($nt['status'] == 3)
+                                                                        <!--begin::Title-->
+                                                                        <span class="text-gray-800 ">
+                                                                            Has approved this
+                                                                            <a href="{{ route('findiv.escrow-detail', ['uuid' => $nt['uuid']]) }}"
+                                                                                class="text-hover-primary"
+                                                                                style="color: #009ef7e0">
+                                                                                #{{ $nt['token'] }}</a>
+                                                                            mandiri escrow transaction.
+                                                                        </span>
+                                                                        <!--end::Title-->
+                                                                    @elseif ($nt['status'] == 5)
+                                                                        <!--begin::Title-->
+                                                                        <span class="text-gray-800 ">
+                                                                            Has rejected this
+                                                                            <a href="{{ route('findiv.escrow-detail', ['uuid' => $nt['uuid']]) }}"
+                                                                                class="text-hover-primary"
+                                                                                style="color: #009ef7e0">
+                                                                                #{{ $nt['token'] }}</a>
+                                                                            mandiri escrow transaction.
+                                                                        </span>
+                                                                        <!--end::Title-->
+                                                                    @endif
+                                                                @endif
+                                                            </div>
+                                                        </div>
+                                                        <!--end::Section-->
+                                                    </div>
+                                                    <div class="col-lg-4">
+                                                        <!--begin::Label-->
+                                                        <span
+                                                            class="badge badge-light fs-8">{{ $nt['updated_at']->format('F, jS Y') }}<br>{{ $nt['updated_at']->format('h:i A') }}</span>
+                                                        <!--end::Label-->
+                                                    </div>
+                                                </div>
+                                                <!--end::Item-->
+                                            @endforeach
+                                        @endif
+                                    </div>
+                                    <!--end::Items-->
+                                </div>
+                                <div class="tab-pane fade" id="kt_topbar_notifications_2" role="tabpanel">
+                                    <!--begin::Items-->
+                                    <div class="scroll-y mh-325px my-5 px-8">
+                                        @if (count($notifReport) == 0)
+                                            <div class="row py-4">
+                                                <div class="col-lg-12 text-center">
+                                                    <div class="text-muted fst-italic">
+                                                        There are no reports
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        @else
+                                            @foreach ($notifReport as $nr)
+                                                <!--begin::Item-->
+                                                <div class="row py-4">
+                                                    <div class="col-lg-8">
+                                                        <!--begin::Section-->
+                                                        <div class="row align-items-center me-2">
+                                                            <div class="col-lg-3">
+                                                                <div class="symbol-group symbol-hover me-3">
+                                                                    <!--begin::User-->
+                                                                    <div class="symbol symbol-35px symbol-circle"
+                                                                        data-bs-toggle="tooltip" title="Name"
+                                                                        data-bs-original-title="Name">
+                                                                        {{-- <span
+                                                                        class="symbol-label bg-primary text-inverse-primary fw-bolder">im</span> --}}
+                                                                        <img class="img img-fluid"
+                                                                            src="{{ asset('assets/image/avatar/150-13.jpg') }}"
+                                                                            alt="image"
+                                                                            style="max-width: 100%; height:auto;">
+                                                                    </div>
+                                                                    <!--end::User-->
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-lg-9">
+                                                                @if ($nr['report'] == 1)
+                                                                    @if ($nr['status'] == 3)
+                                                                        <!--begin::Title-->
+                                                                        <span class="text-gray-800 ">
+                                                                            Has approved this
+                                                                            <a href="{{ route('findiv.report-detail', ['uuid' => $nr['uuid']]) }}"
+                                                                                class="text-hover-primary"
+                                                                                style="color: #009ef7e0">
+                                                                                balance sheet</a>
+                                                                            report.
+                                                                        </span>
+                                                                        <!--end::Title-->
+                                                                    @elseif ($nr['status'] == 2)
+                                                                        <!--begin::Title-->
+                                                                        <span class="text-gray-800 ">
+                                                                            Has rejected this
+                                                                            <a href="{{ route('findiv.report-detail', ['uuid' => $nr['uuid']]) }}"
+                                                                                class="text-hover-primary"
+                                                                                style="color: #009ef7e0">
+                                                                                balance sheet</a>
+                                                                            report.
+                                                                        </span>
+                                                                        <!--end::Title-->
+                                                                    @endif
+                                                                @else
+                                                                    @if ($nr['status'] == 3)
+                                                                        <!--begin::Title-->
+                                                                        <span class="text-gray-800 ">
+                                                                            Has approved this
+                                                                            <a href="{{ route('findiv.report-detail', ['uuid' => $nr['uuid']]) }}"
+                                                                                class="text-hover-primary"
+                                                                                style="color: #009ef7e0">
+                                                                                profit ledger</a>
+                                                                            report.
+                                                                        </span>
+                                                                        <!--end::Title-->
+                                                                    @elseif ($nr['status'] == 2)
+                                                                        <!--begin::Title-->
+                                                                        <span class="text-gray-800 ">
+                                                                            Has rejected this
+                                                                            <a href="{{ route('findiv.report-detail', ['uuid' => $nr['uuid']]) }}"
+                                                                                class="text-hover-primary"
+                                                                                style="color: #009ef7e0">
+                                                                                profit ledger</a>
+                                                                            report.
+                                                                        </span>
+                                                                        <!--end::Title-->
+                                                                    @endif
+                                                                @endif
+                                                            </div>
+                                                        </div>
+                                                        <!--end::Section-->
+                                                    </div>
+                                                    <div class="col-lg-4">
+                                                        <!--begin::Label-->
+                                                        <span
+                                                            class="badge badge-light fs-8">{{ $nr['updated_at']->format('F, jS Y') }}<br>{{ $nr['updated_at']->format('h:i A') }}</span>
+                                                        <!--end::Label-->
+                                                    </div>
+                                                </div>
+                                                <!--end::Item-->
+                                            @endforeach
+                                        @endif
+                                    </div>
+                                    <!--end::Items-->
+                                </div>
+                            </div>
+                            <!--end::Tab content-->
+                        </div>
+                        <!--end::Menu-->
+                        <!--end::Menu wrapper-->
+                    </div>
                     <!--begin::User-->
                     <div class="d-flex align-items-center ms-1 ms-lg-3" id="kt_header_user_menu_toggle">
                         <!--begin::Menu wrapper-->
@@ -227,7 +569,8 @@
                 <ul class="breadcrumb breadcrumb-separatorless fw-bold fs-7 my-1">
                     <!--begin::Item-->
                     <li class="breadcrumb-item text-muted">
-                        <a href="{{ route('findiv.dashboard') }}" class="text-muted text-hover-primary">Dashboard</a>
+                        <a href="{{ route('findiv.dashboard') }}"
+                            class="text-muted text-hover-primary">Dashboard</a>
                     </li>
                     <!--end::Item-->
                     @if (Route::currentRouteName() != 'findiv.dashboard')

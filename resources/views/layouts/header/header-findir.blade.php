@@ -120,6 +120,123 @@
             <div class="d-flex align-items-stretch flex-shrink-0">
                 <!--begin::Toolbar wrapper-->
                 <div class="d-flex align-items-stretch flex-shrink-0">
+                    <div class="d-flex align-items-center">
+                        <!--begin::Menu- wrapper-->
+                        <div class="btn btn-icon btn-active-light-primary w-30px h-30px w-md-40px h-md-40px position-relative pulse pulse-primary"
+                            data-kt-menu-trigger="click" data-kt-menu-attach="parent"
+                            data-kt-menu-placement="bottom-end" data-bs-toggle="tooltip" data-bs-trigger="hover"
+                            data-bs-placement="bottom" title="Activity Logs">
+                            <i class="bi bi-app-indicator fs-2"></i>
+                            <span class="pulse-ring w-45px h-45px"></span>
+                        </div>
+                        <!--begin::Menu-->
+                        <div class="menu menu-sub menu-sub-dropdown menu-column w-350px w-lg-375px" data-kt-menu="true"
+                            style="">
+                            <!--begin::Heading-->
+                            <div class="d-flex flex-column bgi-no-repeat rounded-top"
+                                style="background-image:url('{{ asset('assets/image/random/notification.jpg') }}')">
+                                <!--begin::Title-->
+                                <h3 class="text-white fw-bold px-9 mt-10">Activity Logs
+                                    <span class="fs-8 opacity-75 ps-3">{{ count($notification) }} activity</span>
+                                </h3>
+                                <div class="text-white px-9 mb-6 mt-1 fs-8 mb-10 opacity-75 fst-italic">For the last 7
+                                    days
+                                </div>
+                                <!--end::Title-->
+                            </div>
+                            <!--end::Heading-->
+                            <!--begin::Tab content-->
+                            <div class="tab-content">
+                                <!--begin::Items-->
+                                <div class="scroll-y mh-325px my-5 px-8">
+                                    @if (count($notification) == 0)
+                                        <div class="row py-4">
+                                            <div class="col-lg-12 text-center">
+                                                <div class="text-muted fst-italic">
+                                                    There are no activities
+                                                </div>
+                                            </div>
+                                        </div>
+                                    @else
+                                        @foreach ($notification as $n)
+                                            <!--begin::Item-->
+                                            <div class="row py-4">
+                                                <div class="col-lg-8">
+                                                    <!--begin::Section-->
+                                                    <div class="row align-items-center me-2">
+                                                        <div class="col-lg-3">
+                                                            <div class="symbol-group symbol-hover me-3">
+                                                                <!--begin::User-->
+                                                                <div class="symbol symbol-35px symbol-circle"
+                                                                    data-bs-toggle="tooltip" title="Name"
+                                                                    data-bs-original-title="Name">
+                                                                    {{-- <span
+                                                                    class="symbol-label bg-primary text-inverse-primary fw-bolder">im</span> --}}
+                                                                    <img class="img img-fluid"
+                                                                        src="{{ asset('assets/image/avatar/150-13.jpg') }}"
+                                                                        alt="image"
+                                                                        style="max-width: 100%; height:auto;">
+                                                                </div>
+                                                                <!--end::User-->
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-lg-9">
+                                                            @if ($n['category'] == 'cash')
+                                                                <!--begin::Title-->
+                                                                <span class="text-gray-800">
+                                                                    This
+                                                                    <a href="{{ route('findir.cash-detail', ['uuid' => $n['uuid']]) }}"
+                                                                        class="text-hover-primary"
+                                                                        style="color: #009ef7e0">
+                                                                        #{{ $n['token'] }}</a>
+                                                                    need approval.
+                                                                </span>
+                                                                <!--end::Title-->
+                                                            @elseif ($n['category'] == 'operational')
+                                                                <!--begin::Title-->
+                                                                <span class="text-gray-800">
+                                                                    This
+                                                                    <a href="{{ route('findir.operational-detail', ['uuid' => $n['uuid']]) }}"
+                                                                        class="text-hover-primary"
+                                                                        style="color: #009ef7e0">
+                                                                        #{{ $n['token'] }}</a>
+                                                                    need approval.
+                                                                </span>
+                                                                <!--end::Title-->
+                                                            @else
+                                                                <!--begin::Title-->
+                                                                <span class="text-gray-800">
+                                                                    This
+                                                                    <a href="{{ route('findir.escrow-detail', ['uuid' => $n['uuid']]) }}"
+                                                                        class="text-hover-primary"
+                                                                        style="color: #009ef7e0">
+                                                                        #{{ $n['token'] }}</a>
+                                                                    need approval.
+                                                                </span>
+                                                                <!--end::Title-->
+                                                            @endif
+                                                        </div>
+                                                    </div>
+                                                    <!--end::Section-->
+                                                </div>
+                                                <div class="col-lg-4">
+                                                    <!--begin::Label-->
+                                                    <span
+                                                        class="badge badge-light fs-8">{{ $n['updated_at']->format('F, jS Y') }}<br>{{ $n['updated_at']->format('h:i A') }}</span>
+                                                    <!--end::Label-->
+                                                </div>
+                                            </div>
+                                            <!--end::Item-->
+                                        @endforeach
+                                    @endif
+                                </div>
+                                <!--end::Items-->
+                            </div>
+                            <!--end::Tab content-->
+                        </div>
+                        <!--end::Menu-->
+                        <!--end::Menu wrapper-->
+                    </div>
                     <!--begin::User-->
                     <div class="d-flex align-items-center ms-1 ms-lg-3" id="kt_header_user_menu_toggle">
                         <!--begin::Menu wrapper-->
@@ -227,7 +344,8 @@
                 <ul class="breadcrumb breadcrumb-separatorless fw-bold fs-7 my-1">
                     <!--begin::Item-->
                     <li class="breadcrumb-item text-muted">
-                        <a href="{{ route('findir.dashboard') }}" class="text-muted text-hover-primary">Dashboard</a>
+                        <a href="{{ route('findir.dashboard') }}"
+                            class="text-muted text-hover-primary">Dashboard</a>
                     </li>
                     <!--end::Item-->
                     @if (Route::currentRouteName() != 'findir.dashboard')
