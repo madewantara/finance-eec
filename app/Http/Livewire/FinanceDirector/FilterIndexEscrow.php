@@ -26,12 +26,25 @@ class FilterIndexEscrow extends Component
     public $pics;
     public $projects;
     public $paidtos;
+    public $statuss;
+    public $approveAct = 2; 
+    public $uuid; 
+
+    protected $rules = [
+        'approveAct' => 'required',
+    ];
+
+    public function updated($propertyName)
+    {
+        $this->validateOnly($propertyName);
+    }
 
     public function resetescrow()
     {
         $this->reset();
         $this->emit('refreshDropdown');
         $this->emit('refreshNotification');
+        $this->emit('closeApproval');
     }
 
     public function submitfilterescrow()
@@ -41,30 +54,59 @@ class FilterIndexEscrow extends Component
         $this->pics;
         $this->projects;
         $this->paidtos;
+        $this->statuss;
         $this->emit('refreshDropdown');
         $this->emit('refreshNotification');
+        $this->emit('closeApproval');
     }
 
-    public function confirmUpdateStatus($uuid){
-        $this->emit('triggerUpdateStatus', ['uuid' => $uuid]);
-    }
-
-    public function updateStatus($uuid)
+    public function resetInputFields()
     {
+        $this->approveAct = 2;
+    }
+
+    public function edit($uuid)
+    {
+        $this->updateMode = true;
+        $this->approveAct = 2;
+        $this->uuid = $uuid;
+
+        $this->emit('openEditTrans');
+    }
+
+    public function approveTrans()
+    {
+        $validated = $this->validate();
+
         Transaction::where([
             ['is_active', 1],
             ['type', 2],
             ['category', 'escrow'],
-            ['uuid', $uuid['uuid']],
-        ])->update(['status' => 2]);
+            ['uuid', $this->uuid],
+        ])->update(['status' => $validated['approveAct']]);
 
-        $log = ActivityLog::create([
-            'user_id' => Auth::id(),
-            'category' => 'escrow-approved-findir',
-            'activity_id' => $uuid['uuid'],
-        ]);
+        if($validated['approveAct'] == 2){
+            $log = ActivityLog::create([
+                'user_id' => Auth::id(),
+                'category' => 'escrow-approved-findir',
+                'activity_id' => $this->uuid,
+            ]);
 
-        session()->flash('success', 'Transaction status successfully updated to approved by finance director');
+            session()->flash('success', 'Transaction status successfully updated to approved by finance director');
+        }else{
+            $log = ActivityLog::create([
+                'user_id' => Auth::id(),
+                'category' => 'escrow-rejected',
+                'activity_id' => $this->uuid,
+            ]);
+
+            session()->flash('success', 'Transaction status successfully updated to rejected');
+        }
+    
+        $this->resetInputFields();
+        $this->emit('closeApproval');
+        $this->emit('refreshDropdown');
+        $this->emit('refreshNotification');
     }
 
     public function render()
@@ -108,7 +150,7 @@ class FilterIndexEscrow extends Component
             $items = $transactionObj->forPage($this->page, $this->pagesize);
             $transaction = new LengthAwarePaginator($items, $transactionObj->count(), $this->pagesize, $this->page);
         } 
-        elseif($this->datefilter || $this->accounts || $this->pics || $this->projects || $this->paidtos){
+        elseif($this->datefilter || $this->accounts || $this->pics || $this->projects || $this->paidtos || $this->statuss){
             $data = Transaction::select('uuid')->where('is_active', 1)->where('type', 2)->where('category', 'escrow')->where(function($query){
                 if($this->datefilter){
                     $expDate = explode(' -> ', $this->datefilter);
@@ -125,6 +167,9 @@ class FilterIndexEscrow extends Component
                 }
                 if($this->paidtos){
                     $query->whereIn('paid_to', $this->paidtos);
+                }
+                if($this->statuss){
+                    $query->whereIn('status', $this->statuss);
                 }
             })->with(['transactionAccount', 'transactionProject'])->orderBy('updated_at', 'desc')->distinct()->get();
 
@@ -168,6 +213,7 @@ class FilterIndexEscrow extends Component
 
         $this->emit('refreshDropdown');
         $this->emit('refreshNotification');
+        $this->emit('closeApproval');
 
         return view('livewire.finance-director.filter-index-escrow', ['transaction' => $transaction, 'account' => $account, 'pic' => $pic, 'paidto' => $paidto, 'project' => $project, 'distAllTrans' => $distAllTrans, 'escrowBalance' => $escrowBalance]);
     }

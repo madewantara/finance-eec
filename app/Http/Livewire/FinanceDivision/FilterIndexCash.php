@@ -26,6 +26,8 @@ class FilterIndexCash extends Component
     public $pics;
     public $projects;
     public $paidtos;
+    public $types;
+    public $statuss;
     public $balance;
 
     public function resetcash()
@@ -74,6 +76,8 @@ class FilterIndexCash extends Component
         $this->pics;
         $this->projects;
         $this->paidtos;
+        $this->types;
+        $this->statuss;
         $this->emit('refreshDropdown');
         $this->emit('refreshNominal');
         $this->emit('refreshNotification');
@@ -189,7 +193,7 @@ class FilterIndexCash extends Component
             $items = $transactionObj->forPage($this->page, $this->pagesize);
             $transaction = new LengthAwarePaginator($items, $transactionObj->count(), $this->pagesize, $this->page);
         } 
-        elseif($this->datefilter || $this->accounts || $this->pics || $this->projects || $this->paidtos){
+        elseif($this->datefilter || $this->accounts || $this->pics || $this->projects || $this->paidtos || $this->types || $this->statuss){
             $data = Transaction::select('uuid')->where('is_active', 1)->where('category', 'cash')->where(function($query){
                 if($this->datefilter){
                     $expDate = explode(' -> ', $this->datefilter);
@@ -206,6 +210,12 @@ class FilterIndexCash extends Component
                 }
                 if($this->paidtos){
                     $query->whereIn('paid_to', $this->paidtos);
+                }
+                if($this->types){
+                    $query->whereIn('type', $this->types);
+                }
+                if($this->statuss){
+                    $query->whereIn('status', $this->statuss);
                 }
             })->with(['transactionAccount', 'transactionProject'])->orderBy('updated_at', 'desc')->distinct()->get();
 
