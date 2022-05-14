@@ -195,23 +195,30 @@
             <!--end::Table head-->
             <!--begin::Table body-->
             <tbody class="text-gray-600 fw-bold">
-                @foreach ($account as $acc)
+                @if (count($account) == 0)
                     <tr>
-                        <!--begin::Customer=-->
-                        <td>
-                            {{ $acc->referral }}
+                        <td colspan="3" class="text-muted fst-italic mt-5 text-center">There are no financial accounts
                         </td>
-                        <td>
-                            {{ $acc->name }}
-                        </td>
-                        <!--end::Customer=-->
-                        <!--begin::Status=-->
-                        <td>
-                            <div class="badge badge-light-success">{{ $acc->category }}</div>
-                        </td>
-                        <!--end::Status=-->
                     </tr>
-                @endforeach
+                @else
+                    @foreach ($account as $acc)
+                        <tr>
+                            <!--begin::Customer=-->
+                            <td>
+                                {{ $acc->referral }}
+                            </td>
+                            <td>
+                                {{ $acc->name }}
+                            </td>
+                            <!--end::Customer=-->
+                            <!--begin::Status=-->
+                            <td>
+                                <div class="badge badge-light-success">{{ $acc->category }}</div>
+                            </td>
+                            <!--end::Status=-->
+                        </tr>
+                    @endforeach
+                @endif
             </tbody>
             <!--end::Table body-->
         </table>

@@ -77,7 +77,7 @@
                                 @endforeach
                             @else
                                 <div class="fs-6 my-4 me-5">
-                                    <div class="fw-bold text-dark">There are no high priority
+                                    <div class="fw-bolder text-muted fst-italic">There are no high priority
                                         projects</div>
                                 </div>
                                 <div class="separator separator-dashed"></div>
@@ -100,7 +100,7 @@
                                 @endforeach
                             @else
                                 <div class="fs-6 my-4 me-5">
-                                    <div class="fw-bold text-dark">There are no medium priority
+                                    <div class="fw-bolder text-muted fst-italic">There are no medium priority
                                         projects</div>
                                 </div>
                                 <div class="separator separator-dashed"></div>
@@ -123,7 +123,7 @@
                                 @endforeach
                             @else
                                 <div class="fs-6 my-4 me-5">
-                                    <div class="fw-bold text-dark">There are no low priority
+                                    <div class="fw-bolder text-muted fst-italic">There are no low priority
                                         projects</div>
                                 </div>
                                 <div class="separator separator-dashed"></div>
@@ -202,190 +202,204 @@
     <!--begin::Row-->
     <div class="row g-6 g-xl-9">
         <!--begin::Col-->
-        @foreach ($projCategory as $key => $p)
-            <div class="col-md-6 col-xl-4">
-                <!--begin::Card-->
-                <a href="{{ route('findir.project-detail', ['uuid' => $p->uuid]) }}"
-                    class="card border-hover-primary h-100">
-                    <!--begin::Card header-->
-                    <div class="card-header border-0 pt-9">
-                        <!--begin::Card Title-->
-                        <div class="card-title m-0">
-                            <!--begin::Avatar-->
-                            <div class="symbol symbol-50px w-50px bg-light">
-                                @if ($p->projectCategory->category == 'New Radar')
-                                    <span
-                                        class="symbol-label bg-success text-inverse-primary fw-bolder">{{ strtoupper($p->name[0]) }}</span>
-                                @elseif($p->projectCategory->category == 'Preventive Maintenance')
-                                    <span
-                                        class="symbol-label bg-warning text-inverse-primary fw-bolder">{{ strtoupper($p->name[0]) }}</span>
-                                @elseif($p->projectCategory->category == 'Corrective Maintenance')
-                                    <span class="symbol-label text-inverse-primary fw-bolder"
-                                        style="background-color: #f6910d">{{ strtoupper($p->name[0]) }}</span>
-                                @elseif($p->projectCategory->category == 'Radar Reinstallation')
-                                    <span class="symbol-label text-inverse-primary fw-bolder"
-                                        style="background-color:#9f4398;">{{ strtoupper($p->name[0]) }}</span>
-                                @elseif($p->projectCategory->category == 'Radar Spare Part')
-                                    <span class="symbol-label text-inverse-primary fw-bolder"
-                                        style="background-color:#00647b;">{{ strtoupper($p->name[0]) }}</span>
-                                @else
-                                    <span
-                                        class="symbol-label bg-danger text-inverse-primary fw-bolder">{{ strtoupper($p->name[0]) }}</span>
-                                @endif
-                            </div>
-                            <!--end::Avatar-->
+        @if (count($projCategory) == 0)
+            <div class="col-md-12">
+                <div class="container card d-flex align-items-center justify-content-center h-150px">
+                    <div class="card-body">
+                        <div class="text-muted fw-bolder fst-italic mt-10">
+                            There are no projects
                         </div>
-                        <!--end::Car Title-->
-                        <!--begin::Card toolbar-->
-                        @if ($p->status == 1)
-                            <div class="card-toolbar">
-                                <span class="badge badge-light fw-bolder me-auto px-4 py-3">To
-                                    Do</span>
-                                @if ($p->priority == 0)
-                                    <span></span>
-                                @elseif ($p->priority == 1)
-                                    <span class="badge badge-light fw-bolder ms-2 me-auto px-4 py-3 text-white"
-                                        style="background-color: #3498DB;">
-                                        High</span>
-                                @elseif($p->priority == 2)
-                                    <span class="badge badge-light fw-bolder ms-2 me-auto px-4 py-3 text-white"
-                                        style="background-color:#40e0d0;">
-                                        Medium</span>
-                                @else
-                                    <span class="badge badge-light fw-bolder ms-2 me-auto px-4 py-3 text-white"
-                                        style="background-color: #F08080;">
-                                        Low</span>
-                                @endif
-                            </div>
-                        @elseif($p->status == 2)
-                            <div class="card-toolbar">
-                                <span class="badge badge-light-primary fw-bolder me-auto px-4 py-3">In
-                                    Progress</span>
-                            </div>
-                        @else
-                            <div class="card-toolbar">
-                                <span class="badge badge-light-success fw-bolder me-auto px-4 py-3">Completed</span>
-                            </div>
-                        @endif
-                        <!--end::Card toolbar-->
                     </div>
-                    <!--end:: Card header-->
-                    <!--begin:: Card body-->
-                    <div class="card-body p-9">
-                        <!--begin::Name-->
-                        <div class="fs-3 fw-bolder text-dark project-name">{{ $p->name }}</div>
-                        <!--end::Name-->
-                        <!--begin::Description-->
-                        <p class="text-gray-400 fw-bold fs-5 mt-1 mb-7">
-                            {{ $p->projectCategory->category }}</p>
-                        <!--end::Description-->
-                        <!--begin::Info-->
-                        <div class="d-flex flex-wrap mb-5">
-                            <!--begin::Due-->
-                            <div class="border border-gray-300 border-dashed rounded min-w-125px py-3 px-4 me-7 mb-3">
-                                <div class="fs-6 text-gray-800 fw-bolder">Start Date :
-                                    {{ date('F j, Y', strtotime($p->start_date)) }} <br>
-                                    End Date : {{ date('F j, Y', strtotime($p->end_date)) }}</div>
-                                <div class="fw-bold text-gray-400">Project Period</div>
-                            </div>
-                            <!--end::Due-->
-                            <!--begin::Budget-->
-                            <div class="d-flex flex-row">
-                                <div
-                                    class="border border-gray-300 border-dashed rounded min-w-125px py-3 px-4 mb-3 me-3">
-                                    @if ($p->projectCategory->category == 'New Radar')
-                                        <div class="fs-6 text-gray-800 fw-bolder">Rp.
-                                            {{ number_format($p->contract - $p->contract * 0.015, 0, ',', '.') }}
-                                        </div>
-                                    @elseif($p->projectCategory->category == 'Preventive Maintenance')
-                                        <div class="fs-6 text-gray-800 fw-bolder">Rp.
-                                            {{ number_format($p->contract - $p->contract * 0.02, 0, ',', '.') }}
-                                        </div>
-                                    @elseif($p->projectCategory->category == 'Corrective Maintenance')
-                                        <div class="fs-6 text-gray-800 fw-bolder">Rp.
-                                            {{ number_format($p->contract - $p->contract * 0.02, 0, ',', '.') }}
-                                        </div>
-                                    @elseif($p->projectCategory->category == 'Radar Reinstallation')
-                                        <div class="fs-6 text-gray-800 fw-bolder">Rp.
-                                            {{ number_format($p->contract - $p->contract * 0.015, 0, ',', '.') }}
-                                        </div>
-                                    @elseif($p->projectCategory->category == 'Radar Spare Part')
-                                        <div class="fs-6 text-gray-800 fw-bolder">Rp.
-                                            {{ number_format($p->contract - $p->contract * 0.015, 0, ',', '.') }}
-                                        </div>
-                                    @else
-                                        <div class="fs-6 text-gray-800 fw-bolder">Rp.
-                                            {{ number_format($p->contract - $p->contract * 0.015, 0, ',', '.') }}
-                                        </div>
-                                    @endif
-                                    <div class="fw-bold text-gray-400">Nett Contract</div>
-                                </div>
-                                <div class="border border-gray-300 border-dashed rounded min-w-125px py-3 px-4 mb-3">
-                                    @if ($p->projectCategory->category == 'New Radar')
-                                        <div class="fs-6 text-gray-800 fw-bolder">Rp.
-                                            {{ number_format($p->contract - $p->contract * 0.015 - $arrhighProjectExpanse[$key], 0, ',', '.') }}
-                                        </div>
-                                    @elseif($p->projectCategory->category == 'Preventive Maintenance')
-                                        <div class="fs-6 text-gray-800 fw-bolder">Rp.
-                                            {{ number_format($p->contract - $p->contract * 0.02 - $arrhighProjectExpanse[$key], 0, ',', '.') }}
-                                        </div>
-                                    @elseif($p->projectCategory->category == 'Corrective Maintenance')
-                                        <div class="fs-6 text-gray-800 fw-bolder">Rp.
-                                            {{ number_format($p->contract - $p->contract * 0.02 - $arrhighProjectExpanse[$key], 0, ',', '.') }}
-                                        </div>
-                                    @elseif($p->projectCategory->category == 'Radar Reinstallation')
-                                        <div class="fs-6 text-gray-800 fw-bolder">Rp.
-                                            {{ number_format($p->contract - $p->contract * 0.015 - $arrhighProjectExpanse[$key], 0, ',', '.') }}
-                                        </div>
-                                    @elseif($p->projectCategory->category == 'Radar Spare Part')
-                                        <div class="fs-6 text-gray-800 fw-bolder">Rp.
-                                            {{ number_format($p->contract - $p->contract * 0.015 - $arrhighProjectExpanse[$key], 0, ',', '.') }}
-                                        </div>
-                                    @else
-                                        <div class="fs-6 text-gray-800 fw-bolder">Rp.
-                                            {{ number_format($p->contract - $p->contract * 0.015 - $arrhighProjectExpanse[$key], 0, ',', '.') }}
-                                        </div>
-                                    @endif
-                                    <div class="fw-bold text-gray-400">Margin Budget</div>
-                                </div>
-                            </div>
-                            <!--end::Budget-->
-                        </div>
-                        <!--end::Info-->
-                        <!--begin::Progress-->
-                        <div class="h-4px w-100 bg-light mb-5" data-bs-toggle="tooltip"
-                            title="@if ($p->status == 1) Not started yet @elseif($p->status == 2) On going @else Done @endif"
-                            data-bs-original-title="@if ($p->status == 1) Not started yet @elseif($p->status == 2) On going @else Done @endif">
-                            @if ($p->status == 1)
-                                <div class="rounded h-4px" role="progressbar" style="width: 0%" aria-valuenow="0"
-                                    aria-valuemin="0" aria-valuemax="100"></div>
-                            @elseif($p->status == 2)
-                                <div class="bg-primary rounded h-4px" role="progressbar" style="width: 50%"
-                                    aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
-                            @else
-                                <div class="bg-success rounded h-4px" role="progressbar" style="width: 100%"
-                                    aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
-                            @endif
-                        </div>
-                        <!--end::Progress-->
-                        <!--begin::Users-->
-                        <div class="symbol-group symbol-hover">
-                            <!--begin::User-->
-                            <div class="symbol symbol-35px symbol-circle" data-bs-toggle="tooltip"
-                                title="{{ $p->project_manager }}"
-                                data-bs-original-title="{{ $p->project_manager }}">
-                                <span
-                                    class="symbol-label bg-primary text-inverse-primary fw-bolder">{{ strtoupper($p->project_manager[0]) }}</span>
-                            </div>
-                            <!--end::User-->
-                        </div>
-                        <!--end::Users-->
-                    </div>
-                    <!--end:: Card body-->
-                </a>
-                <!--end::Card-->
+                </div>
             </div>
-        @endforeach
+        @else
+            @foreach ($projCategory as $key => $p)
+                <div class="col-md-6 col-xl-4">
+                    <!--begin::Card-->
+                    <a href="{{ route('findir.project-detail', ['uuid' => $p->uuid]) }}"
+                        class="card border-hover-primary h-100">
+                        <!--begin::Card header-->
+                        <div class="card-header border-0 pt-9">
+                            <!--begin::Card Title-->
+                            <div class="card-title m-0">
+                                <!--begin::Avatar-->
+                                <div class="symbol symbol-50px w-50px bg-light">
+                                    @if ($p->projectCategory->category == 'New Radar')
+                                        <span
+                                            class="symbol-label bg-success text-inverse-primary fw-bolder">{{ strtoupper($p->name[0]) }}</span>
+                                    @elseif($p->projectCategory->category == 'Preventive Maintenance')
+                                        <span
+                                            class="symbol-label bg-warning text-inverse-primary fw-bolder">{{ strtoupper($p->name[0]) }}</span>
+                                    @elseif($p->projectCategory->category == 'Corrective Maintenance')
+                                        <span class="symbol-label text-inverse-primary fw-bolder"
+                                            style="background-color: #f6910d">{{ strtoupper($p->name[0]) }}</span>
+                                    @elseif($p->projectCategory->category == 'Radar Reinstallation')
+                                        <span class="symbol-label text-inverse-primary fw-bolder"
+                                            style="background-color:#9f4398;">{{ strtoupper($p->name[0]) }}</span>
+                                    @elseif($p->projectCategory->category == 'Radar Spare Part')
+                                        <span class="symbol-label text-inverse-primary fw-bolder"
+                                            style="background-color:#00647b;">{{ strtoupper($p->name[0]) }}</span>
+                                    @else
+                                        <span
+                                            class="symbol-label bg-danger text-inverse-primary fw-bolder">{{ strtoupper($p->name[0]) }}</span>
+                                    @endif
+                                </div>
+                                <!--end::Avatar-->
+                            </div>
+                            <!--end::Car Title-->
+                            <!--begin::Card toolbar-->
+                            @if ($p->status == 1)
+                                <div class="card-toolbar">
+                                    <span class="badge badge-light fw-bolder me-auto px-4 py-3">To
+                                        Do</span>
+                                    @if ($p->priority == 0)
+                                        <span></span>
+                                    @elseif ($p->priority == 1)
+                                        <span class="badge badge-light fw-bolder ms-2 me-auto px-4 py-3 text-white"
+                                            style="background-color: #3498DB;">
+                                            High</span>
+                                    @elseif($p->priority == 2)
+                                        <span class="badge badge-light fw-bolder ms-2 me-auto px-4 py-3 text-white"
+                                            style="background-color:#40e0d0;">
+                                            Medium</span>
+                                    @else
+                                        <span class="badge badge-light fw-bolder ms-2 me-auto px-4 py-3 text-white"
+                                            style="background-color: #F08080;">
+                                            Low</span>
+                                    @endif
+                                </div>
+                            @elseif($p->status == 2)
+                                <div class="card-toolbar">
+                                    <span class="badge badge-light-primary fw-bolder me-auto px-4 py-3">In
+                                        Progress</span>
+                                </div>
+                            @else
+                                <div class="card-toolbar">
+                                    <span class="badge badge-light-success fw-bolder me-auto px-4 py-3">Completed</span>
+                                </div>
+                            @endif
+                            <!--end::Card toolbar-->
+                        </div>
+                        <!--end:: Card header-->
+                        <!--begin:: Card body-->
+                        <div class="card-body p-9">
+                            <!--begin::Name-->
+                            <div class="fs-3 fw-bolder text-dark project-name">{{ $p->name }}</div>
+                            <!--end::Name-->
+                            <!--begin::Description-->
+                            <p class="text-gray-400 fw-bold fs-5 mt-1 mb-7">
+                                {{ $p->projectCategory->category }}</p>
+                            <!--end::Description-->
+                            <!--begin::Info-->
+                            <div class="d-flex flex-wrap mb-5">
+                                <!--begin::Due-->
+                                <div
+                                    class="border border-gray-300 border-dashed rounded min-w-125px py-3 px-4 me-7 mb-3">
+                                    <div class="fs-6 text-gray-800 fw-bolder">Start Date :
+                                        {{ date('F j, Y', strtotime($p->start_date)) }} <br>
+                                        End Date : {{ date('F j, Y', strtotime($p->end_date)) }}</div>
+                                    <div class="fw-bold text-gray-400">Project Period</div>
+                                </div>
+                                <!--end::Due-->
+                                <!--begin::Budget-->
+                                <div class="d-flex flex-row">
+                                    <div
+                                        class="border border-gray-300 border-dashed rounded min-w-125px py-3 px-4 mb-3 me-3">
+                                        @if ($p->projectCategory->category == 'New Radar')
+                                            <div class="fs-6 text-gray-800 fw-bolder">Rp.
+                                                {{ number_format($p->contract - $p->contract * 0.015, 0, ',', '.') }}
+                                            </div>
+                                        @elseif($p->projectCategory->category == 'Preventive Maintenance')
+                                            <div class="fs-6 text-gray-800 fw-bolder">Rp.
+                                                {{ number_format($p->contract - $p->contract * 0.02, 0, ',', '.') }}
+                                            </div>
+                                        @elseif($p->projectCategory->category == 'Corrective Maintenance')
+                                            <div class="fs-6 text-gray-800 fw-bolder">Rp.
+                                                {{ number_format($p->contract - $p->contract * 0.02, 0, ',', '.') }}
+                                            </div>
+                                        @elseif($p->projectCategory->category == 'Radar Reinstallation')
+                                            <div class="fs-6 text-gray-800 fw-bolder">Rp.
+                                                {{ number_format($p->contract - $p->contract * 0.015, 0, ',', '.') }}
+                                            </div>
+                                        @elseif($p->projectCategory->category == 'Radar Spare Part')
+                                            <div class="fs-6 text-gray-800 fw-bolder">Rp.
+                                                {{ number_format($p->contract - $p->contract * 0.015, 0, ',', '.') }}
+                                            </div>
+                                        @else
+                                            <div class="fs-6 text-gray-800 fw-bolder">Rp.
+                                                {{ number_format($p->contract - $p->contract * 0.015, 0, ',', '.') }}
+                                            </div>
+                                        @endif
+                                        <div class="fw-bold text-gray-400">Nett Contract</div>
+                                    </div>
+                                    <div
+                                        class="border border-gray-300 border-dashed rounded min-w-125px py-3 px-4 mb-3">
+                                        @if ($p->projectCategory->category == 'New Radar')
+                                            <div class="fs-6 text-gray-800 fw-bolder">Rp.
+                                                {{ number_format($p->contract - $p->contract * 0.015 - $arrhighProjectExpanse[$key], 0, ',', '.') }}
+                                            </div>
+                                        @elseif($p->projectCategory->category == 'Preventive Maintenance')
+                                            <div class="fs-6 text-gray-800 fw-bolder">Rp.
+                                                {{ number_format($p->contract - $p->contract * 0.02 - $arrhighProjectExpanse[$key], 0, ',', '.') }}
+                                            </div>
+                                        @elseif($p->projectCategory->category == 'Corrective Maintenance')
+                                            <div class="fs-6 text-gray-800 fw-bolder">Rp.
+                                                {{ number_format($p->contract - $p->contract * 0.02 - $arrhighProjectExpanse[$key], 0, ',', '.') }}
+                                            </div>
+                                        @elseif($p->projectCategory->category == 'Radar Reinstallation')
+                                            <div class="fs-6 text-gray-800 fw-bolder">Rp.
+                                                {{ number_format($p->contract - $p->contract * 0.015 - $arrhighProjectExpanse[$key], 0, ',', '.') }}
+                                            </div>
+                                        @elseif($p->projectCategory->category == 'Radar Spare Part')
+                                            <div class="fs-6 text-gray-800 fw-bolder">Rp.
+                                                {{ number_format($p->contract - $p->contract * 0.015 - $arrhighProjectExpanse[$key], 0, ',', '.') }}
+                                            </div>
+                                        @else
+                                            <div class="fs-6 text-gray-800 fw-bolder">Rp.
+                                                {{ number_format($p->contract - $p->contract * 0.015 - $arrhighProjectExpanse[$key], 0, ',', '.') }}
+                                            </div>
+                                        @endif
+                                        <div class="fw-bold text-gray-400">Margin Budget</div>
+                                    </div>
+                                </div>
+                                <!--end::Budget-->
+                            </div>
+                            <!--end::Info-->
+                            <!--begin::Progress-->
+                            <div class="h-4px w-100 bg-light mb-5" data-bs-toggle="tooltip"
+                                title="@if ($p->status == 1) Not started yet @elseif($p->status == 2) On going @else Done @endif"
+                                data-bs-original-title="@if ($p->status == 1) Not started yet @elseif($p->status == 2) On going @else Done @endif">
+                                @if ($p->status == 1)
+                                    <div class="rounded h-4px" role="progressbar" style="width: 0%" aria-valuenow="0"
+                                        aria-valuemin="0" aria-valuemax="100"></div>
+                                @elseif($p->status == 2)
+                                    <div class="bg-primary rounded h-4px" role="progressbar" style="width: 50%"
+                                        aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
+                                @else
+                                    <div class="bg-success rounded h-4px" role="progressbar" style="width: 100%"
+                                        aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
+                                @endif
+                            </div>
+                            <!--end::Progress-->
+                            <!--begin::Users-->
+                            <div class="symbol-group symbol-hover">
+                                <!--begin::User-->
+                                <div class="symbol symbol-35px symbol-circle" data-bs-toggle="tooltip"
+                                    title="{{ $p->project_manager }}"
+                                    data-bs-original-title="{{ $p->project_manager }}">
+                                    <span
+                                        class="symbol-label bg-primary text-inverse-primary fw-bolder">{{ strtoupper($p->project_manager[0]) }}</span>
+                                </div>
+                                <!--end::User-->
+                            </div>
+                            <!--end::Users-->
+                        </div>
+                        <!--end:: Card body-->
+                    </a>
+                    <!--end::Card-->
+                </div>
+            @endforeach
+        @endif
         <!--end::Col-->
     </div>
     <!--end::Row-->

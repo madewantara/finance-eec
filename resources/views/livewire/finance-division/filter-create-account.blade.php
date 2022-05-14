@@ -122,27 +122,35 @@
                 <!--begin::List-->
                 <div class="scroll-y me-n5 pe-5 h-550px" data-kt-scroll="true"
                     data-kt-scroll-activate="{default: false, lg: true}" data-kt-scroll-offset="5px">
-                    @foreach ($accounts as $search)
-                        <!--begin::User-->
-                        <div class="d-flex flex-stack py-4">
-                            <!--begin::Details-->
-                            <div class="d-flex align-items-center">
+                    @if (count($accounts) == 0)
+                        <div class="container d-flex align-items-center justify-content-center h-450px">
+                            <div class="text-muted fw-bolder fst-italic mt-5 text-center">
+                                There are no financial accounts
+                            </div>
+                        </div>
+                    @else
+                        @foreach ($accounts as $search)
+                            <!--begin::User-->
+                            <div class="d-flex flex-stack py-4">
                                 <!--begin::Details-->
-                                <div class="ms-4">
-                                    <a class="fs-6 fw-bolder text-gray-900 text-hover-primary mb-2">{{ $search->referral }}
-                                        - {{ $search->name }}</a>
-                                    <div class="fw-bold fs-7 text-muted">{{ $search->category }}
+                                <div class="d-flex align-items-center">
+                                    <!--begin::Details-->
+                                    <div class="ms-4">
+                                        <a class="fs-6 fw-bolder text-gray-900 text-hover-primary mb-2">{{ $search->referral }}
+                                            - {{ $search->name }}</a>
+                                        <div class="fw-bold fs-7 text-muted">{{ $search->category }}
+                                        </div>
                                     </div>
+                                    <!--end::Details-->
                                 </div>
                                 <!--end::Details-->
                             </div>
-                            <!--end::Details-->
-                        </div>
-                        <!--end::User-->
-                        <!--begin::Separator-->
-                        <div class="separator separator-dashed d-none"></div>
-                        <!--end::Separator-->
-                    @endforeach
+                            <!--end::User-->
+                            <!--begin::Separator-->
+                            <div class="separator separator-dashed d-none"></div>
+                            <!--end::Separator-->
+                        @endforeach
+                    @endif
                 </div>
                 <!--end::List-->
             </div>

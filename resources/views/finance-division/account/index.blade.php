@@ -66,16 +66,24 @@
                     <div class="card h-100">
                         <div class="card-body p-9">
                             <div class="fs-2hx fw-bolder">{{ count($categories) }}</div>
-                            <div class="fs-4 fw-bold text-gray-400 mb-7">Project by Category</div>
+                            <div class="fs-4 fw-bold text-gray-400 mb-7">Account by Category</div>
                             <div class="row mx-n10">
-                                @foreach (array_combine($categories, $countCategory) as $cate => $countCate)
-                                    <div class="col-md-6 px-10">
-                                        <div class="fs-6 d-flex justify-content-between mb-4">
-                                            <div class="fw-bold">{{ $cate }}</div>
-                                            <div class="badge badge-light-primary">{{ $countCate }}</div>
+                                @if (count($categories) == 0)
+                                    <div class="container d-flex align-items-center justify-content-center h-150px">
+                                        <div class="text-muted fw-bolder fst-italic mt-5 text-center">
+                                            There are no accounts by category
                                         </div>
                                     </div>
-                                @endforeach
+                                @else
+                                    @foreach (array_combine($categories, $countCategory) as $cate => $countCate)
+                                        <div class="col-md-6 px-10">
+                                            <div class="fs-6 d-flex justify-content-between mb-4">
+                                                <div class="fw-bold">{{ $cate }}</div>
+                                                <div class="badge badge-light-primary">{{ $countCate }}</div>
+                                            </div>
+                                        </div>
+                                    @endforeach
+                                @endif
                             </div>
                         </div>
                     </div>

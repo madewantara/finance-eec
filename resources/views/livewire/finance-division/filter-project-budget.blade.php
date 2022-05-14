@@ -103,94 +103,105 @@
                         <!--end::Head-->
                         <!--begin::Body-->
                         <tbody class="fs-7 text-gray-600 fw-bold">
-                            @foreach ($transaction as $trans)
+                            @if (count($transaction) == 0)
                                 <tr>
-                                    <td class="text-center">
-                                        {{ $trans[0]->date }}
-                                    </td>
-                                    <td class="text-center">{{ $trans[0]->token }}</td>
-                                    <td>
-                                        @foreach ($trans as $t)
-                                            {{ $t->description }}<br>
-                                        @endforeach
-                                    </td>
-                                    <td class="text-center">
-                                        @foreach ($trans as $t)
-                                            {{ $t->transactionAccount[0]->referral }}<br>
-                                        @endforeach
-                                    </td>
-                                    <td class="text-center">
-                                        @foreach ($trans as $t)
-                                            @if (empty($t->debit))
-                                                -<br>
-                                            @else
-                                                Rp. {{ number_format($t->debit, 0, ',', '.') }}<br>
-                                            @endif
-                                        @endforeach
-                                    </td>
-                                    <td class="text-center">
-                                        @foreach ($trans as $t)
-                                            @if (empty($t->credit))
-                                                -<br>
-                                            @else
-                                                Rp. {{ number_format($t->credit, 0, ',', '.') }}<br>
-                                            @endif
-                                        @endforeach
-                                    </td>
-
-                                    <td class="text-center">{{ $trans[0]->paid_to }}</td>
-
-                                    @if ($trans[0]->status == 1 || $trans[0]->status == 2)
-                                        <td class="text-center"><span class="badge badge-light-warning fw-bolder">
-                                                Pending</span></td>
-                                    @elseif ($trans[0]->status == 3)
-                                        <td class="text-center"><span class="badge badge-light-success fw-bolder">
-                                                Approved</span></td>
-                                    @elseif ($trans[0]->status == 4)
-                                        <td class="text-center"><span class="badge badge-light-primary fw-bolder">
-                                                Paid</span></td>
-                                    @else
-                                        <td class="text-center"><span class="badge badge-light-danger fw-bolder">
-                                                Rejected</span></td>
-                                    @endif
-
-                                    @if ($trans[0]->category == 'cash')
-                                        <td class="text-center"><span
-                                                class="badge badge-success fw-bolder text-white">
-                                                Cash</span></td>
-                                    @elseif ($trans[0]->category == 'operational')
-                                        <td class="text-center"><span
-                                                class="badge badge-primary fw-bolder text-white">
-                                                Mandiri Operational</span></td>
-                                    @else
-                                        <td class="text-center"><span
-                                                class="badge badge-danger fw-bolder text-white">
-                                                Mandiri Escrow</span></td>
-                                    @endif
-
-                                    <td class="text-end">
-                                        @if ($trans[0]->category == 'cash')
-                                            <a href="{{ route('findiv.cash-detail', ['uuid' => $trans[0]->uuid]) }}"
-                                                class="btn btn-light btn-active-light-primary btn-sm"
-                                                style="padding: 5px 10px;">
-                                                View
-                                            </a>
-                                        @elseif ($trans[0]->category == 'operational')
-                                            <a href="{{ route('findiv.operational-detail', ['uuid' => $trans[0]->uuid]) }}"
-                                                class="btn btn-light btn-active-light-primary btn-sm"
-                                                style="padding: 5px 10px;">
-                                                View
-                                            </a>
-                                        @else
-                                            <a href="{{ route('findiv.escrow-detail', ['uuid' => $trans[0]->uuid]) }}"
-                                                class="btn btn-light btn-active-light-primary btn-sm"
-                                                style="padding: 5px 10px;">
-                                                View
-                                            </a>
-                                        @endif
+                                    <td colspan="10" class="text-muted fst-italic mt-5 text-center">There are no
+                                        transactions
                                     </td>
                                 </tr>
-                            @endforeach
+                            @else
+                                @foreach ($transaction as $trans)
+                                    <tr>
+                                        <td class="text-center">
+                                            {{ $trans[0]->date }}
+                                        </td>
+                                        <td class="text-center">{{ $trans[0]->token }}</td>
+                                        <td>
+                                            @foreach ($trans as $t)
+                                                {{ $t->description }}<br>
+                                            @endforeach
+                                        </td>
+                                        <td class="text-center">
+                                            @foreach ($trans as $t)
+                                                {{ $t->transactionAccount[0]->referral }}<br>
+                                            @endforeach
+                                        </td>
+                                        <td class="text-center">
+                                            @foreach ($trans as $t)
+                                                @if (empty($t->debit))
+                                                    -<br>
+                                                @else
+                                                    Rp. {{ number_format($t->debit, 0, ',', '.') }}<br>
+                                                @endif
+                                            @endforeach
+                                        </td>
+                                        <td class="text-center">
+                                            @foreach ($trans as $t)
+                                                @if (empty($t->credit))
+                                                    -<br>
+                                                @else
+                                                    Rp. {{ number_format($t->credit, 0, ',', '.') }}<br>
+                                                @endif
+                                            @endforeach
+                                        </td>
+
+                                        <td class="text-center">{{ $trans[0]->paid_to }}</td>
+
+                                        @if ($trans[0]->status == 1 || $trans[0]->status == 2)
+                                            <td class="text-center"><span
+                                                    class="badge badge-light-warning fw-bolder">
+                                                    Pending</span></td>
+                                        @elseif ($trans[0]->status == 3)
+                                            <td class="text-center"><span
+                                                    class="badge badge-light-success fw-bolder">
+                                                    Approved</span></td>
+                                        @elseif ($trans[0]->status == 4)
+                                            <td class="text-center"><span
+                                                    class="badge badge-light-primary fw-bolder">
+                                                    Paid</span></td>
+                                        @else
+                                            <td class="text-center"><span class="badge badge-light-danger fw-bolder">
+                                                    Rejected</span></td>
+                                        @endif
+
+                                        @if ($trans[0]->category == 'cash')
+                                            <td class="text-center"><span
+                                                    class="badge badge-success fw-bolder text-white">
+                                                    Cash</span></td>
+                                        @elseif ($trans[0]->category == 'operational')
+                                            <td class="text-center"><span
+                                                    class="badge badge-primary fw-bolder text-white">
+                                                    Mandiri Operational</span></td>
+                                        @else
+                                            <td class="text-center"><span
+                                                    class="badge badge-danger fw-bolder text-white">
+                                                    Mandiri Escrow</span></td>
+                                        @endif
+
+                                        <td class="text-end">
+                                            @if ($trans[0]->category == 'cash')
+                                                <a href="{{ route('findiv.cash-detail', ['uuid' => $trans[0]->uuid]) }}"
+                                                    class="btn btn-light btn-active-light-primary btn-sm"
+                                                    style="padding: 5px 10px;">
+                                                    View
+                                                </a>
+                                            @elseif ($trans[0]->category == 'operational')
+                                                <a href="{{ route('findiv.operational-detail', ['uuid' => $trans[0]->uuid]) }}"
+                                                    class="btn btn-light btn-active-light-primary btn-sm"
+                                                    style="padding: 5px 10px;">
+                                                    View
+                                                </a>
+                                            @else
+                                                <a href="{{ route('findiv.escrow-detail', ['uuid' => $trans[0]->uuid]) }}"
+                                                    class="btn btn-light btn-active-light-primary btn-sm"
+                                                    style="padding: 5px 10px;">
+                                                    View
+                                                </a>
+                                            @endif
+                                        </td>
+                                    </tr>
+                                @endforeach
+                            @endif
                         </tbody>
                         <!--end::Body-->
                     </table>

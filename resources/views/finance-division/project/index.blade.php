@@ -97,42 +97,50 @@
                             <div class="fs-4 fw-bold text-gray-400 mb-7">Current Projects</div>
                             <!--end::Heading-->
                             <!--begin::Wrapper-->
-                            <div class="d-flex flex-wrap">
-                                <!--begin::Chart-->
-                                <div class="d-flex flex-center h-200px w-200px">
-                                    <div id="piechart"
-                                        style="display: block; box-sizing: border-box; height: auto; width: 100%;">
+                            @if (count($project) == 0)
+                                <div class="container d-flex align-items-center justify-content-center h-150px">
+                                    <div class="text-muted fw-bolder fst-italic mt-10">
+                                        There are no projects
                                     </div>
                                 </div>
-                                <!--end::Chart-->
-                                <!--begin::Labels-->
-                                <div class="d-flex flex-column justify-content-center flex-row-fluid pe-11 mb-5">
-                                    @foreach ($projPerStat as $pps)
-                                        @if ($pps['status'] == 1)
-                                            <div class="d-flex fs-6 fw-bold align-items-center mb-3">
-                                                <div class="bullet bg-gray-300 me-3"></div>
-                                                <div class="text-gray-400">To Do</div>
-                                                <div class="ms-auto fw-bolder text-gray-700">
-                                                    {{ $pps['amount'] }}</div>
-                                            </div>
-                                        @elseif($pps['status'] == 2)
-                                            <div class="d-flex fs-6 fw-bold align-items-center mb-3">
-                                                <div class="bullet bg-primary me-3"></div>
-                                                <div class="text-gray-400">In Progress</div>
-                                                <div class="ms-auto fw-bolder text-gray-700">
-                                                    {{ $pps['amount'] }}</div>
-                                            </div>
-                                        @else
-                                            <div class="d-flex fs-6 fw-bold align-items-center mb-3">
-                                                <div class="bullet bg-success me-3"></div>
-                                                <div class="text-gray-400">Completed</div>
-                                                <div class="ms-auto fw-bolder text-gray-700">
-                                                    {{ $pps['amount'] }}</div>
-                                            </div>
-                                        @endif
-                                    @endforeach
+                            @else
+                                <div class="d-flex flex-wrap">
+                                    <!--begin::Chart-->
+                                    <div class="d-flex flex-center h-200px w-200px">
+                                        <div id="piechart"
+                                            style="display: block; box-sizing: border-box; height: auto; width: 100%;">
+                                        </div>
+                                    </div>
+                                    <!--end::Chart-->
+                                    <!--begin::Labels-->
+                                    <div class="d-flex flex-column justify-content-center flex-row-fluid pe-11 mb-5">
+                                        @foreach ($projPerStat as $pps)
+                                            @if ($pps['status'] == 1)
+                                                <div class="d-flex fs-6 fw-bold align-items-center mb-3">
+                                                    <div class="bullet bg-gray-300 me-3"></div>
+                                                    <div class="text-gray-400">To Do</div>
+                                                    <div class="ms-auto fw-bolder text-gray-700">
+                                                        {{ $pps['amount'] }}</div>
+                                                </div>
+                                            @elseif($pps['status'] == 2)
+                                                <div class="d-flex fs-6 fw-bold align-items-center mb-3">
+                                                    <div class="bullet bg-primary me-3"></div>
+                                                    <div class="text-gray-400">In Progress</div>
+                                                    <div class="ms-auto fw-bolder text-gray-700">
+                                                        {{ $pps['amount'] }}</div>
+                                                </div>
+                                            @else
+                                                <div class="d-flex fs-6 fw-bold align-items-center mb-3">
+                                                    <div class="bullet bg-success me-3"></div>
+                                                    <div class="text-gray-400">Completed</div>
+                                                    <div class="ms-auto fw-bolder text-gray-700">
+                                                        {{ $pps['amount'] }}</div>
+                                                </div>
+                                            @endif
+                                        @endforeach
+                                    </div>
                                 </div>
-                            </div>
+                            @endif
                             <!--end::Wrapper-->
                         </div>
                         <!--end::Card body-->
@@ -193,27 +201,35 @@
                             <div class="fs-4 fw-bold text-gray-400 mb-7">Active Project Manager</div>
                             <!--end::Heading-->
                             <!--begin::Project Manager group-->
-                            @foreach ($projectActiveLim as $pa)
-                                <div class="fs-6 d-flex justify-content-between mb-4">
-                                    <div class="d-flex flex-column">
-                                        <div class="fw-bolder text-dark">{{ $pa->project_manager }}
-                                        </div>
-                                        <a href="{{ route('findiv.project-detail', ['uuid' => $pa->uuid]) }}"
-                                            class="fw-bold text-muted text-hover-primary">{{ $pa->name }}</a>
-                                    </div>
-                                    <div class="symbol symbol-35px symbol-circle" data-bs-toggle="tooltip"
-                                        title="{{ $pa->project_manager }}   "
-                                        data-bs-original-title="{{ $pa->project_manager }}">
-                                        <span
-                                            class="symbol-label bg-warning text-inverse-warning fw-bolder">{{ strtoupper($pa->project_manager[0]) }}</span>
+                            @if (count($projectActiveLim) == 0)
+                                <div class="container d-flex align-items-center justify-content-center h-150px">
+                                    <div class="text-muted fw-bolder fst-italic mt-10">
+                                        There are no active project manager
                                     </div>
                                 </div>
-                            @endforeach
-                            <!--end::Project Manager group-->
-                            <div class="d-flex">
-                                <a href="#" class="btn btn-primary btn-sm me-3" data-bs-toggle="modal"
-                                    data-bs-target="#kt_modal_view_users">All Project Manager</a>
-                            </div>
+                            @else
+                                @foreach ($projectActiveLim as $pa)
+                                    <div class="fs-6 d-flex justify-content-between mb-4">
+                                        <div class="d-flex flex-column">
+                                            <div class="fw-bolder text-dark">{{ $pa->project_manager }}
+                                            </div>
+                                            <a href="{{ route('findiv.project-detail', ['uuid' => $pa->uuid]) }}"
+                                                class="fw-bold text-muted text-hover-primary">{{ $pa->name }}</a>
+                                        </div>
+                                        <div class="symbol symbol-35px symbol-circle" data-bs-toggle="tooltip"
+                                            title="{{ $pa->project_manager }}   "
+                                            data-bs-original-title="{{ $pa->project_manager }}">
+                                            <span
+                                                class="symbol-label bg-warning text-inverse-warning fw-bolder">{{ strtoupper($pa->project_manager[0]) }}</span>
+                                        </div>
+                                    </div>
+                                @endforeach
+                                <!--end::Project Manager group-->
+                                <div class="d-flex">
+                                    <a href="#" class="btn btn-primary btn-sm me-3" data-bs-toggle="modal"
+                                        data-bs-target="#kt_modal_view_users">All Project Manager</a>
+                                </div>
+                            @endif
                         </div>
                     </div>
                     <!--end::Clients-->
@@ -266,60 +282,70 @@
                                 <!--begin::List-->
                                 <div class="mh-375px scroll-y me-n7 pe-7">
                                     <!--begin::User-->
-                                    @foreach ($projectActive as $p)
-                                        <div
-                                            class="d-flex flex-stack py-5 border-bottom border-gray-300 border-bottom-dashed">
-                                            <!--begin::Details-->
-                                            <div class="d-flex align-items-center">
-                                                <!--begin::Avatar-->
-                                                <div class="symbol symbol-35px symbol-circle">
-                                                    <img alt="Pic" src="/metronic8/demo6/assets/media/avatars/300-6.jpg">
-                                                </div>
-                                                <!--end::Avatar-->
+                                    @if (count($projectActive) == 0)
+                                        <div class="container d-flex align-items-center justify-content-center h-150px">
+                                            <div class="text-muted fw-bolder fst-italic mt-10">
+                                                There are no project manager
+                                            </div>
+                                        </div>
+                                    @else
+                                        @foreach ($projectActive as $p)
+                                            <div
+                                                class="d-flex flex-stack py-5 border-bottom border-gray-300 border-bottom-dashed">
                                                 <!--begin::Details-->
-                                                <div class="ms-6">
-                                                    <!--begin::Name-->
-                                                    <div class="d-flex align-items-center fs-5 fw-bolder text-dark">
-                                                        @if (!empty($p->project_manager))
-                                                            {{ $p->project_manager }}
-                                                        @else
-                                                            Anonymous
-                                                        @endif
-                                                        @if ($p->status == 1)
-                                                            <span class="badge badge-light fs-8 fw-bold ms-2">To
-                                                                Do</span>
-                                                        @elseif($p->status == 2)
-                                                            <span class="badge badge-light-primary fs-8 fw-bold ms-2">In
-                                                                Progress</span>
-                                                        @else
-                                                            <span
-                                                                class="badge badge-light-success fs-8 fw-bold ms-2">Completed</span>
-                                                        @endif
+                                                <div class="d-flex align-items-center">
+                                                    <!--begin::Avatar-->
+                                                    <div class="symbol symbol-35px symbol-circle">
+                                                        <img alt="Pic"
+                                                            src="/metronic8/demo6/assets/media/avatars/300-6.jpg">
                                                     </div>
-                                                    <!--end::Name-->
-                                                    <!--begin::Email-->
-                                                    <div class="fw-bold text-muted">smith@kpmg.com</div>
-                                                    <!--end::Email-->
+                                                    <!--end::Avatar-->
+                                                    <!--begin::Details-->
+                                                    <div class="ms-6">
+                                                        <!--begin::Name-->
+                                                        <div class="d-flex align-items-center fs-5 fw-bolder text-dark">
+                                                            @if (!empty($p->project_manager))
+                                                                {{ $p->project_manager }}
+                                                            @else
+                                                                Anonymous
+                                                            @endif
+                                                            @if ($p->status == 1)
+                                                                <span class="badge badge-light fs-8 fw-bold ms-2">To
+                                                                    Do</span>
+                                                            @elseif($p->status == 2)
+                                                                <span
+                                                                    class="badge badge-light-primary fs-8 fw-bold ms-2">In
+                                                                    Progress</span>
+                                                            @else
+                                                                <span
+                                                                    class="badge badge-light-success fs-8 fw-bold ms-2">Completed</span>
+                                                            @endif
+                                                        </div>
+                                                        <!--end::Name-->
+                                                        <!--begin::Email-->
+                                                        <div class="fw-bold text-muted">smith@kpmg.com</div>
+                                                        <!--end::Email-->
+                                                    </div>
+                                                    <!--end::Details-->
                                                 </div>
                                                 <!--end::Details-->
-                                            </div>
-                                            <!--end::Details-->
-                                            <!--begin::Stats-->
-                                            <div class="d-flex">
-                                                <!--begin::Sales-->
-                                                <div class="text-end">
-                                                    <a href="{{ route('findiv.project-detail', ['uuid' => $p->uuid]) }}"
-                                                        class="fs-5 fw-bolder text-dark text-hover-primary">{{ $p->name }}
-                                                    </a>
-                                                    <div class="fs-7 text-muted">
-                                                        {{ $p->projectCategory->category }}</div>
+                                                <!--begin::Stats-->
+                                                <div class="d-flex">
+                                                    <!--begin::Sales-->
+                                                    <div class="text-end">
+                                                        <a href="{{ route('findiv.project-detail', ['uuid' => $p->uuid]) }}"
+                                                            class="fs-5 fw-bolder text-dark text-hover-primary">{{ $p->name }}
+                                                        </a>
+                                                        <div class="fs-7 text-muted">
+                                                            {{ $p->projectCategory->category }}</div>
+                                                    </div>
+                                                    <!--end::Sales-->
                                                 </div>
-                                                <!--end::Sales-->
+                                                <!--end::Stats-->
                                             </div>
-                                            <!--end::Stats-->
-                                        </div>
-                                    @endforeach
-                                    <!--end::User-->
+                                        @endforeach
+                                        <!--end::User-->
+                                    @endif
                                 </div>
                                 <!--end::List-->
                             </div>
@@ -416,7 +442,7 @@
         var locations = {!! json_encode($allProjLoc) !!};
 
         var map = new google.maps.Map(document.getElementById('map'), {
-            zoom: 4,
+            zoom: 5,
             center: new google.maps.LatLng(-0.5093411, 117.0354433),
             mapTypeId: google.maps.MapTypeId.ROADMAP
         });

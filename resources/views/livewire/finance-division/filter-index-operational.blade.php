@@ -52,7 +52,7 @@
                 <div class="d-flex flex-column align-items-start justift-content-center flex-equal me-5">
                     <!--begin::Title-->
                     <i>
-                        <h1 class="fw-bolder fs-4 fs-lg-1 text-gray-800 mb-3 mb-lg-8" style="font-size: ">Mandiri
+                        <h1 class="fw-bolder fs-4 fs-lg-1 text-gray-800 mb-3 mb-lg-8">Mandiri
                             Operational Balance
                         </h1>
                     </i>
@@ -210,7 +210,7 @@
                         <!--end::Svg Icon-->Filter
                     </button>
                     <!--begin::Menu 1-->
-                    <div class="menu menu-sub menu-sub-dropdown w-300px w-md-325px" data-kt-menu="true">
+                    <div class="menu menu-sub menu-sub-dropdown w-500px w-md-525px" data-kt-menu="true">
                         <!--begin::Header-->
                         <div class="px-7 py-5">
                             <div class="fs-5 text-dark fw-bolder">Filter Options</div>
@@ -222,99 +222,150 @@
                         <!--begin::Content-->
                         <div class="px-7 py-5" data-kt-subscription-table-filter="form">
                             <form wire:submit.prevent="submitfilteroperational" autocomplete="off">
-                                <!--begin::Input group-->
-                                <div class="fv-row mb-5">
-                                    <!--begin::Label-->
-                                    <label class="fs-5 fw-bold form-label mb-3">Date Range:</label>
-                                    <!--end::Label-->
-                                    <!--begin::Input-->
-                                    <input class="form-control form-control-solid" placeholder="Pick a date range"
-                                        id="datefilter" name="datefilter" type="text" wire:model.defer="datefilter">
-                                    <!--end::Input-->
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <!--begin::Input group-->
+                                        <div class="fv-row mb-5">
+                                            <!--begin::Label-->
+                                            <label class="fs-5 fw-bold form-label mb-3">Date Range:</label>
+                                            <!--end::Label-->
+                                            <!--begin::Input-->
+                                            <input class="form-control form-control-solid"
+                                                placeholder="Pick a date range" id="datefilter" name="datefilter"
+                                                type="text" wire:model.defer="datefilter">
+                                            <!--end::Input-->
+                                        </div>
+                                        <!--end::Input group-->
+                                        <!--begin::Input group-->
+                                        <div class="fv-row mb-5">
+                                            <!--begin::Label-->
+                                            <label class="fs-5 fw-bold form-label mb-3">Referral:</label>
+                                            <!--end::Label-->
+                                            <!--begin::Input-->
+                                            <select class="form-control form-select account-multiple"
+                                                data-pharaonic="select2" data-component-id="{{ $this->id }}"
+                                                wire:model.defer="accounts" id="accounts" name="accounts[]"
+                                                multiple="multiple">
+                                                @foreach ($account as $a)
+                                                    <option value="{{ $a->id }}">
+                                                        {{ $a->referral }} -
+                                                        {{ $a->name }} </option>
+                                                @endforeach
+                                            </select>
+                                            <!--end::Input-->
+                                        </div>
+                                        <!--end::Input group-->
+                                        <!--begin::Input group-->
+                                        <div class="fv-row mb-5">
+                                            <!--begin::Label-->
+                                            <label class="fs-5 fw-bold form-label mb-3">PIC:</label>
+                                            <!--end::Label-->
+                                            <!--begin::Input-->
+                                            <select class="form-control form-select pic-multiple"
+                                                data-pharaonic="select2" data-component-id="{{ $this->id }}"
+                                                wire:model.defer="pics" id="pics" name="pics[]" multiple="multiple">
+                                                @foreach ($pic as $p)
+                                                    <option value="{{ $p->pic }}">
+                                                        {{ $p->pic }}</option>
+                                                @endforeach
+                                            </select>
+                                            <!--end::Input-->
+                                        </div>
+                                        <!--end::Input group-->
+                                        <!--begin::Input group-->
+                                        <div class="fv-row mb-5">
+                                            <!--begin::Label-->
+                                            <label class="fs-5 fw-bold form-label mb-3">Paid To:</label>
+                                            <!--end::Label-->
+                                            <!--begin::Input-->
+                                            <select class="form-control form-select paidto-multiple"
+                                                data-pharaonic="select2" data-component-id="{{ $this->id }}"
+                                                wire:model.defer="paidtos" id="paidtos" name="paidtos[]"
+                                                multiple="multiple">
+                                                @foreach ($paidto as $pt)
+                                                    <option value="{{ $pt->paid_to }}">
+                                                        {{ $pt->paid_to }}</option>
+                                                @endforeach
+                                            </select>
+                                            <!--end::Input-->
+                                        </div>
+                                        <!--end::Input group-->
+                                    </div>
+                                    <div class="col-md-6">
+                                        <!--begin::Input group-->
+                                        <div class="fv-row mb-5">
+                                            <!--begin::Label-->
+                                            <label class="fs-5 fw-bold form-label mb-3">Project:</label>
+                                            <!--end::Label-->
+                                            <!--begin::Input-->
+                                            <select class="form-control form-select project-multiple"
+                                                data-pharaonic="select2" data-component-id="{{ $this->id }}"
+                                                wire:model.defer="projects" id="projects" name="projects[]"
+                                                multiple="multiple">
+                                                @foreach ($project as $p)
+                                                    @if (!empty($p->transactionProject))
+                                                        <option value="{{ $p->transactionProject->id }}">
+                                                            {{ $p->transactionProject->name }}</option>
+                                                    @endif
+                                                @endforeach
+                                            </select>
+                                            <!--end::Input-->
+                                        </div>
+                                        <!--end::Input group-->
+                                        <!--begin::Input group-->
+                                        <div class="fv-row mb-5">
+                                            <!--begin::Label-->
+                                            <label class="fs-5 fw-bold form-label mb-3">Type:</label>
+                                            <!--end::Label-->
+                                            <!--begin::Input-->
+                                            <select class="form-control form-select type-multiple"
+                                                data-pharaonic="select2" data-component-id="{{ $this->id }}"
+                                                wire:model.defer="types" id="types" name="types[]" multiple="multiple">
+                                                <option></option>
+                                                <option value="1">Draft</option>
+                                                <option value="2">Posted</option>
+                                            </select>
+                                            <!--end::Input-->
+                                        </div>
+                                        <!--end::Input group-->
+                                        <!--begin::Input group-->
+                                        <div class="fv-row mb-5">
+                                            <!--begin::Label-->
+                                            <label class="fs-5 fw-bold form-label mb-3">Status:</label>
+                                            <!--end::Label-->
+                                            <!--begin::Input-->
+                                            <select class="form-control form-select status-multiple"
+                                                data-pharaonic="select2" data-component-id="{{ $this->id }}"
+                                                wire:model.defer="statuss" id="statuss" name="statuss[]"
+                                                multiple="multiple">
+                                                <option></option>
+                                                <option value="1" selected>Pending</option>
+                                                <option value="2" selected>Pending (Only approved by Finance Director)
+                                                </option>
+                                                <option value="3">Accepted</option>
+                                                <option value="5">Rejected</option>
+                                                <option value="4">Paid</option>
+                                            </select>
+                                            <!--end::Input-->
+                                        </div>
+                                        <!--end::Input group-->
+                                    </div>
                                 </div>
-                                <!--end::Input group-->
-                                <!--begin::Input group-->
-                                <div class="fv-row mb-5">
-                                    <!--begin::Label-->
-                                    <label class="fs-5 fw-bold form-label mb-3">Referral:</label>
-                                    <!--end::Label-->
-                                    <!--begin::Input-->
-                                    <select class="form-control form-select account-multiple" data-pharaonic="select2"
-                                        data-component-id="{{ $this->id }}" wire:model.defer="accounts"
-                                        id="accounts" name="accounts[]" multiple="multiple">
-                                        @foreach ($account as $a)
-                                            <option value="{{ $a->id }}">
-                                                {{ $a->referral }} -
-                                                {{ $a->name }} </option>
-                                        @endforeach
-                                    </select>
-                                    <!--end::Input-->
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <!--begin::Actions-->
+                                        <div class="d-flex justify-content-end">
+                                            <button type="reset"
+                                                class="btn btn-light btn-active-light-primary fw-bold me-2 px-6"
+                                                data-kt-menu-dismiss="true" data-kt-subscription-table-filter="reset"
+                                                wire:click="resetoperational()">Reset</button>
+                                            <button type="submit" class="btn btn-primary fw-bold px-6"
+                                                data-kt-menu-dismiss="true"
+                                                data-kt-subscription-table-filter="filter">Apply</button>
+                                        </div>
+                                        <!--end::Actions-->
+                                    </div>
                                 </div>
-                                <!--end::Input group-->
-                                <!--begin::Input group-->
-                                <div class="fv-row mb-5">
-                                    <!--begin::Label-->
-                                    <label class="fs-5 fw-bold form-label mb-3">PIC:</label>
-                                    <!--end::Label-->
-                                    <!--begin::Input-->
-                                    <select class="form-control form-select pic-multiple" data-pharaonic="select2"
-                                        data-component-id="{{ $this->id }}" wire:model.defer="pics" id="pics"
-                                        name="pics[]" multiple="multiple">
-                                        @foreach ($pic as $p)
-                                            <option value="{{ $p->pic }}">
-                                                {{ $p->pic }}</option>
-                                        @endforeach
-                                    </select>
-                                    <!--end::Input-->
-                                </div>
-                                <!--end::Input group-->
-                                <!--begin::Input group-->
-                                <div class="fv-row mb-5">
-                                    <!--begin::Label-->
-                                    <label class="fs-5 fw-bold form-label mb-3">Paid To:</label>
-                                    <!--end::Label-->
-                                    <!--begin::Input-->
-                                    <select class="form-control form-select paidto-multiple" data-pharaonic="select2"
-                                        data-component-id="{{ $this->id }}" wire:model.defer="paidtos" id="paidtos"
-                                        name="paidtos[]" multiple="multiple">
-                                        @foreach ($paidto as $pt)
-                                            <option value="{{ $pt->paid_to }}">
-                                                {{ $pt->paid_to }}</option>
-                                        @endforeach
-                                    </select>
-                                    <!--end::Input-->
-                                </div>
-                                <!--end::Input group-->
-                                <!--begin::Input group-->
-                                <div class="fv-row mb-10">
-                                    <!--begin::Label-->
-                                    <label class="fs-5 fw-bold form-label mb-3">Project:</label>
-                                    <!--end::Label-->
-                                    <!--begin::Input-->
-                                    <select class="form-control form-select project-multiple" data-pharaonic="select2"
-                                        data-component-id="{{ $this->id }}" wire:model.defer="projects"
-                                        id="projects" name="projects[]" multiple="multiple">
-                                        @foreach ($project as $p)
-                                            @if (!empty($p->transactionProject))
-                                                <option value="{{ $p->transactionProject->id }}">
-                                                    {{ $p->transactionProject->name }}</option>
-                                            @endif
-                                        @endforeach
-                                    </select>
-                                    <!--end::Input-->
-                                </div>
-                                <!--end::Input group-->
-                                <!--begin::Actions-->
-                                <div class="d-flex justify-content-end">
-                                    <button type="reset"
-                                        class="btn btn-light btn-active-light-primary fw-bold me-2 px-6"
-                                        data-kt-menu-dismiss="true" data-kt-subscription-table-filter="reset"
-                                        wire:click="resetoperational()">Reset</button>
-                                    <button type="submit" class="btn btn-primary fw-bold px-6"
-                                        data-kt-menu-dismiss="true"
-                                        data-kt-subscription-table-filter="filter">Apply</button>
-                                </div>
-                                <!--end::Actions-->
                             </form>
                         </div>
                         <!--end::Content-->
@@ -406,127 +457,137 @@
                 <!--end::Table head-->
                 <!--begin::Table body-->
                 <tbody class="text-gray-600 fw-bold">
-                    @foreach ($transaction as $trans)
+                    @if (count($transaction) == 0)
                         <tr>
-                            <td class="text-center">
-                                {{ $trans[0][0]->date }}
-                            </td>
-                            <td class="text-center">{{ $trans[0][0]->token }}</td>
-                            <td>
-                                @foreach ($trans[0] as $t)
-                                    {{ $t->description }}<br>
-                                @endforeach
-                            </td>
-                            <td class="text-center">
-                                @foreach ($trans[0] as $t)
-                                    {{ $t->transactionAccount[0]->referral }}<br>
-                                @endforeach
-                            </td>
-                            <td class="text-center">
-                                @foreach ($trans[0] as $t)
-                                    @if (empty($t->debit))
-                                        -<br>
-                                    @else
-                                        Rp. {{ number_format($t->debit, 0, ',', '.') }}<br>
-                                    @endif
-                                @endforeach
-                            </td>
-                            <td class="text-center">
-                                @foreach ($trans[0] as $t)
-                                    @if (empty($t->credit))
-                                        -<br>
-                                    @else
-                                        Rp. {{ number_format($t->credit, 0, ',', '.') }}<br>
-                                    @endif
-                                @endforeach
-                            </td>
-                            @if (empty($trans[0][0]->pic))
-                                <td class="text-center">-</td>
-                            @else
-                                <td class="text-center">{{ $trans[0][0]->pic }}</td>
-                            @endif
-
-                            @if (empty($trans[0][0]->transactionProject->name))
-                                <td class="text-center">-</td>
-                            @else
-                                <td class="text-center">{{ $trans[0][0]->transactionProject->name }}</td>
-                            @endif
-
-                            <td class="text-center">{{ $trans[0][0]->paid_to }}</td>
-
-                            @if ($trans[0][0]->type == 1)
-                                <td class="text-center"><span class="badge badge-light fw-bolder text-white"
-                                        style="background-color: rgb(232, 123, 51);">
-                                        Draft</span></td>
-                            @else
-                                <td class="text-center"><span class="badge badge-light fw-bolder text-white"
-                                        style="background-color: #3498DB;">
-                                        Posted</span></td>
-                            @endif
-
-                            @if ($trans[0][0]->status == 1 || $trans[0][0]->status == 2)
-                                <td class="text-center"><span class="badge badge-light-warning fw-bolder">
-                                        Pending</span></td>
-                            @elseif ($trans[0][0]->status == 3)
-                                <td class="text-center"><span class="badge badge-light-success fw-bolder">
-                                        Approved</span></td>
-                            @elseif ($trans[0][0]->status == 4)
-                                <td class="text-center"><span class="badge badge-light-primary fw-bolder">
-                                        Paid</span></td>
-                            @else
-                                <td class="text-center"><span class="badge badge-light-danger fw-bolder">
-                                        Rejected</span></td>
-                            @endif
-
-                            <td class="text-end">
-                                <a href="#" class="btn btn-light btn-active-light-primary btn-sm"
-                                    data-kt-menu-trigger="click" data-kt-menu-placement="bottom-end"
-                                    data-kt-menu-flip="top-end" style="padding: 5px 10px;">
-                                    <!--begin::Svg Icon | path: icons/duotone/Navigation/Angle-down.svg-->
-                                    <i class="bi bi-three-dots fs-5 pe-0"></i>
-                                    <!--end::Svg Icon-->
-                                </a>
-                                <!--begin::Menu-->
-                                <div class="menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-600 menu-state-bg-light-primary fw-bold fs-7 w-125px py-4"
-                                    data-kt-menu="true">
-                                    <!--begin::Menu item-->
-                                    <div class="menu-item px-3">
-                                        <a href="{{ route('findiv.operational-detail', ['uuid' => $trans[0][0]->uuid]) }}"
-                                            class="menu-link px-3">View</a>
-                                    </div>
-                                    <!--end::Menu item-->
-                                    <!--begin::Menu item-->
-                                    <div class="menu-item px-3">
-                                        <a href="{{ route('findiv.operational-edit', ['uuid' => $trans[0][0]->uuid]) }}"
-                                            class="menu-link px-3">Edit</a>
-                                    </div>
-                                    <!--end::Menu item-->
-                                    <!--begin::Menu item-->
-                                    <div class="menu-item px-3">
-                                        <button type="submit" class="btn-delete menu-link px-3 fw-bold"
-                                            wire:click="confirmDelete('{{ $trans[0][0]->uuid }}')">Delete</button>
-                                    </div>
-
-                                    <div class="separator border-gray-200"></div>
-                                    <div class="menu-item px-3">
-                                        <div class="text-start">
-                                            <label class="px-3 fw-bold mt-5"
-                                                @if ($trans[0][0]->status == 1 || $trans[0][0]->status == 2 || $trans[0][0]->status == 4 || $trans[0][0]->status == 5) style="color:#7e829978;" @endif>Paid?</label>
-                                            <label class="switch">
-                                                <input wire:click="confirmUpdateStatus('{{ $trans[0][0]->uuid }}')"
-                                                    type="checkbox" class="checkbox-status"
-                                                    @if ($trans[0][0]->status == 1 || $trans[0][0]->status == 2 || $trans[0][0]->status == 5) disabled @elseif ($trans[0][0]->status == 4) disabled checked @endif>
-                                                <span class="slider round"
-                                                    @if ($trans[0][0]->status == 1 || $trans[0][0]->status == 2 || $trans[0][0]->status == 4 || $trans[0][0]->status == 5) style="background-color:#7e829930;" @endif></span>
-                                            </label>
-                                        </div>
-                                    </div>
-                                    <!--end::Menu item-->
-                                </div>
-                                <!--end::Menu-->
+                            <td colspan="12" class="text-muted fst-italic mt-5 text-center">There are no mandiri
+                                operational
+                                transactions
                             </td>
                         </tr>
-                    @endforeach
+                    @else
+                        @foreach ($transaction as $trans)
+                            <tr>
+                                <td class="text-center">
+                                    {{ $trans[0][0]->date }}
+                                </td>
+                                <td class="text-center">{{ $trans[0][0]->token }}</td>
+                                <td>
+                                    @foreach ($trans[0] as $t)
+                                        {{ $t->description }}<br>
+                                    @endforeach
+                                </td>
+                                <td class="text-center">
+                                    @foreach ($trans[0] as $t)
+                                        {{ $t->transactionAccount[0]->referral }}<br>
+                                    @endforeach
+                                </td>
+                                <td class="text-center">
+                                    @foreach ($trans[0] as $t)
+                                        @if (empty($t->debit))
+                                            -<br>
+                                        @else
+                                            Rp. {{ number_format($t->debit, 0, ',', '.') }}<br>
+                                        @endif
+                                    @endforeach
+                                </td>
+                                <td class="text-center">
+                                    @foreach ($trans[0] as $t)
+                                        @if (empty($t->credit))
+                                            -<br>
+                                        @else
+                                            Rp. {{ number_format($t->credit, 0, ',', '.') }}<br>
+                                        @endif
+                                    @endforeach
+                                </td>
+                                @if (empty($trans[0][0]->pic))
+                                    <td class="text-center">-</td>
+                                @else
+                                    <td class="text-center">{{ $trans[0][0]->pic }}</td>
+                                @endif
+
+                                @if (empty($trans[0][0]->transactionProject->name))
+                                    <td class="text-center">-</td>
+                                @else
+                                    <td class="text-center">{{ $trans[0][0]->transactionProject->name }}</td>
+                                @endif
+
+                                <td class="text-center">{{ $trans[0][0]->paid_to }}</td>
+
+                                @if ($trans[0][0]->type == 1)
+                                    <td class="text-center"><span class="badge badge-light fw-bolder text-white"
+                                            style="background-color: rgb(232, 123, 51);">
+                                            Draft</span></td>
+                                @else
+                                    <td class="text-center"><span class="badge badge-light fw-bolder text-white"
+                                            style="background-color: #3498DB;">
+                                            Posted</span></td>
+                                @endif
+
+                                @if ($trans[0][0]->status == 1 || $trans[0][0]->status == 2)
+                                    <td class="text-center"><span class="badge badge-light-warning fw-bolder">
+                                            Pending</span></td>
+                                @elseif ($trans[0][0]->status == 3)
+                                    <td class="text-center"><span class="badge badge-light-success fw-bolder">
+                                            Approved</span></td>
+                                @elseif ($trans[0][0]->status == 4)
+                                    <td class="text-center"><span class="badge badge-light-primary fw-bolder">
+                                            Paid</span></td>
+                                @else
+                                    <td class="text-center"><span class="badge badge-light-danger fw-bolder">
+                                            Rejected</span></td>
+                                @endif
+
+                                <td class="text-end">
+                                    <a href="#" class="btn btn-light btn-active-light-primary btn-sm"
+                                        data-kt-menu-trigger="click" data-kt-menu-placement="bottom-end"
+                                        data-kt-menu-flip="top-end" style="padding: 5px 10px;">
+                                        <!--begin::Svg Icon | path: icons/duotone/Navigation/Angle-down.svg-->
+                                        <i class="bi bi-three-dots fs-5 pe-0"></i>
+                                        <!--end::Svg Icon-->
+                                    </a>
+                                    <!--begin::Menu-->
+                                    <div class="menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-600 menu-state-bg-light-primary fw-bold fs-7 w-125px py-4"
+                                        data-kt-menu="true">
+                                        <!--begin::Menu item-->
+                                        <div class="menu-item px-3">
+                                            <a href="{{ route('findiv.operational-detail', ['uuid' => $trans[0][0]->uuid]) }}"
+                                                class="menu-link px-3">View</a>
+                                        </div>
+                                        <!--end::Menu item-->
+                                        <!--begin::Menu item-->
+                                        <div class="menu-item px-3">
+                                            <a href="{{ route('findiv.operational-edit', ['uuid' => $trans[0][0]->uuid]) }}"
+                                                class="menu-link px-3">Edit</a>
+                                        </div>
+                                        <!--end::Menu item-->
+                                        <!--begin::Menu item-->
+                                        <div class="menu-item px-3">
+                                            <button type="submit" class="btn-delete menu-link px-3 fw-bold"
+                                                wire:click="confirmDelete('{{ $trans[0][0]->uuid }}')">Delete</button>
+                                        </div>
+
+                                        <div class="separator border-gray-200"></div>
+                                        <div class="menu-item px-3">
+                                            <div class="text-start">
+                                                <label class="px-3 fw-bold mt-5"
+                                                    @if ($trans[0][0]->status == 1 || $trans[0][0]->status == 2 || $trans[0][0]->status == 4 || $trans[0][0]->status == 5) style="color:#7e829978;" @endif>Paid?</label>
+                                                <label class="switch">
+                                                    <input
+                                                        wire:click="confirmUpdateStatus('{{ $trans[0][0]->uuid }}')"
+                                                        type="checkbox" class="checkbox-status"
+                                                        @if ($trans[0][0]->status == 1 || $trans[0][0]->status == 2 || $trans[0][0]->status == 5) disabled @elseif ($trans[0][0]->status == 4) disabled checked @endif>
+                                                    <span class="slider round"
+                                                        @if ($trans[0][0]->status == 1 || $trans[0][0]->status == 2 || $trans[0][0]->status == 4 || $trans[0][0]->status == 5) style="background-color:#7e829930;" @endif></span>
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <!--end::Menu item-->
+                                    </div>
+                                    <!--end::Menu-->
+                                </td>
+                            </tr>
+                        @endforeach
+                    @endif
                 </tbody>
                 <!--end::Table body-->
             </table>
@@ -687,6 +748,66 @@
                     allowClear: true,
                 });
                 $('.project-multiple').on("select2:unselect", function(e) {
+                    if (!e.params.originalEvent) {
+                        return
+                    }
+                    e.params.originalEvent.stopPropagation();
+                });
+            });
+        });
+    </script>
+    <script>
+        $(document).ready(function() {
+            $('.type-multiple').select2({
+                placeholder: "Select type",
+                closeOnSelect: true,
+                allowClear: true,
+            });
+        });
+        $('.type-multiple').on("select2:unselect", function(e) {
+            if (!e.params.originalEvent) {
+                return
+            }
+            e.params.originalEvent.stopPropagation();
+        });
+        document.addEventListener('livewire:load', function(event) {
+            @this.on('refreshDropdown', function() {
+                $('.type-multiple').select2({
+                    placeholder: "Select type",
+                    closeOnSelect: true,
+                    allowClear: true,
+                });
+                $('.type-multiple').on("select2:unselect", function(e) {
+                    if (!e.params.originalEvent) {
+                        return
+                    }
+                    e.params.originalEvent.stopPropagation();
+                });
+            });
+        });
+    </script>
+    <script>
+        $(document).ready(function() {
+            $('.status-multiple').select2({
+                placeholder: "Select status",
+                closeOnSelect: true,
+                allowClear: true,
+            });
+        });
+        $('.status-multiple').on("select2:unselect", function(e) {
+            if (!e.params.originalEvent) {
+                return
+            }
+            e.params.originalEvent.stopPropagation();
+        });
+        document.addEventListener('livewire:load', function(event) {
+            @this.on('refreshDropdown', function() {
+                $('.status-multiple').select2({
+                    placeholder: "Select status",
+                    closeOnSelect: true,
+                    allowClear: true,
+                });
+                $('.status-multiple').on("select2:unselect", function(e) {
                     if (!e.params.originalEvent) {
                         return
                     }

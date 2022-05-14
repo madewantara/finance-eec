@@ -87,18 +87,23 @@ class FindirProjectController extends Controller
             $sumhighProjectExpanse = 0;
         }
         
-        $highProjectExpanse = $arrhighProjectExpanse[0];
-        for($i=1;$i<count($arrhighProjectExpanse);$i++){
-            if($arrhighProjectExpanse[$i] > $highProjectExpanse){
-                $highProjectExpanse = $arrhighProjectExpanse[$i];
+        if(count($arrhighProjectExpanse) != 0){
+            $highProjectExpanse = $arrhighProjectExpanse[0];
+            for($i=1;$i<count($arrhighProjectExpanse);$i++){
+                if($arrhighProjectExpanse[$i] > $highProjectExpanse){
+                    $highProjectExpanse = $arrhighProjectExpanse[$i];
+                }
             }
-        }
 
-        $lowProjectExpanse = $arrhighProjectExpanse[0];
-        for($i=1;$i<count($arrhighProjectExpanse);$i++){
-            if($arrhighProjectExpanse[$i] < $lowProjectExpanse){
-                $lowProjectExpanse = $arrhighProjectExpanse[$i];
+            $lowProjectExpanse = $arrhighProjectExpanse[0];
+            for($i=1;$i<count($arrhighProjectExpanse);$i++){
+                if($arrhighProjectExpanse[$i] < $lowProjectExpanse){
+                    $lowProjectExpanse = $arrhighProjectExpanse[$i];
+                }
             }
+        } else{
+            $highProjectExpanse = 0;
+            $lowProjectExpanse = 0;
         }
 
         $projPerStat = [];
@@ -112,8 +117,13 @@ class FindirProjectController extends Controller
         $amountData = count($projectPriority);
         $date = strtotime(Carbon::now()->format('Y-m-d'));
         $itr = 0;
-        if($amountData == 1){
-            $centroid1[$itr] = array((strtotime(($projectPriority->start_date)) - $date)/86400, abs(strtotime($projectPriority->start_date) - strtotime($projectPriority->end_date))/86400, $projectPriority->category_id, $projectPriority->contract);
+        if($amountData == 0){
+            $centroid1[$itr] = array(0,0,0,0);
+            $centroid2[$itr] = array(0,0,0,0);
+            $centroid3[$itr] = array(0,0,0,0);
+        }
+        elseif($amountData == 1){
+            $centroid1[$itr] = array((strtotime(($projectPriority[0]->start_date)) - $date)/86400, abs(strtotime($projectPriority[0]->start_date) - strtotime($projectPriority[0]->end_date))/86400, $projectPriority[0]->category_id, $projectPriority[0]->contract);
             $centroid2[$itr] = array(0,0,0,0);
             $centroid3[$itr] = array(0,0,0,0);
         }
@@ -193,8 +203,13 @@ class FindirProjectController extends Controller
                 array_push($startDate1, (strtotime(($dc1->start_date)) - $date)/86400);
                 array_push($duration1, abs(strtotime($dc1->start_date) - strtotime($dc1->end_date))/86400);
             }
-            $dataC1StartDate = array_sum($startDate1)/count($startDate1);
-            $dataC1Duration = array_sum($duration1)/count($duration1);
+            if(count($dataC1) == 0){
+                $dataC1StartDate = 0;
+                $dataC1Duration = 0;
+            } else{
+                $dataC1StartDate = array_sum($startDate1)/count($startDate1);
+                $dataC1Duration = array_sum($duration1)/count($duration1);
+            }
 
             //New Centroid 2
             $dataC2Contract = Project::select('contract')->where([['is_active',1],['status',1],['priority',2]])->avg('contract');
@@ -206,8 +221,13 @@ class FindirProjectController extends Controller
                 array_push($startDate2, (strtotime(($dc2->start_date)) - $date)/86400);
                 array_push($duration2, abs(strtotime($dc2->start_date) - strtotime($dc2->end_date))/86400);
             }
-            $dataC2StartDate = array_sum($startDate2)/count($startDate2);
-            $dataC2Duration = array_sum($duration2)/count($duration2);
+            if(count($dataC2) == 0){
+                $dataC2StartDate = 0;
+                $dataC2Duration = 0;
+            } else{
+                $dataC2StartDate = array_sum($startDate2)/count($startDate2);
+                $dataC2Duration = array_sum($duration2)/count($duration2);
+            }
 
             //New Centroid 3
             $dataC3Contract = Project::select('contract')->where([['is_active',1],['status',1],['priority',3]])->avg('contract');
@@ -219,8 +239,13 @@ class FindirProjectController extends Controller
                 array_push($startDate3, (strtotime(($dc3->start_date)) - $date)/86400);
                 array_push($duration3, abs(strtotime($dc3->start_date) - strtotime($dc3->end_date))/86400);
             }
-            $dataC3StartDate = array_sum($startDate3)/count($startDate3);
-            $dataC3Duration = array_sum($duration3)/count($duration3);
+            if(count($dataC3) == 0){
+                $dataC3StartDate = 0;
+                $dataC3Duration = 0;
+            } else{
+                $dataC3StartDate = array_sum($startDate3)/count($startDate3);
+                $dataC3Duration = array_sum($duration3)/count($duration3);
+            }
 
             $centroid1[$itr] = array($dataC1StartDate, $dataC1Duration, $dataC1Category, $dataC1Contract);
             $centroid2[$itr] = array($dataC2StartDate, $dataC2Duration, $dataC2Category, $dataC2Contract);
@@ -336,17 +361,17 @@ class FindirProjectController extends Controller
 
         $arrProjActivity = [];
         foreach($projActivity as $pa){
-            array_push($arrProjActivity, ActivityLog::where([
+            array_push($arrProjActivity, ["activity" => ActivityLog::where([
                 ['activity_id', $pa->uuid],
                 ['category', 'like', '%'.$pa->category.'%'],
-            ])->get());
+            ])->get(), "token" => $pa->token, "uuid" => $pa->uuid]);
         }
 
         $lastProjActivity = [];
         foreach($arrProjActivity as $apa){
-            foreach($apa as $a){
+            foreach($apa['activity'] as $a){
                 $user = User::where('id', $a->user_id)->get();
-                array_push($lastProjActivity, [$user[0]->email, $a->category, $a->updated_at]);
+                array_push($lastProjActivity, [$user[0]->email, $a->category, $a->updated_at, $apa['token'], $apa['uuid']]);
             }
         }
         krsort($lastProjActivity);

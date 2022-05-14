@@ -137,207 +137,216 @@
                         <!--end::Table head-->
                         <!--begin::Table body-->
                         <tbody class="fw-bold text-gray-600">
-                            <!--end::Table row-->
-                            @foreach ($report as $index => $r)
+                            @if (count($report) == 0)
                                 <tr>
-                                    <!--begin::startDate-->
-                                    <td>{{ $r->year }}</td>
-                                    <!--end::startDate-->
-                                    <!--begin::Report Type=-->
-                                    <td>
-                                        @if ($r->report_type == 1)
-                                            Balance Sheet
-                                        @else
-                                            Profit Ledger
-                                        @endif
+                                    <td colspan="5" class="text-muted fst-italic mt-5 text-center">There are no reports
                                     </td>
-                                    <!--end::Report Type=-->
-                                    <!--begin::Status=-->
-                                    <td>
-                                        @if ($r->status == 1)
-                                            <div class="badge badge-light-warning">Pending</div>
-                                        @elseif($r->status == 2)
-                                            <div class="badge badge-light-danger">Rejected</div>
-                                        @else
-                                            <div class="badge badge-light-success">Approved</div>
-                                        @endif
-                                    </td>
-                                    <!--end::Status-->
-                                    <!--begin::Type=-->
-                                    <td class="text-center">
-                                        <!--begin::Badges-->
-                                        @if ($r->type == 1)
-                                            <div class="badge badge-light fw-bolder text-white"
-                                                style="background-color: rgb(232, 123, 51);">
-                                                Draft</div>
-                                        @else
-                                            <div class="badge badge-light fw-bolder text-white"
-                                                style="background-color: #3498DB;">Posted
-                                            </div>
-                                        @endif
-                                        <!--end::Badges-->
-                                    </td>
-                                    <!--end::Type=-->
-                                    <!--begin::Actions=-->
-                                    <td class="text-end pe-0">
-                                        <a href="#" class="btn btn-light btn-active-light-primary btn-sm"
-                                            data-kt-menu-trigger="click" data-kt-menu-placement="bottom-end"
-                                            data-kt-menu-flip="top-end" style="padding: 5px 10px;">
-                                            <!--begin::Svg Icon | path: icons/duotone/Navigation/Angle-down.svg-->
-                                            <i class="bi bi-three-dots fs-5 pe-0"></i>
-                                            <!--end::Svg Icon-->
-                                        </a>
-                                        <!--begin::Menu-->
-                                        <div class="menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-600 menu-state-bg-light-primary fw-bold fs-7 w-125px py-4"
-                                            data-kt-menu="true">
-                                            <!--begin::Menu item-->
-                                            <div class="menu-item px-3">
-                                                <a href="{{ route('findiv.report-detail', ['uuid' => $r->uuid]) }}"
-                                                    class="menu-link px-3">View</a>
-                                            </div>
-                                            <!--end::Menu item-->
-                                            <!--begin::Menu item-->
-                                            <div class="menu-item ps-3" style="margin-right: -1.75rem !important">
-                                                <button type="button" class="btn-delete menu-link fw-bold px-3"
-                                                    wire:click="edit('{{ $r->uuid }}')">Edit</button>
-                                            </div>
-                                            <!--end::Menu item-->
-                                            <!--begin::Menu item-->
-                                            <div class="menu-item px-3 mb-2">
-                                                <button type="submit" class="btn-delete menu-link fw-bold px-3"
-                                                    wire:click="confirmDelete('{{ $r->uuid }}')">Delete</button>
-                                            </div>
-                                            <div class="separator border-gray-200"></div>
-                                            <div class="menu-item px-3">
-                                                <button type="button" data-bs-toggle="modal"
-                                                    data-bs-target="#exportReport{{ $index }}"
-                                                    class="btn btn-light-primary menu-link w-100 py-2 mt-3 justify-content-center text-primary text-hover-white fs-7"
-                                                    style="font-weight: 500;">Export</button>
-                                            </div>
-                                            <!--end::Menu item-->
-                                        </div>
-                                        <!--end::Menu-->
-                                    </td>
-                                    <!--end::Actions=-->
                                 </tr>
-
-                                <!--Modal Export-->
-                                <div class="modal fade" id="exportReport{{ $index }}" tabindex="-1"
-                                    aria-labelledby="exportReport{{ $index }}" aria-hidden="true">
-                                    <div class="modal-dialog modal-lg modal-dialog-centered">
-                                        <div class="modal-content">
-                                            <div class="modal-header">
-                                                <h5 class="modal-title">Export Format</h5>
-                                                <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                                    aria-label="Close"></button>
+                            @else
+                                <!--end::Table row-->
+                                @foreach ($report as $index => $r)
+                                    <tr>
+                                        <!--begin::startDate-->
+                                        <td>{{ $r->year }}</td>
+                                        <!--end::startDate-->
+                                        <!--begin::Report Type=-->
+                                        <td>
+                                            @if ($r->report_type == 1)
+                                                Balance Sheet
+                                            @else
+                                                Profit Ledger
+                                            @endif
+                                        </td>
+                                        <!--end::Report Type=-->
+                                        <!--begin::Status=-->
+                                        <td>
+                                            @if ($r->status == 1)
+                                                <div class="badge badge-light-warning">Pending</div>
+                                            @elseif($r->status == 2)
+                                                <div class="badge badge-light-danger">Rejected</div>
+                                            @else
+                                                <div class="badge badge-light-success">Approved</div>
+                                            @endif
+                                        </td>
+                                        <!--end::Status-->
+                                        <!--begin::Type=-->
+                                        <td class="text-center">
+                                            <!--begin::Badges-->
+                                            @if ($r->type == 1)
+                                                <div class="badge badge-light fw-bolder text-white"
+                                                    style="background-color: rgb(232, 123, 51);">
+                                                    Draft</div>
+                                            @else
+                                                <div class="badge badge-light fw-bolder text-white"
+                                                    style="background-color: #3498DB;">Posted
+                                                </div>
+                                            @endif
+                                            <!--end::Badges-->
+                                        </td>
+                                        <!--end::Type=-->
+                                        <!--begin::Actions=-->
+                                        <td class="text-end pe-0">
+                                            <a href="#" class="btn btn-light btn-active-light-primary btn-sm"
+                                                data-kt-menu-trigger="click" data-kt-menu-placement="bottom-end"
+                                                data-kt-menu-flip="top-end" style="padding: 5px 10px;">
+                                                <!--begin::Svg Icon | path: icons/duotone/Navigation/Angle-down.svg-->
+                                                <i class="bi bi-three-dots fs-5 pe-0"></i>
+                                                <!--end::Svg Icon-->
+                                            </a>
+                                            <!--begin::Menu-->
+                                            <div class="menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-600 menu-state-bg-light-primary fw-bold fs-7 w-125px py-4"
+                                                data-kt-menu="true">
+                                                <!--begin::Menu item-->
+                                                <div class="menu-item px-3">
+                                                    <a href="{{ route('findiv.report-detail', ['uuid' => $r->uuid]) }}"
+                                                        class="menu-link px-3">View</a>
+                                                </div>
+                                                <!--end::Menu item-->
+                                                <!--begin::Menu item-->
+                                                <div class="menu-item ps-3" style="margin-right: -1.75rem !important">
+                                                    <button type="button" class="btn-delete menu-link fw-bold px-3"
+                                                        wire:click="edit('{{ $r->uuid }}')">Edit</button>
+                                                </div>
+                                                <!--end::Menu item-->
+                                                <!--begin::Menu item-->
+                                                <div class="menu-item px-3 mb-2">
+                                                    <button type="submit" class="btn-delete menu-link fw-bold px-3"
+                                                        wire:click="confirmDelete('{{ $r->uuid }}')">Delete</button>
+                                                </div>
+                                                <div class="separator border-gray-200"></div>
+                                                <div class="menu-item px-3">
+                                                    <button type="button" data-bs-toggle="modal"
+                                                        data-bs-target="#exportReport{{ $index }}"
+                                                        class="btn btn-light-primary menu-link w-100 py-2 mt-3 justify-content-center text-primary text-hover-white fs-7"
+                                                        style="font-weight: 500;">Export</button>
+                                                </div>
+                                                <!--end::Menu item-->
                                             </div>
-                                            <div class="modal-body">
-                                                <form class="form" id="export{{ $index }}"
-                                                    action="{{ route('findiv.report-export', ['uuid' => $r->uuid]) }}"
-                                                    novalidate method="post" onkeydown="return event.key != 'Enter';"
-                                                    autocomplete="off">
-                                                    @csrf
+                                            <!--end::Menu-->
+                                        </td>
+                                        <!--end::Actions=-->
+                                    </tr>
 
-                                                    <input type="hidden" name="uuid" value="{{ $r->uuid }}">
-                                                    <div class="fv-row row fv-plugins-icon-container">
-                                                        <div class="col-md-12">
-                                                            <!--begin::Options-->
-                                                            <div class="mb-0">
-                                                                <!--begin:Option-->
-                                                                <label class="d-flex flex-stack mb-5 cursor-pointer">
-                                                                    <!--begin:Label-->
-                                                                    <span class="d-flex align-items-center me-2">
-                                                                        <!--begin::Icon-->
-                                                                        <span class="symbol symbol-50px me-6">
-                                                                            <span class="symbol-label">
-                                                                                <i class="bi bi-file-earmark-pdf-fill text-danger"
-                                                                                    style="font-size: 2rem;"></i>
-                                                                            </span>
-                                                                        </span>
-                                                                        <!--end::Icon-->
-                                                                        <!--begin::Description-->
-                                                                        <span class="d-flex flex-column">
-                                                                            <span
-                                                                                class="fw-bolder text-gray-800 text-hover-primary fs-5">PDF</span>
-                                                                            <span
-                                                                                class="fs-6 fw-bold text-muted">Exported
-                                                                                report table with header
-                                                                                and
-                                                                                footer EEC
-                                                                                Indonesia
-                                                                                <b><i>(Recommended)</i></b></span>
-                                                                        </span>
-                                                                        <!--end:Description-->
-                                                                    </span>
-                                                                    <!--end:Label-->
-                                                                    <!--begin:Input-->
-                                                                    <span
-                                                                        class="form-check form-check-custom form-check-solid">
-                                                                        <input class="form-check-input" type="radio"
-                                                                            checked="checked" name="export_format"
-                                                                            value="pdf">
-                                                                    </span>
-                                                                    <!--end:Input-->
-                                                                </label>
-                                                                <!--end::Option-->
-                                                                <!--begin:Option-->
-                                                                <label class="d-flex flex-stack mb-0 cursor-pointer">
-                                                                    <!--begin:Label-->
-                                                                    <span class="d-flex align-items-center me-2">
-                                                                        <!--begin::Icon-->
-                                                                        <span class="symbol symbol-50px me-6">
-                                                                            <span class="symbol-label">
-                                                                                <!--begin::Svg Icon | path: icons/duotune/graphs/gra008.svg-->
-                                                                                <span
-                                                                                    class="svg-icon svg-icon-1 svg-icon-gray-600">
-                                                                                    <i class="bi bi-file-earmark-spreadsheet-fill text-success"
+                                    <!--Modal Export-->
+                                    <div class="modal fade" id="exportReport{{ $index }}" tabindex="-1"
+                                        aria-labelledby="exportReport{{ $index }}" aria-hidden="true">
+                                        <div class="modal-dialog modal-lg modal-dialog-centered">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title">Export Format</h5>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                        aria-label="Close"></button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <form class="form" id="export{{ $index }}"
+                                                        action="{{ route('findiv.report-export', ['uuid' => $r->uuid]) }}"
+                                                        novalidate method="post"
+                                                        onkeydown="return event.key != 'Enter';" autocomplete="off">
+                                                        @csrf
+
+                                                        <input type="hidden" name="uuid" value="{{ $r->uuid }}">
+                                                        <div class="fv-row row fv-plugins-icon-container">
+                                                            <div class="col-md-12">
+                                                                <!--begin::Options-->
+                                                                <div class="mb-0">
+                                                                    <!--begin:Option-->
+                                                                    <label
+                                                                        class="d-flex flex-stack mb-5 cursor-pointer">
+                                                                        <!--begin:Label-->
+                                                                        <span class="d-flex align-items-center me-2">
+                                                                            <!--begin::Icon-->
+                                                                            <span class="symbol symbol-50px me-6">
+                                                                                <span class="symbol-label">
+                                                                                    <i class="bi bi-file-earmark-pdf-fill text-danger"
                                                                                         style="font-size: 2rem;"></i>
                                                                                 </span>
-                                                                                <!--end::Svg Icon-->
                                                                             </span>
+                                                                            <!--end::Icon-->
+                                                                            <!--begin::Description-->
+                                                                            <span class="d-flex flex-column">
+                                                                                <span
+                                                                                    class="fw-bolder text-gray-800 text-hover-primary fs-5">PDF</span>
+                                                                                <span
+                                                                                    class="fs-6 fw-bold text-muted">Exported
+                                                                                    report table with header
+                                                                                    and
+                                                                                    footer EEC
+                                                                                    Indonesia
+                                                                                    <b><i>(Recommended)</i></b></span>
+                                                                            </span>
+                                                                            <!--end:Description-->
                                                                         </span>
-                                                                        <!--end::Icon-->
-                                                                        <!--begin::Description-->
-                                                                        <span class="d-flex flex-column">
-                                                                            <span
-                                                                                class="fw-bolder text-gray-800 text-hover-primary fs-5">Excel</span>
-                                                                            <span
-                                                                                class="fs-6 fw-bold text-muted">Exported
-                                                                                only report table</span>
+                                                                        <!--end:Label-->
+                                                                        <!--begin:Input-->
+                                                                        <span
+                                                                            class="form-check form-check-custom form-check-solid">
+                                                                            <input class="form-check-input" type="radio"
+                                                                                checked="checked" name="export_format"
+                                                                                value="pdf">
                                                                         </span>
-                                                                        <!--end:Description-->
-                                                                    </span>
-                                                                    <!--end:Label-->
-                                                                    <!--begin:Input-->
-                                                                    <span
-                                                                        class="form-check form-check-custom form-check-solid">
-                                                                        <input class="form-check-input" type="radio"
-                                                                            name="export_format" value="excel">
-                                                                    </span>
-                                                                    <!--end:Input-->
-                                                                </label>
-                                                                <!--end::Option-->
+                                                                        <!--end:Input-->
+                                                                    </label>
+                                                                    <!--end::Option-->
+                                                                    <!--begin:Option-->
+                                                                    <label
+                                                                        class="d-flex flex-stack mb-0 cursor-pointer">
+                                                                        <!--begin:Label-->
+                                                                        <span class="d-flex align-items-center me-2">
+                                                                            <!--begin::Icon-->
+                                                                            <span class="symbol symbol-50px me-6">
+                                                                                <span class="symbol-label">
+                                                                                    <!--begin::Svg Icon | path: icons/duotune/graphs/gra008.svg-->
+                                                                                    <span
+                                                                                        class="svg-icon svg-icon-1 svg-icon-gray-600">
+                                                                                        <i class="bi bi-file-earmark-spreadsheet-fill text-success"
+                                                                                            style="font-size: 2rem;"></i>
+                                                                                    </span>
+                                                                                    <!--end::Svg Icon-->
+                                                                                </span>
+                                                                            </span>
+                                                                            <!--end::Icon-->
+                                                                            <!--begin::Description-->
+                                                                            <span class="d-flex flex-column">
+                                                                                <span
+                                                                                    class="fw-bolder text-gray-800 text-hover-primary fs-5">Excel</span>
+                                                                                <span
+                                                                                    class="fs-6 fw-bold text-muted">Exported
+                                                                                    only report table</span>
+                                                                            </span>
+                                                                            <!--end:Description-->
+                                                                        </span>
+                                                                        <!--end:Label-->
+                                                                        <!--begin:Input-->
+                                                                        <span
+                                                                            class="form-check form-check-custom form-check-solid">
+                                                                            <input class="form-check-input" type="radio"
+                                                                                name="export_format" value="excel">
+                                                                        </span>
+                                                                        <!--end:Input-->
+                                                                    </label>
+                                                                    <!--end::Option-->
+                                                                </div>
+                                                                <!--end::Options-->
                                                             </div>
-                                                            <!--end::Options-->
                                                         </div>
-                                                    </div>
-                                                </form>
-                                            </div>
-                                            <div class="modal-footer">
-                                                <button type="button" class="btn btn-secondary"
-                                                    data-bs-dismiss="modal">Close</button>
-                                                <button type="submit" class="btn btn-primary"
-                                                    form="export{{ $index }}">
-                                                    <span class="indicator-label">Export</span>
-                                                    <span class="indicator-progress">Please wait...
-                                                        <span
-                                                            class="spinner-border spinner-border-sm align-middle ms-2"></span></span>
-                                                </button>
+                                                    </form>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary"
+                                                        data-bs-dismiss="modal">Close</button>
+                                                    <button type="submit" class="btn btn-primary"
+                                                        form="export{{ $index }}">
+                                                        <span class="indicator-label">Export</span>
+                                                        <span class="indicator-progress">Please wait...
+                                                            <span
+                                                                class="spinner-border spinner-border-sm align-middle ms-2"></span></span>
+                                                    </button>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
-                            @endforeach
+                                @endforeach
+                            @endif
                         </tbody>
                         <!--end::Table body-->
                     </table>
