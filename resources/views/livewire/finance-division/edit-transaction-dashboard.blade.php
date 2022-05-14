@@ -91,7 +91,7 @@
                 <!--begin::Beader-->
                 <div class="card-header border-0 pt-5 pb-2">
                     <h3 class="card-title align-items-start flex-column">
-                        <span class="card-label fw-bolder fs-3 mb-1">Cash Journal Overview</span>
+                        <span class="card-label fw-bolder fs-4 mb-1">Cash Journal Overview</span>
                         <span class="text-muted fw-bold fs-7">Journal statistics</span>
                     </h3>
                 </div>
@@ -159,39 +159,47 @@
                             </div>
                             <!--begin::Items-->
                             <div class="mt-5">
-                                @foreach ($needPaidCash as $npc)
-                                    <!--begin::Item-->
-                                    <div class="d-flex flex-stack mb-5">
-                                        <!--begin::Section-->
-                                        <div class="d-flex align-items-center me-2">
-                                            <!--begin::Symbol-->
-                                            <div class="symbol symbol-50px me-3">
-                                                <div class="symbol-label bg-light">
-                                                    <i class="bi bi-exclamation-circle-fill text-warning fs-1"></i>
-                                                </div>
-                                            </div>
-                                            <!--end::Symbol-->
-                                            <!--begin::Title-->
-                                            <div>
-                                                <a href="#"
-                                                    class="fs-6 text-gray-800 text-hover-primary fw-bolder">{{ $npc->token }}</a>
-                                                <div class="fs-7 text-muted fw-bold mt-1">Rp.
-                                                    {{ number_format($npc->credit, 0, ',', '.') }}
-                                                </div>
-                                            </div>
-                                            <!--end::Title-->
+                                @if (count($needPaidCash) == 0)
+                                    <div class="container d-flex align-items-center justify-content-center h-125px">
+                                        <div class="text-muted fw-bolder fst-italic mt-5">
+                                            There are no transactions to pay
                                         </div>
-                                        <!--end::Section-->
-                                        <!--begin::Label-->
-                                        <label class="switch">
-                                            <input wire:click="confirmUpdateStatusCash('{{ $npc->uuid }}')"
-                                                type="checkbox" class="checkbox-status">
-                                            <span class="slider round"> </span>
-                                        </label>
-                                        <!--end::Label-->
                                     </div>
-                                    <!--end::Item-->
-                                @endforeach
+                                @else
+                                    @foreach ($needPaidCash as $npc)
+                                        <!--begin::Item-->
+                                        <div class="d-flex flex-stack mb-5">
+                                            <!--begin::Section-->
+                                            <div class="d-flex align-items-center me-2">
+                                                <!--begin::Symbol-->
+                                                <div class="symbol symbol-50px me-3">
+                                                    <div class="symbol-label bg-light">
+                                                        <i class="bi bi-exclamation-circle-fill text-warning fs-1"></i>
+                                                    </div>
+                                                </div>
+                                                <!--end::Symbol-->
+                                                <!--begin::Title-->
+                                                <div>
+                                                    <a href="#"
+                                                        class="fs-6 text-gray-800 text-hover-primary fw-bolder">{{ $npc->token }}</a>
+                                                    <div class="fs-7 text-muted fw-bold mt-1">Rp.
+                                                        {{ number_format($npc->credit, 0, ',', '.') }}
+                                                    </div>
+                                                </div>
+                                                <!--end::Title-->
+                                            </div>
+                                            <!--end::Section-->
+                                            <!--begin::Label-->
+                                            <label class="switch">
+                                                <input wire:click="confirmUpdateStatusCash('{{ $npc->uuid }}')"
+                                                    type="checkbox" class="checkbox-status">
+                                                <span class="slider round"> </span>
+                                            </label>
+                                            <!--end::Label-->
+                                        </div>
+                                        <!--end::Item-->
+                                    @endforeach
+                                @endif
                             </div>
                             <!--end::Items-->
                         </div>
@@ -210,7 +218,7 @@
                 <!--begin::Beader-->
                 <div class="card-header border-0 pt-5 pb-2">
                     <h3 class="card-title align-items-start flex-column">
-                        <span class="card-label fw-bolder fs-3 mb-1">Mandiri Operational Journal Overview</span>
+                        <span class="card-label fw-bolder fs-4 mb-1">Mandiri Operational Journal Overview</span>
                         <span class="text-muted fw-bold fs-7">Journal statistics</span>
                     </h3>
                 </div>
@@ -278,39 +286,47 @@
                             </div>
                             <!--begin::Items-->
                             <div class="mt-5">
-                                @foreach ($needPaidOpt as $npo)
-                                    <!--begin::Item-->
-                                    <div class="d-flex flex-stack mb-5">
-                                        <!--begin::Section-->
-                                        <div class="d-flex align-items-center me-2">
-                                            <!--begin::Symbol-->
-                                            <div class="symbol symbol-50px me-3">
-                                                <div class="symbol-label bg-light">
-                                                    <i class="bi bi-exclamation-circle-fill text-warning fs-1"></i>
-                                                </div>
-                                            </div>
-                                            <!--end::Symbol-->
-                                            <!--begin::Title-->
-                                            <div>
-                                                <a href="#"
-                                                    class="fs-6 text-gray-800 text-hover-primary fw-bolder">{{ $npo->token }}</a>
-                                                <div class="fs-7 text-muted fw-bold mt-1">Rp.
-                                                    {{ number_format($npo->credit, 0, ',', '.') }}
-                                                </div>
-                                            </div>
-                                            <!--end::Title-->
+                                @if (count($needPaidOpt) == 0)
+                                    <div class="container d-flex align-items-center justify-content-center h-125px">
+                                        <div class="text-muted fw-bolder fst-italic mt-5">
+                                            There are no transactions to pay
                                         </div>
-                                        <!--end::Section-->
-                                        <!--begin::Label-->
-                                        <label class="switch">
-                                            <input wire:click="confirmUpdateStatusOpt('{{ $npo->uuid }}')"
-                                                type="checkbox" class="checkbox-status">
-                                            <span class="slider round"> </span>
-                                        </label>
-                                        <!--end::Label-->
                                     </div>
-                                    <!--end::Item-->
-                                @endforeach
+                                @else
+                                    @foreach ($needPaidOpt as $npo)
+                                        <!--begin::Item-->
+                                        <div class="d-flex flex-stack mb-5">
+                                            <!--begin::Section-->
+                                            <div class="d-flex align-items-center me-2">
+                                                <!--begin::Symbol-->
+                                                <div class="symbol symbol-50px me-3">
+                                                    <div class="symbol-label bg-light">
+                                                        <i class="bi bi-exclamation-circle-fill text-warning fs-1"></i>
+                                                    </div>
+                                                </div>
+                                                <!--end::Symbol-->
+                                                <!--begin::Title-->
+                                                <div>
+                                                    <a href="#"
+                                                        class="fs-6 text-gray-800 text-hover-primary fw-bolder">{{ $npo->token }}</a>
+                                                    <div class="fs-7 text-muted fw-bold mt-1">Rp.
+                                                        {{ number_format($npo->credit, 0, ',', '.') }}
+                                                    </div>
+                                                </div>
+                                                <!--end::Title-->
+                                            </div>
+                                            <!--end::Section-->
+                                            <!--begin::Label-->
+                                            <label class="switch">
+                                                <input wire:click="confirmUpdateStatusOpt('{{ $npo->uuid }}')"
+                                                    type="checkbox" class="checkbox-status">
+                                                <span class="slider round"> </span>
+                                            </label>
+                                            <!--end::Label-->
+                                        </div>
+                                        <!--end::Item-->
+                                    @endforeach
+                                @endif
                             </div>
                             <!--end::Items-->
                         </div>
@@ -329,7 +345,7 @@
                 <!--begin::Beader-->
                 <div class="card-header border-0 pt-5 pb-2">
                     <h3 class="card-title align-items-start flex-column">
-                        <span class="card-label fw-bolder fs-3 mb-1">Mandiri Escrow Journal Overview</span>
+                        <span class="card-label fw-bolder fs-4 mb-1">Mandiri Escrow Journal Overview</span>
                         <span class="text-muted fw-bold fs-7">Journal statistics</span>
                     </h3>
                 </div>
@@ -397,39 +413,47 @@
                             </div>
                             <!--begin::Items-->
                             <div class="mt-5">
-                                @foreach ($needPaidEsc as $npe)
-                                    <!--begin::Item-->
-                                    <div class="d-flex flex-stack mb-5">
-                                        <!--begin::Section-->
-                                        <div class="d-flex align-items-center me-2">
-                                            <!--begin::Symbol-->
-                                            <div class="symbol symbol-50px me-3">
-                                                <div class="symbol-label bg-light">
-                                                    <i class="bi bi-exclamation-circle-fill text-warning fs-1"></i>
-                                                </div>
-                                            </div>
-                                            <!--end::Symbol-->
-                                            <!--begin::Title-->
-                                            <div>
-                                                <a href="#"
-                                                    class="fs-6 text-gray-800 text-hover-primary fw-bolder">{{ $npe->token }}</a>
-                                                <div class="fs-7 text-muted fw-bold mt-1">Rp.
-                                                    {{ number_format($npe->credit, 0, ',', '.') }}
-                                                </div>
-                                            </div>
-                                            <!--end::Title-->
+                                @if (count($needPaidEsc) == 0)
+                                    <div class="container d-flex align-items-center justify-content-center h-125px">
+                                        <div class="text-muted fw-bolder fst-italic mt-5">
+                                            There are no transactions to pay
                                         </div>
-                                        <!--end::Section-->
-                                        <!--begin::Label-->
-                                        <label class="switch">
-                                            <input wire:click="confirmUpdateStatusEsc('{{ $npe->uuid }}')"
-                                                type="checkbox" class="checkbox-status">
-                                            <span class="slider round"> </span>
-                                        </label>
-                                        <!--end::Label-->
                                     </div>
-                                    <!--end::Item-->
-                                @endforeach
+                                @else
+                                    @foreach ($needPaidEsc as $npe)
+                                        <!--begin::Item-->
+                                        <div class="d-flex flex-stack mb-5">
+                                            <!--begin::Section-->
+                                            <div class="d-flex align-items-center me-2">
+                                                <!--begin::Symbol-->
+                                                <div class="symbol symbol-50px me-3">
+                                                    <div class="symbol-label bg-light">
+                                                        <i class="bi bi-exclamation-circle-fill text-warning fs-1"></i>
+                                                    </div>
+                                                </div>
+                                                <!--end::Symbol-->
+                                                <!--begin::Title-->
+                                                <div>
+                                                    <a href="#"
+                                                        class="fs-6 text-gray-800 text-hover-primary fw-bolder">{{ $npe->token }}</a>
+                                                    <div class="fs-7 text-muted fw-bold mt-1">Rp.
+                                                        {{ number_format($npe->credit, 0, ',', '.') }}
+                                                    </div>
+                                                </div>
+                                                <!--end::Title-->
+                                            </div>
+                                            <!--end::Section-->
+                                            <!--begin::Label-->
+                                            <label class="switch">
+                                                <input wire:click="confirmUpdateStatusEsc('{{ $npe->uuid }}')"
+                                                    type="checkbox" class="checkbox-status">
+                                                <span class="slider round"> </span>
+                                            </label>
+                                            <!--end::Label-->
+                                        </div>
+                                        <!--end::Item-->
+                                    @endforeach
+                                @endif
                             </div>
                             <!--end::Items-->
                         </div>

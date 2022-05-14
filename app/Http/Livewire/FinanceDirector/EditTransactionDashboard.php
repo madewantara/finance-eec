@@ -11,70 +11,150 @@ use Illuminate\Support\Facades\Auth;
 
 class EditTransactionDashboard extends Component
 {
-    public function confirmUpdateStatusCash($uuid){
-        $this->emit('triggerUpdateStatusCash', ['uuid' => $uuid]);
-    }
+    public $approveAct = 2; 
+    public $uuid; 
 
-    public function confirmUpdateStatusOpt($uuid){
-        $this->emit('triggerUpdateStatusOpt', ['uuid' => $uuid]);
-    }
+    protected $rules = [
+        'approveAct' => 'required',
+    ];
 
-    public function confirmUpdateStatusEsc($uuid){
-        $this->emit('triggerUpdateStatusEsc', ['uuid' => $uuid]);
-    }
-
-    public function updateStatusCash($uuid)
+    public function updated($propertyName)
     {
+        $this->validateOnly($propertyName);
+    }
+
+    public function resetInputFields()
+    {
+        $this->approveAct = 2;
+    }
+
+    public function editCash($uuid)
+    {
+        $this->updateMode = true;
+        $this->approveAct = 2;
+        $this->uuid = $uuid;
+
+        $this->emit('openEditCashTrans');
+    }
+
+    public function editOperational($uuid)
+    {
+        $this->updateMode = true;
+        $this->approveAct = 2;
+        $this->uuid = $uuid;
+
+        $this->emit('openEditOperationalTrans');
+    }
+
+    public function editEscrow($uuid)
+    {
+        $this->updateMode = true;
+        $this->approveAct = 2;
+        $this->uuid = $uuid;
+
+        $this->emit('openEditEscrowTrans');
+    }
+
+    public function approveCashTrans()
+    {
+        $validated = $this->validate();
+
         Transaction::where([
             ['is_active', 1],
             ['type', 2],
             ['category', 'cash'],
-            ['uuid', $uuid['uuid']],
-        ])->update(['status' => 2]);
+            ['uuid', $this->uuid],
+        ])->update(['status' => $validated['approveAct']]);
 
-        $log = ActivityLog::create([
-            'user_id' => Auth::id(),
-            'category' => 'cash-approved-findir',
-            'activity_id' => $uuid['uuid'],
-        ]);
+        if($validated['approveAct'] == 2){
+            $log = ActivityLog::create([
+                'user_id' => Auth::id(),
+                'category' => 'cash-approved-findir',
+                'activity_id' => $this->uuid,
+            ]);
 
-        session()->flash('success', 'Transaction status successfully updated to approved by finance director');
+            session()->flash('success', 'Transaction status successfully updated to approved by finance director');
+        }else{
+            $log = ActivityLog::create([
+                'user_id' => Auth::id(),
+                'category' => 'cash-rejected',
+                'activity_id' => $this->uuid,
+            ]);
+
+            session()->flash('success', 'Transaction status successfully updated to rejected');
+        }
+    
+        $this->resetInputFields();
+        $this->emit('closeCashApproval');
+        $this->emit('refreshNotification');
     }
 
-    public function updateStatusOpt($uuid)
+    public function approveOperationalTrans()
     {
+        $validated = $this->validate();
+
         Transaction::where([
             ['is_active', 1],
             ['type', 2],
             ['category', 'operational'],
-            ['uuid', $uuid['uuid']],
-        ])->update(['status' => 2]);
+            ['uuid', $this->uuid],
+        ])->update(['status' => $validated['approveAct']]);
 
-        $log = ActivityLog::create([
-            'user_id' => Auth::id(),
-            'category' => 'operational-approved-findir',
-            'activity_id' => $uuid['uuid'],
-        ]);
+        if($validated['approveAct'] == 2){
+            $log = ActivityLog::create([
+                'user_id' => Auth::id(),
+                'category' => 'operational-approved-findir',
+                'activity_id' => $this->uuid,
+            ]);
 
-        session()->flash('success', 'Transaction status successfully updated to approved by finance director');
+            session()->flash('success', 'Transaction status successfully updated to approved by finance director');
+        }else{
+            $log = ActivityLog::create([
+                'user_id' => Auth::id(),
+                'category' => 'operational-rejected',
+                'activity_id' => $this->uuid,
+            ]);
+
+            session()->flash('success', 'Transaction status successfully updated to rejected');
+        }
+    
+        $this->resetInputFields();
+        $this->emit('closeOperationalApproval');
+        $this->emit('refreshNotification');
     }
 
-    public function updateStatusEsc($uuid)
+    public function approveEscrowTrans()
     {
+        $validated = $this->validate();
+        
         Transaction::where([
             ['is_active', 1],
             ['type', 2],
             ['category', 'escrow'],
-            ['uuid', $uuid['uuid']],
-        ])->update(['status' => 2]);
+            ['uuid', $this->uuid],
+        ])->update(['status' => $validated['approveAct']]);
 
-        $log = ActivityLog::create([
-            'user_id' => Auth::id(),
-            'category' => 'escrow-approved-findir',
-            'activity_id' => $uuid['uuid'],
-        ]);
+        if($validated['approveAct'] == 2){
+            $log = ActivityLog::create([
+                'user_id' => Auth::id(),
+                'category' => 'escrow-approved-findir',
+                'activity_id' => $this->uuid,
+            ]);
 
-        session()->flash('success', 'Transaction status successfully updated to approved by finance director');
+            session()->flash('success', 'Transaction status successfully updated to approved by finance director');
+        }else{
+            $log = ActivityLog::create([
+                'user_id' => Auth::id(),
+                'category' => 'escrow-rejected',
+                'activity_id' => $this->uuid,
+            ]);
+
+            session()->flash('success', 'Transaction status successfully updated to rejected');
+        }
+    
+        $this->resetInputFields();
+        $this->emit('closeEscrowApproval');
+        $this->emit('refreshNotification');
     }
 
     public function render()
