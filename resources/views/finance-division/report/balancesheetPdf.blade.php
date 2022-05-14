@@ -490,7 +490,6 @@
             </div>
         </div>
     </main>
-    {{-- {{ dd($todayDate) }} --}}
 </body>
 
 </html>

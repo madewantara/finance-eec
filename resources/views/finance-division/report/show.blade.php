@@ -524,7 +524,7 @@
                                                         <tr>
                                                             <td></td>
                                                             <td class="ps-10">
-                                                                6.2. Laba Ditahan
+                                                                6.2. Laba Ditahan {{ $year - 1 }}
                                                             </td>
                                                             <td class="ps-10">
                                                                 Rp.
@@ -534,7 +534,7 @@
                                                         <tr>
                                                             <td></td>
                                                             <td class="ps-10">
-                                                                6.3. Laba Tahun
+                                                                6.3. Laba Tahun {{ $year }}
                                                             </td>
                                                             <td class="ps-10">
                                                                 Rp.
@@ -818,7 +818,7 @@
                                 @if (count($activity) == 0)
                                     <div class="row mt-7">
                                         <div class="col-lg-12">
-                                            <p><i>There are no activities for this transaction</i></p>
+                                            <p><i>There are no activities for this report</i></p>
                                         </div>
                                     </div>
                                 @else
