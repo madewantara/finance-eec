@@ -29,6 +29,22 @@
 </head>
 
 <body @yield('body')>
+    <div class="preloader">
+        <div class="loader">
+            <div class="spinner">
+                <div class="spinner-container">
+                    <div class="spinner-rotator">
+                        <div class="spinner-left">
+                            <div class="spinner-circle"></div>
+                        </div>
+                        <div class="spinner-right">
+                            <div class="spinner-circle"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
     <div class="d-flex flex-column flex-root">
         <!--begin::Page-->
         <div class="page d-flex flex-row flex-column-fluid">
@@ -47,6 +63,16 @@
 
     <script src="{{ asset('assets/js/plugins.bundle.js') }}"></script>
     <script src="{{ asset('assets/js/scripts.bundle.js') }}"></script>
+    <script>
+        window.onload = function() {
+            window.setTimeout(fadeout, 500);
+        };
+
+        function fadeout() {
+            document.querySelector(".preloader").style.opacity = "0";
+            document.querySelector(".preloader").style.display = "none";
+        }
+    </script>
     @include('sweetalert::alert')
     @livewireScripts
     @stack('js')
