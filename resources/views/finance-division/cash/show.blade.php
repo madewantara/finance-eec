@@ -455,11 +455,7 @@
                                                             <span>Has <b><i class="text-dark fw-bolder">approved</i></b>
                                                                 this transaction on
                                                                 {{ $a['log']->updated_at->format('l, jS \of F Y h:i:s A') }}</span>
-                                                        @elseif ($a['log']->category == 'cash-rejected-findir')
-                                                            <span>Has <b><i class="text-dark fw-bolder">rejected</i></b>
-                                                                this transaction on
-                                                                {{ $a['log']->updated_at->format('l, jS \of F Y h:i:s A') }}</span>
-                                                        @elseif ($a['log']->category == 'cash-rejected-excdir')
+                                                        @elseif ($a['log']->category == 'cash-rejected')
                                                             <span>Has <b><i class="text-dark fw-bolder">rejected</i></b>
                                                                 this transaction on
                                                                 {{ $a['log']->updated_at->format('l, jS \of F Y h:i:s A') }}</span>
