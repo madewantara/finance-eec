@@ -2,9 +2,9 @@
 <div id="kt_aside" class="aside pb-5 pt-5 pt-lg-0" data-kt-drawer="true" data-kt-drawer-name="aside"
     data-kt-drawer-activate="{default: true, lg: false}" data-kt-drawer-overlay="true"
     data-kt-drawer-width="{default:'80px', '300px': '100px'}" data-kt-drawer-direction="start"
-    data-kt-drawer-toggle="#kt_aside_mobile_toggle">
+    data-kt-drawer-toggle="#kt_aside_mobile_toggle" style="background-color: #161527 !important;">
     <!--begin::Brand-->
-    <div class="aside-logo py-8" id="kt_aside_logo">
+    <div class="aside-logo py-8" id="kt_aside_logo" style="background-color: #161527 !important;">
         <!--begin::Logo-->
         <a href="{{ route('findir.dashboard') }}" class="d-flex align-items-center">
             <img alt="Logo" src="{{ asset('assets/image/logo/logo.png') }}" class="h-80px logo" />
