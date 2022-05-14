@@ -194,8 +194,7 @@ class FindivCashController extends Controller
                 ->orWhere('category', 'cash-delete')
                 ->orWhere('category', 'cash-approved-findir')
                 ->orWhere('category', 'cash-approved-excdir')
-                ->orWhere('category', 'cash-rejected-findir')
-                ->orWhere('category', 'cash-rejected-excdir')
+                ->orWhere('category', 'cash-rejected')
                 ->orWhere('category', 'cash-paid');
             })->get();
         
@@ -226,8 +225,7 @@ class FindivCashController extends Controller
                 ->orWhere('category', 'cash-delete')
                 ->orWhere('category', 'cash-approved-findir')
                 ->orWhere('category', 'cash-approved-excdir')
-                ->orWhere('category', 'cash-rejected-findir')
-                ->orWhere('category', 'cash-rejected-excdir')
+                ->orWhere('category', 'cash-rejected')
                 ->orWhere('category', 'cash-paid');
             })->get();
         
@@ -294,8 +292,7 @@ class FindivCashController extends Controller
                         ->orWhere('category', 'cash-delete')
                         ->orWhere('category', 'cash-approved-findir')
                         ->orWhere('category', 'cash-approved-excdir')
-                        ->orWhere('category', 'cash-rejected-findir')
-                        ->orWhere('category', 'cash-rejected-excdir')
+                        ->orWhere('category', 'cash-rejected')
                         ->orWhere('category', 'cash-paid');
                     })->get();
         

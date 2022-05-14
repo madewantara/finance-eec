@@ -194,8 +194,7 @@ class FindivEscrowController extends Controller
                 ->orWhere('category', 'escrow-delete')
                 ->orWhere('category', 'escrow-approved-findir')
                 ->orWhere('category', 'escrow-approved-excdir')
-                ->orWhere('category', 'escrow-rejected-findir')
-                ->orWhere('category', 'escrow-rejected-excdir')
+                ->orWhere('category', 'escrow-rejected')
                 ->orWhere('category', 'escrow-paid');
             })->get();
         
@@ -226,8 +225,7 @@ class FindivEscrowController extends Controller
                 ->orWhere('category', 'escrow-delete')
                 ->orWhere('category', 'escrow-approved-findir')
                 ->orWhere('category', 'escrow-approved-excdir')
-                ->orWhere('category', 'escrow-rejected-findir')
-                ->orWhere('category', 'escrow-rejected-excdir')
+                ->orWhere('category', 'escrow-rejected')
                 ->orWhere('category', 'escrow-paid');
             })->get();
         
@@ -294,8 +292,7 @@ class FindivEscrowController extends Controller
                         ->orWhere('category', 'escrow-delete')
                         ->orWhere('category', 'escrow-approved-findir')
                         ->orWhere('category', 'escrow-approved-excdir')
-                        ->orWhere('category', 'escrow-rejected-findir')
-                        ->orWhere('category', 'escrow-rejected-excdir')
+                        ->orWhere('category', 'escrow-rejected')
                         ->orWhere('category', 'escrow-paid');
                     })->get();
         

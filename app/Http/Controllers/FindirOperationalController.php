@@ -97,8 +97,7 @@ class FindirOperationalController extends Controller
                 ->orWhere('category', 'operational-delete')
                 ->orWhere('category', 'operational-approved-findir')
                 ->orWhere('category', 'operational-approved-excdir')
-                ->orWhere('category', 'operational-rejected-findir')
-                ->orWhere('category', 'operational-rejected-excdir')
+                ->orWhere('category', 'operational-rejected')
                 ->orWhere('category', 'operational-paid');
             })->get();
         
