@@ -856,6 +856,10 @@
                                                             <span>Has <b><i class="text-dark fw-bolder">deleted</i></b>
                                                                 this report on
                                                                 {{ $a['log']->updated_at->format('l, jS \of F Y h:i:s A') }}</span>
+                                                        @elseif ($a['log']->category == 'report-rejected')
+                                                            <span>Has <b><i class="text-dark fw-bolder">rejected</i></b>
+                                                                this report on
+                                                                {{ $a['log']->updated_at->format('l, jS \of F Y h:i:s A') }}</span>
                                                         @elseif ($a['log']->category == 'report-approved')
                                                             <span>Has <b><i class="text-dark fw-bolder">approved</i></b>
                                                                 this report on

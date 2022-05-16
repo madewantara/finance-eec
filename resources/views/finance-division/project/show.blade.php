@@ -607,6 +607,9 @@
                                                         @elseif(explode('-', trim($lpa[1]))[0] == 'escrow')
                                                             <span
                                                                 class="symbol-label bg-danger text-inverse-primary fw-bolder">{{ ucfirst($lpa[0][0]) }}</span>
+                                                        @elseif(explode('-', trim($lpa[1]))[0] == 'project')
+                                                            <span class="symbol-label text-inverse-primary fw-bolder"
+                                                                style="background-color: #f6910d">{{ ucfirst($lpa[0][0]) }}</span>
                                                         @endif
                                                     </div>
                                                     <!--end::Image-->
@@ -824,6 +827,36 @@
                                                             </div>
                                                             <div class="text-gray-400 fs-7">
                                                                 Mandiri {{ explode('-', trim($lpa[1]))[0] }} transaction
+                                                            </div>
+                                                        @elseif ($lpa[1] == 'project-store')
+                                                            <div class="text-gray-900 fs-6">Has <i
+                                                                    class="text-dark fw-bolder">created</i>
+                                                                this
+                                                                project on
+                                                                {{ $lpa[2]->format('l, jS \of F Y h:i:s A') }}
+                                                            </div>
+                                                            <div class="text-gray-400 fs-7">
+                                                                Project
+                                                            </div>
+                                                        @elseif ($lpa[1] == 'project-update')
+                                                            <div class="text-gray-900 fs-6">Has <i
+                                                                    class="text-dark fw-bolder">updated</i>
+                                                                this
+                                                                project on
+                                                                {{ $lpa[2]->format('l, jS \of F Y h:i:s A') }}
+                                                            </div>
+                                                            <div class="text-gray-400 fs-7">
+                                                                Project
+                                                            </div>
+                                                        @elseif ($lpa[1] == 'project-delete')
+                                                            <div class="text-gray-900 fs-6">Has <i
+                                                                    class="text-dark fw-bolder">delated</i>
+                                                                this
+                                                                project on
+                                                                {{ $lpa[2]->format('l, jS \of F Y h:i:s A') }}
+                                                            </div>
+                                                            <div class="text-gray-400 fs-7">
+                                                                Project
                                                             </div>
                                                         @endif
                                                     </div>
@@ -1806,6 +1839,90 @@
                                                                             class="text-hover-primary"
                                                                             style="color: #009ef7e0">#{{ $lpa[3] }}</a>
                                                                         mandiri escrow transaction
+                                                                    </div>
+                                                                    <!--end::Title-->
+                                                                    <!--begin::Description-->
+                                                                    <div class="d-flex align-items-center mt-1 fs-6">
+                                                                        <!--begin::Info-->
+                                                                        <div class="text-muted me-2 fs-7">Updated at
+                                                                            {{ $lpa[2]->format('l, jS \of F Y h:i:s A') }}
+                                                                            by
+                                                                        </div>
+                                                                        <!--end::Info-->
+                                                                        <!--begin::User-->
+                                                                        <div class="symbol symbol-circle symbol-25px"
+                                                                            data-bs-toggle="tooltip"
+                                                                            data-bs-boundary="window"
+                                                                            data-bs-placement="top"
+                                                                            title="{{ $lpa[0] }}"
+                                                                            data-bs-original-title="{{ $lpa[0] }}">
+                                                                            <span
+                                                                                class="symbol-label bg-success text-inverse-warning fw-bolder">{{ ucfirst($lpa[0][0]) }}</span>
+                                                                        </div>
+                                                                        <!--end::User-->
+                                                                    </div>
+                                                                    <!--end::Description-->
+                                                                @elseif ($lpa[1] == 'project-store')
+                                                                    <!--begin::Title-->
+                                                                    <div class="fs-5 fw-bold mb-2">Has <i
+                                                                            class="text-dark fw-bolder">created</i>
+                                                                        this project.
+                                                                    </div>
+                                                                    <!--end::Title-->
+                                                                    <!--begin::Description-->
+                                                                    <div class="d-flex align-items-center mt-1 fs-6">
+                                                                        <!--begin::Info-->
+                                                                        <div class="text-muted me-2 fs-7">Created at
+                                                                            {{ $lpa[2]->format('l, jS \of F Y h:i:s A') }}
+                                                                            by
+                                                                        </div>
+                                                                        <!--end::Info-->
+                                                                        <!--begin::User-->
+                                                                        <div class="symbol symbol-circle symbol-25px"
+                                                                            data-bs-toggle="tooltip"
+                                                                            data-bs-boundary="window"
+                                                                            data-bs-placement="top"
+                                                                            title="{{ $lpa[0] }}"
+                                                                            data-bs-original-title="{{ $lpa[0] }}">
+                                                                            <span
+                                                                                class="symbol-label bg-success text-inverse-warning fw-bolder">{{ ucfirst($lpa[0][0]) }}</span>
+                                                                        </div>
+                                                                        <!--end::User-->
+                                                                    </div>
+                                                                    <!--end::Description-->
+                                                                @elseif ($lpa[1] == 'project-update')
+                                                                    <!--begin::Title-->
+                                                                    <div class="fs-5 fw-bold mb-2">Has <i
+                                                                            class="text-dark fw-bolder">updated</i>
+                                                                        this project.
+                                                                    </div>
+                                                                    <!--end::Title-->
+                                                                    <!--begin::Description-->
+                                                                    <div class="d-flex align-items-center mt-1 fs-6">
+                                                                        <!--begin::Info-->
+                                                                        <div class="text-muted me-2 fs-7">Updated at
+                                                                            {{ $lpa[2]->format('l, jS \of F Y h:i:s A') }}
+                                                                            by
+                                                                        </div>
+                                                                        <!--end::Info-->
+                                                                        <!--begin::User-->
+                                                                        <div class="symbol symbol-circle symbol-25px"
+                                                                            data-bs-toggle="tooltip"
+                                                                            data-bs-boundary="window"
+                                                                            data-bs-placement="top"
+                                                                            title="{{ $lpa[0] }}"
+                                                                            data-bs-original-title="{{ $lpa[0] }}">
+                                                                            <span
+                                                                                class="symbol-label bg-success text-inverse-warning fw-bolder">{{ ucfirst($lpa[0][0]) }}</span>
+                                                                        </div>
+                                                                        <!--end::User-->
+                                                                    </div>
+                                                                    <!--end::Description-->
+                                                                @elseif ($lpa[1] == 'project-delete')
+                                                                    <!--begin::Title-->
+                                                                    <div class="fs-5 fw-bold mb-2">Has <i
+                                                                            class="text-dark fw-bolder">deleted</i>
+                                                                        this project.
                                                                     </div>
                                                                     <!--end::Title-->
                                                                     <!--begin::Description-->
