@@ -63,6 +63,7 @@ class FindivReportController extends Controller
             $query->where('category', 'report-store')
                 ->orWhere('category', 'report-update')
                 ->orWhere('category', 'report-delete')
+                ->orWhere('category', 'report-rejected')
                 ->orWhere('category', 'report-approved');
             })->get();
         
