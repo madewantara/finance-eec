@@ -35,8 +35,14 @@ class FindirProjectController extends Controller
         $avgContract = Project::where('is_active', 1)->avg('contract');
         $minContract = Project::where('is_active', 1)->min('contract');
         $maxContract = Project::where('is_active', 1)->max('contract');
-        $projectActive = Project::where('is_active', 1)->where('status', 1)->orWhere('status', 2)->with('projectTransaction')->orderBy('id', 'desc')->get();
-        $projectActiveLim = Project::where('is_active', 1)->where('status', 1)->orWhere('status', 2)->orderBy('id', 'desc')->limit(4)->get();
+        $projectActive = Project::where('is_active', 1)->where(function($query){
+            $query->where('status', 1)
+            ->orWhere('status', 2);
+        })->with('projectTransaction')->orderBy('id', 'desc')->get();
+        $projectActiveLim = Project::where('is_active', 1)->where(function($query){
+            $query->where('status', 1)
+            ->orWhere('status', 2);
+        })->orderBy('id', 'desc')->limit(4)->get();
         $projLocation = Project::where('is_active', 1)->where(function($query){
             $query->where('status', 1)
             ->orWhere('status', 2);
@@ -108,7 +114,7 @@ class FindirProjectController extends Controller
 
         $projPerStat = [];
         foreach($status as $s){
-            array_push($projPerStat, ["status" => $s->status, "amount" => count(Project::where('status', $s->status)->get())]);
+            array_push($projPerStat, ["status" => $s->status, "amount" => count(Project::where([['status', $s->status], ['is_active', 1]])->get())]);
         }
 
         // Start K-Means Clustering
@@ -365,6 +371,10 @@ class FindirProjectController extends Controller
                 ['activity_id', $pa->uuid],
                 ['category', 'like', '%'.$pa->category.'%'],
             ])->get(), "token" => $pa->token, "uuid" => $pa->uuid]);
+        }
+
+        foreach($projActivity as $pa){
+            array_push($arrProjActivity, ["activity" => ActivityLog::where([['activity_id', $uuid], ['category', 'like', '%project%']])->get(), "token" => "", "uuid" => ""]);
         }
 
         $lastProjActivity = [];
