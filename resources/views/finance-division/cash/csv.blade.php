@@ -8,24 +8,26 @@
 </head>
 
 <body>
-    <table>
-        <thead>
-            <tr>
-                @foreach ($arrayData[0] as $key => $value)
-                    <th><b>{{ ucfirst($key) }}</b></th>
-                @endforeach
-            </tr>
-        </thead>
-        <tbody>
-            @foreach ($arrayData as $row)
+    @if (count($arrayData) != 0)
+        <table>
+            <thead>
                 <tr>
-                    @foreach ($row as $value)
-                        <td>{{ $value }}</td>
+                    @foreach ($arrayData[0] as $key => $value)
+                        <th><b>{{ ucfirst($key) }}</b></th>
                     @endforeach
                 </tr>
-            @endforeach
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+                @foreach ($arrayData as $row)
+                    <tr>
+                        @foreach ($row as $value)
+                            <td>{{ $value }}</td>
+                        @endforeach
+                    </tr>
+                @endforeach
+            </tbody>
+        </table>
+    @endif
 </body>
 
 </html>

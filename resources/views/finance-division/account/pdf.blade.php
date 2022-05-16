@@ -20,7 +20,7 @@
 
     <main class="content" style="margin-left: 80px; margin-right: 80px;">
         <div class=" content-main">
-            <table style="margin-bottom: 90px;">
+            <table style="margin-bottom: 90px; width:100%;">
                 <thead>
                     <tr>
                         <th colspan="4" style="padding-top: 60px; padding-bottom: 60px; text-align: left;"><img
@@ -50,20 +50,27 @@
                     </tr>
                 </thead>
                 <tbody style="padding: 3px 3px;">
-                    @foreach ($arrayData as $ad)
-                        <tr style="page-break-inside:avoid;">
-                            <td style="height: 30px; border: 1px solid black; text-align: center;">
-                                {{ $loop->iteration }}.
-                            </td>
-                            <td style="height: 30px; border: 1px solid black; text-align: center;">
-                                {{ $ad['Referral Code'] }}</td>
-                            <td style="height: 30px; border: 1px solid black; padding-left: 5px;">
-                                {{ $ad['Name'] }}</td>
-                            <td style="height: 30px; border: 1px solid black; text-align: center;">
-                                {{ $ad['Category'] }}
-                            </td>
+                    @if (count($arrayData) == 0)
+                        <tr>
+                            <td colspan="4" style="height: 30px; border: 1px solid black; text-align: center;">There are
+                                no financial accounts.</td>
                         </tr>
-                    @endforeach
+                    @else
+                        @foreach ($arrayData as $ad)
+                            <tr style="page-break-inside:avoid;">
+                                <td style="height: 30px; border: 1px solid black; text-align: center;">
+                                    {{ $loop->iteration }}.
+                                </td>
+                                <td style="height: 30px; border: 1px solid black; text-align: center;">
+                                    {{ $ad['Referral Code'] }}</td>
+                                <td style="height: 30px; border: 1px solid black; padding-left: 5px;">
+                                    {{ $ad['Name'] }}</td>
+                                <td style="height: 30px; border: 1px solid black; text-align: center;">
+                                    {{ $ad['Category'] }}
+                                </td>
+                            </tr>
+                        @endforeach
+                    @endif
                     <tr>
                         <td colspan="4" style="padding: 10px 0"><i>Printed on
                                 <b>{{ date('d F, Y', strtotime($todayDate)) }}</b></i>

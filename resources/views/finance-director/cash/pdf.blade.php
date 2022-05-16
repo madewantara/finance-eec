@@ -65,64 +65,73 @@
                     </tr>
                 </thead>
                 <tbody style="padding: 3px 3px;">
-                    @foreach ($dataTrans as $trans)
+                    @if (count($dataTrans) == 0)
                         <tr>
-                            <td style="text-align: center;vertical-align:middle;border: 1px solid black;">
-                                {{ $loop->iteration }}.
+                            <td colspan="10"
+                                style="text-align: center;vertical-align:middle;border: 1px solid black; height: 25px;">
+                                There are no cash transactions
                             </td>
-                            <td style="text-align: center;vertical-align:middle;border: 1px solid black;">
-                                {{ date('Y-m-d', strtotime($trans[0][0]->date)) }}
-                            </td>
-                            <td style="text-align: center;vertical-align:middle;border: 1px solid black;">
-                                {{ $trans[0][0]->token }}</td>
-                            <td style="vertical-align:middle;border: 1px solid black;">
-                                @foreach ($trans[0] as $t)
-                                    &nbsp;{{ $t->description }}<br>
-                                @endforeach
-                            </td>
-                            <td style="vertical-align:middle;border: 1px solid black;">
-                                @foreach ($trans[0] as $t)
-                                    {{ $t->transactionAccount[0]->referral }} -
-                                    {{ $t->transactionAccount[0]->name }}<br>
-                                @endforeach
-                            </td>
-                            <td style="text-align: center;vertical-align:middle;border: 1px solid black;">
-                                @foreach ($trans[0] as $t)
-                                    @if (empty($t->debit))
-                                        -<br>
-                                    @else
-                                        Rp. {{ number_format($t->debit, 0, ',', '.') }}<br>
-                                    @endif
-                                @endforeach
-                            </td>
-                            <td style="text-align: center;vertical-align:middle;border: 1px solid black;">
-                                @foreach ($trans[0] as $t)
-                                    @if (empty($t->credit))
-                                        -<br>
-                                    @else
-                                        Rp. {{ number_format($t->credit, 0, ',', '.') }}<br>
-                                    @endif
-                                @endforeach
-                            </td>
-
-                            @if (empty($trans[0][0]->pic))
-                                <td style="text-align: center;vertical-align:middle;border: 1px solid black;">-</td>
-                            @else
-                                <td style="text-align: center;vertical-align:middle;border: 1px solid black;">
-                                    {{ $trans[0][0]->pic }}</td>
-                            @endif
-
-                            <td style="text-align: center;vertical-align:middle;border: 1px solid black;">
-                                {{ $trans[0][0]->paid_to }}</td>
-
-                            @if (empty($trans[0][0]->transactionProject->name))
-                                <td style="text-align: center;vertical-align:middle;border: 1px solid black;">-</td>
-                            @else
-                                <td style="text-align: center;vertical-align:middle;border: 1px solid black;">
-                                    {{ $trans[0][0]->transactionProject->name }}</td>
-                            @endif
                         </tr>
-                    @endforeach
+                    @else
+                        @foreach ($dataTrans as $trans)
+                            <tr>
+                                <td style="text-align: center;vertical-align:middle;border: 1px solid black;">
+                                    {{ $loop->iteration }}.
+                                </td>
+                                <td style="text-align: center;vertical-align:middle;border: 1px solid black;">
+                                    {{ date('Y-m-d', strtotime($trans[0][0]->date)) }}
+                                </td>
+                                <td style="text-align: center;vertical-align:middle;border: 1px solid black;">
+                                    {{ $trans[0][0]->token }}</td>
+                                <td style="vertical-align:middle;border: 1px solid black;">
+                                    @foreach ($trans[0] as $t)
+                                        &nbsp;{{ $t->description }}<br>
+                                    @endforeach
+                                </td>
+                                <td style="vertical-align:middle;border: 1px solid black;">
+                                    @foreach ($trans[0] as $t)
+                                        {{ $t->transactionAccount[0]->referral }} -
+                                        {{ $t->transactionAccount[0]->name }}<br>
+                                    @endforeach
+                                </td>
+                                <td style="text-align: center;vertical-align:middle;border: 1px solid black;">
+                                    @foreach ($trans[0] as $t)
+                                        @if (empty($t->debit))
+                                            -<br>
+                                        @else
+                                            Rp. {{ number_format($t->debit, 0, ',', '.') }}<br>
+                                        @endif
+                                    @endforeach
+                                </td>
+                                <td style="text-align: center;vertical-align:middle;border: 1px solid black;">
+                                    @foreach ($trans[0] as $t)
+                                        @if (empty($t->credit))
+                                            -<br>
+                                        @else
+                                            Rp. {{ number_format($t->credit, 0, ',', '.') }}<br>
+                                        @endif
+                                    @endforeach
+                                </td>
+
+                                @if (empty($trans[0][0]->pic))
+                                    <td style="text-align: center;vertical-align:middle;border: 1px solid black;">-</td>
+                                @else
+                                    <td style="text-align: center;vertical-align:middle;border: 1px solid black;">
+                                        {{ $trans[0][0]->pic }}</td>
+                                @endif
+
+                                <td style="text-align: center;vertical-align:middle;border: 1px solid black;">
+                                    {{ $trans[0][0]->paid_to }}</td>
+
+                                @if (empty($trans[0][0]->transactionProject->name))
+                                    <td style="text-align: center;vertical-align:middle;border: 1px solid black;">-</td>
+                                @else
+                                    <td style="text-align: center;vertical-align:middle;border: 1px solid black;">
+                                        {{ $trans[0][0]->transactionProject->name }}</td>
+                                @endif
+                            </tr>
+                        @endforeach
+                    @endif
                     <tr>
                         <td colspan="10" style="padding: 10px 0"><i>Printed on
                                 <b>{{ date('d F, Y', strtotime($todayDate)) }}</b></i>
