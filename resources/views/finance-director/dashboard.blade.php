@@ -153,8 +153,7 @@
                             </div>
                             <!--end::Item-->
                             <!--begin::Item-->
-                            <div
-                                class="border-start-dashed border-end-dashed border-1 border-gray-300 px-5 ps-md-10 pe-md-7 me-md-5">
+                            <div class="border-end-dashed border-1 border-gray-300 pe-md-7 me-md-5">
                                 <!--begin::Statistics-->
                                 <div class="d-flex mb-2">
                                     <span class="fs-4 fw-bold text-gray-400 me-1">Rp.</span>
@@ -414,8 +413,8 @@
 @endsection
 
 @push('js')
-    <script src="{{ asset('assets/js/finance-division/widgets.bundle.js') }}"></script>
-    <script src="{{ asset('assets/js/finance-division/widgets.js') }}"></script>
+    <script src="{{ asset('assets/js/finance-director/widgets.bundle.js') }}"></script>
+    <script src="{{ asset('assets/js/finance-director/widgets.js') }}"></script>
     <script>
         window.setTimeout(function() {
             $(".alert").fadeTo(500, 0).slideUp(500, function() {

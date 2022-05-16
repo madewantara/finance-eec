@@ -12,7 +12,7 @@
 @section('active-link', 'active-sidebar-link')
 
 @push('css')
-    <link href="{{ asset('asset/css/finance-division/datatables.bundle.css') }}" rel="stylesheet" type="text/css">
+    <link href="{{ asset('assets/css/finance-division/datatables.bundle.css') }}" rel="stylesheet" type="text/css">
 @endpush
 
 @section('content')
@@ -297,7 +297,7 @@
                                                     <!--begin::Avatar-->
                                                     <div class="symbol symbol-35px symbol-circle">
                                                         <img alt="Pic"
-                                                            src="/metronic8/demo6/assets/media/avatars/300-6.jpg">
+                                                            src="{{ asset('assets/image/avatar/150-13.jpg') }}">
                                                     </div>
                                                     <!--end::Avatar-->
                                                     <!--begin::Details-->
