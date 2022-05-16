@@ -17,6 +17,14 @@ use App\Http\Controllers\FindirOperationalController;
 use App\Http\Controllers\FindirEscrowController;
 use App\Http\Controllers\FindirProjectController;
 use App\Http\Controllers\FindirReportController;
+use App\Http\Controllers\ExedirDashboardController;
+use App\Http\Controllers\ExedirProfileController;
+use App\Http\Controllers\ExedirAccountController;
+use App\Http\Controllers\ExedirCashController;
+use App\Http\Controllers\ExedirOperationalController;
+use App\Http\Controllers\ExedirEscrowController;
+use App\Http\Controllers\ExedirProjectController;
+use App\Http\Controllers\ExedirReportController;
 
 /*
 |--------------------------------------------------------------------------
@@ -129,6 +137,47 @@ Route::group([
     
     //Profile
     Route::get('/profile', [App\Http\Controllers\FindirProfileController::class, 'index'])->name('findir.profile');
+});
+
+Route::group([
+    'middleware' => 'executive.director',
+    'prefix' => 'executive-director',
+], function ($router) {
+    Route::get('/dashboard', [App\Http\Controllers\ExedirDashboardController::class, 'index'])->name('exedir.dashboard');
+
+    //Account Menu
+    Route::get('/account', [App\Http\Controllers\ExedirAccountController::class, 'index'])->name('exedir.account-index');
+    Route::get('/account/export', [App\Http\Controllers\ExedirAccountController::class, 'export'])->name('exedir.account-export');
+    
+    //Cash Menu
+    Route::get('/cash', [App\Http\Controllers\ExedirCashController::class, 'index'])->name('exedir.cash-index');
+    Route::get('/cash/{uuid}', [App\Http\Controllers\ExedirCashController::class, 'show'])->name('exedir.cash-detail');
+    Route::post('/cash/export', [App\Http\Controllers\ExedirCashController::class, 'export'])->name('exedir.cash-export');
+    Route::post('/cash/export/{uuid}', [App\Http\Controllers\ExedirCashController::class, 'exportDetail'])->name('exedir.cash-detail-export');
+
+    //Mandiri Operational Menu
+    Route::get('/mandiri-operational', [App\Http\Controllers\ExedirOperationalController::class, 'index'])->name('exedir.operational-index');
+    Route::get('/mandiri-operational/{uuid}', [App\Http\Controllers\ExedirOperationalController::class, 'show'])->name('exedir.operational-detail');
+    Route::post('/mandiri-operational/export', [App\Http\Controllers\ExedirOperationalController::class, 'export'])->name('exedir.operational-export');
+    Route::post('/mandiri-operational/export/{uuid}', [App\Http\Controllers\ExedirOperationalController::class, 'exportDetail'])->name('exedir.operational-detail-export');
+
+    //Mandiri Escrow Menu
+    Route::get('/mandiri-escrow', [App\Http\Controllers\ExedirEscrowController::class, 'index'])->name('exedir.escrow-index');
+    Route::get('/mandiri-escrow/{uuid}', [App\Http\Controllers\ExedirEscrowController::class, 'show'])->name('exedir.escrow-detail');
+    Route::post('/mandiri-escrow/export', [App\Http\Controllers\ExedirEscrowController::class, 'export'])->name('exedir.escrow-export');
+    Route::post('/mandiri-escrow/export/{uuid}', [App\Http\Controllers\ExedirEscrowController::class, 'exportDetail'])->name('exedir.escrow-detail-export');
+    
+    //Project Menu
+    Route::get('/project', [App\Http\Controllers\ExedirProjectController::class, 'index'])->name('exedir.project-index');
+    Route::get('/project/{uuid}', [App\Http\Controllers\ExedirProjectController::class, 'show'])->name('exedir.project-detail');
+    
+    //Report
+    Route::get('/report', [App\Http\Controllers\ExedirReportController::class, 'index'])->name('exedir.report-index');
+    Route::get('/report/{uuid}', [App\Http\Controllers\ExedirReportController::class, 'show'])->name('exedir.report-detail');
+    Route::post('/report/export/{uuid}', [App\Http\Controllers\ExedirReportController::class, 'export'])->name('exedir.report-export');
+    
+    //Profile
+    Route::get('/profile', [App\Http\Controllers\ExedirProfileController::class, 'index'])->name('exedir.profile');
 });
 
 require __DIR__.'/auth.php';
