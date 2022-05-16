@@ -50,7 +50,7 @@ class AuthenticatedSessionController extends Controller
                 return redirect()->route('findir.dashboard')->withSuccess('You have successfully logged into finance director portal.');
             }
             elseif($role == 'executivedirector'){
-                return view('test3');
+                return redirect()->route('exedir.dashboard')->withSuccess('You have successfully logged into executive director portal.');
             }
         }
         else{

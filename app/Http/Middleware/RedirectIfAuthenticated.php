@@ -27,7 +27,7 @@ class RedirectIfAuthenticated
             $role = Role::where('id', $userRole)->first()->role;
             
             if(auth()->user() && $role == 'executivedirector'){
-                // return redirect()->route('exedir.dashboard')->withSuccess('You have already logged into executive director portal.');
+                return redirect()->route('exedir.dashboard')->withSuccess('You have already logged into executive director portal.');
             }elseif(auth()->user() && $role == 'financedirector'){
                 return redirect()->route('findir.dashboard')->withSuccess('You have already logged into finance director portal.');
             }elseif(auth()->user() && $role == 'financedivision'){
