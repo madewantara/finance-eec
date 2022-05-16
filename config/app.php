@@ -178,6 +178,7 @@ return [
         App\Providers\RouteServiceProvider::class,
         App\Providers\FindivContentServiceProvider::class,
         App\Providers\FindirContentServiceProvider::class,
+        App\Providers\ExedirContentServiceProvider::class,
 
     ],
 

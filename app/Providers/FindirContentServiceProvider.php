@@ -36,26 +36,50 @@ class FindirContentServiceProvider extends ServiceProvider
             ->orWhere('category', 'escrow-store')
             ->orWhere('category', 'cash-update')
             ->orWhere('category', 'operational-update')
-            ->orWhere('category', 'escrow-update');
-        })->where('updated_at', '>=', $date)->orderBy('updated_at', 'desc')->get();
+            ->orWhere('category', 'escrow-update')
+            ->orWhere('category', 'cash-paid')
+            ->orWhere('category', 'operational-paid')
+            ->orWhere('category', 'escrow-paid');
+        })->where('updated_at', '>=', $date)->orderBy('updated_at', 'desc')->get()->unique('activity_id');
         
-        $tempAct = [];
+        $lastAct = [];
         foreach($activity as $a){
+            $getLastAct = ActivityLog::where('activity_id', $a->activity_id)->get();
+            if($getLastAct[count($getLastAct) - 1]->category == 'cash-store' || 
+                $getLastAct[count($getLastAct) - 1]->category == 'operational-store' ||
+                $getLastAct[count($getLastAct) - 1]->category == 'escrow-store' ||
+                $getLastAct[count($getLastAct) - 1]->category == 'cash-update' ||
+                $getLastAct[count($getLastAct) - 1]->category == 'operational-update' ||
+                $getLastAct[count($getLastAct) - 1]->category == 'escrow-update' ||
+                $getLastAct[count($getLastAct) - 1]->category == 'cash-paid' ||
+                $getLastAct[count($getLastAct) - 1]->category == 'operational-paid' ||
+                $getLastAct[count($getLastAct) - 1]->category == 'escrow-paid')
+            {
+                array_push($lastAct, $getLastAct[count($getLastAct) - 1]);
+            }
+        }
+
+        $tempAct = [];
+        foreach($lastAct as $la){
             $transaction = Transaction::where([
                 ['is_active',1],
                 ['type',2],
-                ['status', 1],
-                ['uuid', $a->activity_id],
-            ])->get()->unique('uuid');
-            array_push($tempAct, [$transaction, $a->user_id, $a->updated_at]);
+                ['uuid', $la->activity_id],
+            ])->where(function($query){
+                $query->where('status', 1)
+                ->orWhere('status', 4);
+            })->get()->unique('uuid');
+            if(count($transaction) != 0){
+                array_push($tempAct, [$transaction, $la->user_id, $la->updated_at]);
+            }
         }
 
         $arrActivity = [];
         foreach($tempAct as $ta){
             if(count($ta) != 0){
                 foreach($ta[0] as $t){
-                    if($t->status == 1){
-                        array_push($arrActivity, ["uuid" => $t->uuid, "token" => $t->token, "category" => $t->category, "user_id" => $ta[1], "updated_at" => $ta[2]]);
+                    if($t->status == 1 || $t->status == 4){
+                        array_push($arrActivity, ["uuid" => $t->uuid, "token" => $t->token, "category" => $t->category, "user_id" => $ta[1], "updated_at" => $ta[2], "status" => $t->status]);
                     }
                 }
             }
