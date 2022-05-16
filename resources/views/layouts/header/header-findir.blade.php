@@ -182,38 +182,77 @@
                                                         </div>
                                                         <div class="col-lg-9">
                                                             @if ($n['category'] == 'cash')
-                                                                <!--begin::Title-->
-                                                                <span class="text-gray-800">
-                                                                    This
-                                                                    <a href="{{ route('findir.cash-detail', ['uuid' => $n['uuid']]) }}"
-                                                                        class="text-hover-primary"
-                                                                        style="color: #009ef7e0">
-                                                                        #{{ $n['token'] }}</a>
-                                                                    need approval.
-                                                                </span>
-                                                                <!--end::Title-->
+                                                                @if ($n['status'] == 1)
+                                                                    <!--begin::Title-->
+                                                                    <span class="text-gray-800">
+                                                                        This
+                                                                        <a href="{{ route('findir.cash-detail', ['uuid' => $n['uuid']]) }}"
+                                                                            class="text-hover-primary"
+                                                                            style="color: #009ef7e0">
+                                                                            #{{ $n['token'] }}</a>
+                                                                        cash transaction need approval.
+                                                                    </span>
+                                                                    <!--end::Title-->
+                                                                @elseif ($n['status'] == 4)
+                                                                    <!--begin::Title-->
+                                                                    <span class="text-gray-800">
+                                                                        This
+                                                                        <a href="{{ route('findir.cash-detail', ['uuid' => $n['uuid']]) }}"
+                                                                            class="text-hover-primary"
+                                                                            style="color: #009ef7e0">
+                                                                            #{{ $n['token'] }}</a>
+                                                                        cash transaction has been paid.
+                                                                    </span>
+                                                                    <!--end::Title-->
+                                                                @endif
                                                             @elseif ($n['category'] == 'operational')
-                                                                <!--begin::Title-->
-                                                                <span class="text-gray-800">
-                                                                    This
-                                                                    <a href="{{ route('findir.operational-detail', ['uuid' => $n['uuid']]) }}"
-                                                                        class="text-hover-primary"
-                                                                        style="color: #009ef7e0">
-                                                                        #{{ $n['token'] }}</a>
-                                                                    need approval.
-                                                                </span>
-                                                                <!--end::Title-->
+                                                                @if ($n['status'] == 1)
+                                                                    <!--begin::Title-->
+                                                                    <span class="text-gray-800">
+                                                                        This
+                                                                        <a href="{{ route('findir.operational-detail', ['uuid' => $n['uuid']]) }}"
+                                                                            class="text-hover-primary"
+                                                                            style="color: #009ef7e0">
+                                                                            #{{ $n['token'] }}</a>
+                                                                        operational transaction need approval.
+                                                                    </span>
+                                                                    <!--end::Title-->
+                                                                @elseif ($n['status'] == 4)
+                                                                    <!--begin::Title-->
+                                                                    <span class="text-gray-800">
+                                                                        This
+                                                                        <a href="{{ route('findir.operational-detail', ['uuid' => $n['uuid']]) }}"
+                                                                            class="text-hover-primary"
+                                                                            style="color: #009ef7e0">
+                                                                            #{{ $n['token'] }}</a>
+                                                                        operational transaction has been paid.
+                                                                    </span>
+                                                                    <!--end::Title-->
+                                                                @endif
                                                             @else
-                                                                <!--begin::Title-->
-                                                                <span class="text-gray-800">
-                                                                    This
-                                                                    <a href="{{ route('findir.escrow-detail', ['uuid' => $n['uuid']]) }}"
-                                                                        class="text-hover-primary"
-                                                                        style="color: #009ef7e0">
-                                                                        #{{ $n['token'] }}</a>
-                                                                    need approval.
-                                                                </span>
-                                                                <!--end::Title-->
+                                                                @if ($n['status'] == 1)
+                                                                    <!--begin::Title-->
+                                                                    <span class="text-gray-800">
+                                                                        This
+                                                                        <a href="{{ route('findir.escrow-detail', ['uuid' => $n['uuid']]) }}"
+                                                                            class="text-hover-primary"
+                                                                            style="color: #009ef7e0">
+                                                                            #{{ $n['token'] }}</a>
+                                                                        escrow transaction need approval.
+                                                                    </span>
+                                                                    <!--end::Title-->
+                                                                @elseif ($n['status'] == 4)
+                                                                    <!--begin::Title-->
+                                                                    <span class="text-gray-800">
+                                                                        This
+                                                                        <a href="{{ route('findir.escrow-detail', ['uuid' => $n['uuid']]) }}"
+                                                                            class="text-hover-primary"
+                                                                            style="color: #009ef7e0">
+                                                                            #{{ $n['token'] }}</a>
+                                                                        escrow transaction has been paid.
+                                                                    </span>
+                                                                    <!--end::Title-->
+                                                                @endif
                                                             @endif
                                                         </div>
                                                     </div>
