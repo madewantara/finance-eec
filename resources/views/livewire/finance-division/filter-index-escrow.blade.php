@@ -177,7 +177,7 @@
                 </div>
                 <div class="d-flex align-items-center position-relative my-1 ms-3">
                     <select class="form-control form-select-solid form-select" name="pagesize" id="pagesize"
-                        wire:model="pagesize">
+                        wire:model="pagesize" data-pharaonic="select2" data-component-id="{{ $this->id }}">
                         <option value="10" class="form-control form-select form-select-solid fw-bolder" selected>10
                         </option>
                         <option value="25" class="form-control form-select form-select-solid fw-bolder">25</option>
@@ -631,6 +631,22 @@
             $('input[name="datefilter"]').on('cancel.daterangepicker', function(ev, picker) {
                 $(this).val('');
                 @this.set('datefilter', '', true);
+            });
+        });
+    </script>
+    <script>
+        $(document).ready(function() {
+            $('#pagesize').select2({
+                closeOnSelect: true,
+                minimumResultsForSearch: -1,
+            });
+        });
+        document.addEventListener('livewire:load', function(event) {
+            @this.on('refreshDropdown', function() {
+                $('#pagesize').select2({
+                    closeOnSelect: true,
+                    minimumResultsForSearch: -1,
+                });
             });
         });
     </script>

@@ -178,7 +178,11 @@
                                         <div class="modal-dialog modal-lg modal-dialog-centered">
                                             <div class="modal-content">
                                                 <div class="modal-header">
-                                                    <h5 class="modal-title">Export Format</h5>
+                                                    <h5 class="modal-title">Export Format <br> <span
+                                                            class="text-muted fw-bold fs-6"><b
+                                                                class="text-warning">Attention!</b> Only
+                                                            transaction
+                                                            with 'paid' status will be calculated in report.</span></h5>
                                                     <button type="button" class="btn-close" data-bs-dismiss="modal"
                                                         aria-label="Close"></button>
                                                 </div>

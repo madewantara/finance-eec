@@ -43,7 +43,7 @@
             </div>
         </div>
     @endif
-    <div class="row g-6 g-xl-9 mt-1" wire:poll.keep-alive>
+    <div class="row g-6 g-xl-9 mt-1" wire:poll.60000ms>
         <div class="col-lg-12 col-xxl-12">
             <!--begin::Card-->
             <div class="card h-100">
@@ -60,74 +60,83 @@
                     <div class="row">
                         <div class="col-lg-4 col-xxl-4">
                             <div class="fs-3 fw-bolder mb-6" style="color: #3498DB">High</div>
-                            @if (count($projHigh) != 0)
-                                @foreach ($projHigh as $ph)
-                                    <div class="fs-6 d-flex justify-content-between my-4 me-5">
-                                        <a href="{{ route('findir.project-detail', ['uuid' => $ph->uuid]) }}"
-                                            class="fw-bold text-dark text-hover-primary">
-                                            {{ $ph->name }}
-                                        </a>
-                                        <div class="d-flex fw-bolder">
-                                            <span class="badge badge-light fw-bolder text-white"
-                                                style="background-color: #3498DB;">
-                                                High</span>
+                            <div class="scroll-y h-250px" data-kt-scroll="true"
+                                data-kt-scroll-activate="{default: false, lg: true}" data-kt-scroll-offset="5px">
+                                @if (count($projHigh) != 0)
+                                    @foreach ($projHigh as $ph)
+                                        <div class="fs-6 d-flex justify-content-between my-4 me-5">
+                                            <a href="{{ route('findir.project-detail', ['uuid' => $ph->uuid]) }}"
+                                                class="fw-bold text-dark text-hover-primary">
+                                                {{ $ph->name }}
+                                            </a>
+                                            <div class="d-flex fw-bolder">
+                                                <span class="badge badge-light fw-bolder text-white"
+                                                    style="background-color: #3498DB;">
+                                                    High</span>
+                                            </div>
                                         </div>
+                                        <div class="separator separator-dashed"></div>
+                                    @endforeach
+                                @else
+                                    <div class="fs-6 my-4 me-5">
+                                        <div class="fw-bolder text-muted fst-italic">There are no high priority
+                                            projects</div>
                                     </div>
                                     <div class="separator separator-dashed"></div>
-                                @endforeach
-                            @else
-                                <div class="fs-6 my-4 me-5">
-                                    <div class="fw-bolder text-muted fst-italic">There are no high priority
-                                        projects</div>
-                                </div>
-                                <div class="separator separator-dashed"></div>
-                            @endif
+                                @endif
+                            </div>
                         </div>
                         <div class="col-lg-4 col-xxl-4">
                             <div class="fs-3 fw-bolder mb-6" style="color: #40e0d0;">Medium</div>
-                            @if (count($projMed) != 0)
-                                @foreach ($projMed as $pm)
-                                    <div class="fs-6 d-flex justify-content-between my-4 me-5">
-                                        <a href="{{ route('findir.project-detail', ['uuid' => $pm->uuid]) }}"
-                                            class="fw-bold text-dark text-hover-primary">{{ $pm->name }}</a>
-                                        <div class="d-flex fw-bolder">
-                                            <span class="badge badge-light fw-bolder text-white"
-                                                style="background-color:#40e0d0;">
-                                                Medium</span>
+                            <div class="scroll-y h-250px" data-kt-scroll="true"
+                                data-kt-scroll-activate="{default: false, lg: true}" data-kt-scroll-offset="5px">
+                                @if (count($projMed) != 0)
+                                    @foreach ($projMed as $pm)
+                                        <div class="fs-6 d-flex justify-content-between my-4 me-5">
+                                            <a href="{{ route('findir.project-detail', ['uuid' => $pm->uuid]) }}"
+                                                class="fw-bold text-dark text-hover-primary">{{ $pm->name }}</a>
+                                            <div class="d-flex fw-bolder">
+                                                <span class="badge badge-light fw-bolder text-white"
+                                                    style="background-color:#40e0d0;">
+                                                    Medium</span>
+                                            </div>
                                         </div>
+                                        <div class="separator separator-dashed"></div>
+                                    @endforeach
+                                @else
+                                    <div class="fs-6 my-4 me-5">
+                                        <div class="fw-bolder text-muted fst-italic">There are no medium priority
+                                            projects</div>
                                     </div>
                                     <div class="separator separator-dashed"></div>
-                                @endforeach
-                            @else
-                                <div class="fs-6 my-4 me-5">
-                                    <div class="fw-bolder text-muted fst-italic">There are no medium priority
-                                        projects</div>
-                                </div>
-                                <div class="separator separator-dashed"></div>
-                            @endif
+                                @endif
+                            </div>
                         </div>
                         <div class="col-lg-4 col-xxl-4">
                             <div class="fs-3 fw-bolder mb-6" style="color: #F08080">Low</div>
-                            @if (count($projLow) != 0)
-                                @foreach ($projLow as $pl)
-                                    <div class="fs-6 d-flex justify-content-between my-4 me-5">
-                                        <a href="{{ route('findir.project-detail', ['uuid' => $pl->uuid]) }}"
-                                            class="fw-bold text-dark text-hover-primary">{{ $pl->name }}</a>
-                                        <div class="d-flex fw-bolder">
-                                            <span class="badge badge-light fw-bolder text-white"
-                                                style="background-color: #F08080;">
-                                                Low</span>
+                            <div class="scroll-y h-250px" data-kt-scroll="true"
+                                data-kt-scroll-activate="{default: false, lg: true}" data-kt-scroll-offset="5px">
+                                @if (count($projLow) != 0)
+                                    @foreach ($projLow as $pl)
+                                        <div class="fs-6 d-flex justify-content-between my-4 me-5">
+                                            <a href="{{ route('findir.project-detail', ['uuid' => $pl->uuid]) }}"
+                                                class="fw-bold text-dark text-hover-primary">{{ $pl->name }}</a>
+                                            <div class="d-flex fw-bolder">
+                                                <span class="badge badge-light fw-bolder text-white"
+                                                    style="background-color: #F08080;">
+                                                    Low</span>
+                                            </div>
                                         </div>
+                                        <div class="separator separator-dashed"></div>
+                                    @endforeach
+                                @else
+                                    <div class="fs-6 my-4 me-5">
+                                        <div class="fw-bolder text-muted fst-italic">There are no low priority
+                                            projects</div>
                                     </div>
                                     <div class="separator separator-dashed"></div>
-                                @endforeach
-                            @else
-                                <div class="fs-6 my-4 me-5">
-                                    <div class="fw-bolder text-muted fst-italic">There are no low priority
-                                        projects</div>
-                                </div>
-                                <div class="separator separator-dashed"></div>
-                            @endif
+                                @endif
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -138,7 +147,7 @@
     </div>
 
     <!--begin::Toolbar-->
-    <div class="d-flex flex-wrap flex-stack my-5" wire:poll.keep-alive>
+    <div class="d-flex flex-wrap flex-stack my-5">
         <!--begin::Heading-->
         <h2 class="fs-2 fw-bold my-2">Projects
             <span class="fs-6 text-gray-400 ms-1">by Status</span>
@@ -147,11 +156,12 @@
         <!--begin::Controls-->
         <div class="d-flex flex-wrap my-1">
             <!--begin::Select wrapper-->
-            <div class="m-0 me-1">
+            <div class="m-0 me-3">
                 <!--begin::Select-->
                 <select name="pagesize" id="pagesize"
-                    class="form-select form-select-sm bg-body border-body fw-bolder w-125px" wire:model="pagesize"
-                    style="margin-top: 3px; height: 43px;">
+                    class="form-control form-select form-control-solid bg-body border-body fw-bolder w-75px"
+                    wire:model="pagesize" style="margin-top: 3px; height: 43px;" data-pharaonic="select2"
+                    data-component-id="{{ $this->id }}">
                     <option value="6" selected>6</option>
                     <option value="12">12</option>
                     <option value="24">24</option>
@@ -161,13 +171,13 @@
             </div>
             <!--end::Select wrapper-->
             <!--begin::Select wrapper-->
-            <div class="m-0 me-1">
+            <div class="m-0 me-3" wire:ignore>
                 <!--begin::Select-->
                 <select name="status" id="status"
-                    class="form-select form-select-sm bg-body border-body fw-bolder w-125px" wire:model="status"
+                    class="form-control form-select form-control-solid bg-body border-body fw-bolder w-100px"
+                    wire:model="status" data-pharaonic="select2" data-component-id="{{ $this->id }}"
                     style="margin-top: 3px; height: 43px;">
-                    <option value="" selected>
-                        All</option>
+                    <option></option>
                     <option value="1">To Do</option>
                     <option value="2">In Progress</option>
                     <option value="3">Completed</option>
@@ -175,8 +185,8 @@
                 <!--end::Select-->
             </div>
             <!--end::Select wrapper-->
-            <div class="m-0">
-                <div class="d-flex align-items-center position-relative my-1">
+            <div class="m-0" wire:ignore>
+                <div class="d-flex align-items-center position-relative">
                     <span class="svg-icon svg-icon-1 position-absolute ms-6">
                         <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px"
                             height="24px" viewBox="0 0 24 24" version="1.1">
@@ -191,8 +201,8 @@
                             </g>
                         </svg>
                     </span>
-                    <input type="text" name="search" class="form-control w-250px ps-14" wire:model="search"
-                        placeholder="Search Project" />
+                    <input type="text" name="search" class="form-control w-250px ps-14 border-transparent"
+                        wire:model="search" placeholder="Search Project" />
                 </div>
             </div>
         </div>
@@ -284,7 +294,8 @@
                         <!--begin:: Card body-->
                         <div class="card-body p-9">
                             <!--begin::Name-->
-                            <div class="fs-3 fw-bolder text-dark project-name">{{ $p->name }}</div>
+                            <div class="fs-3 fw-bolder text-dark project-name">{{ $p->projectCategory->category }}
+                                - {{ $p->name }}</div>
                             <!--end::Name-->
                             <!--begin::Description-->
                             <p class="text-gray-400 fw-bold fs-5 mt-1 mb-7">
@@ -413,3 +424,43 @@
         <!--end::Pages-->
     </div>
 </div>
+
+@push('js')
+    <script src="{{ asset('vendor/pharaonic/pharaonic.select2.min.js') }}"></script>
+    <script>
+        $(document).ready(function() {
+            $('#pagesize').select2({
+                closeOnSelect: true,
+                minimumResultsForSearch: -1,
+            });
+        });
+        document.addEventListener('livewire:load', function(event) {
+            @this.on('refreshDropdown', function() {
+                $('#pagesize').select2({
+                    closeOnSelect: true,
+                    minimumResultsForSearch: -1,
+                });
+            });
+        });
+    </script>
+    <script>
+        $(document).ready(function() {
+            $('#status').select2({
+                placeholder: "All",
+                closeOnSelect: true,
+                allowClear: true,
+                minimumResultsForSearch: -1,
+            });
+        });
+        document.addEventListener('livewire:load', function(event) {
+            @this.on('refreshDropdown', function() {
+                $('#status').select2({
+                    placeholder: "All",
+                    closeOnSelect: true,
+                    allowClear: true,
+                    minimumResultsForSearch: -1,
+                });
+            });
+        });
+    </script>
+@endpush
