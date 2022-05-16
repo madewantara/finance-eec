@@ -49583,6 +49583,10 @@ span.select2-selection.select2-selection--single.form-control.form-control-white
     background-color: #f5f8fa !important;
 }
 
+span.select2-selection.select2-selection--single.form-control.form-select.form-control-solid.fw-bolder.custom-select.status-report.add{
+    background-color: #7e82993b !important;
+}
+
 .yearpicker-container{
     border: none !important;
     border-radius: 0.5rem !important;
