@@ -73,7 +73,10 @@
                         <!--begin::Modal header-->
                         <div class="modal-header">
                             <!--begin::Modal title-->
-                            <h2 class="fw-bolder">Export Cash Transaction</h2>
+                            <h2 class="fw-bolder">Export Cash Transaction <br> <span class="text-muted fw-bold fs-6"><b
+                                        class="text-warning">Attention!</b> Only transaction with 'paid' status
+                                    will be
+                                    exported.</span></h2>
                             <!--end::Modal title-->
                             <!--begin::Close-->
                             <div class="btn btn-icon btn-sm btn-active-icon-primary" data-bs-dismiss="modal"
@@ -342,5 +345,12 @@
                 }, 2000);
             });
         })
+    </script>
+    <script>
+        window.setTimeout(function() {
+            $(".alert").fadeTo(500, 0).slideUp(500, function() {
+                $(this).remove();
+            });
+        }, 5000);
     </script>
 @endpush
