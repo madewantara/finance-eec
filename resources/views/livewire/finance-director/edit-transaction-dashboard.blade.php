@@ -182,7 +182,7 @@
                                                 <!--end::Symbol-->
                                                 <!--begin::Title-->
                                                 <div>
-                                                    <a href="#"
+                                                    <a href="{{ route('findir.cash-detail', ['uuid' => $npc->uuid]) }}"
                                                         class="fs-6 text-gray-800 text-hover-primary fw-bolder">{{ $npc->token }}</a>
                                                     <div class="fs-7 text-muted fw-bold mt-1">Rp.
                                                         {{ number_format($npc->credit, 0, ',', '.') }}
@@ -403,7 +403,7 @@
                                                 <!--end::Symbol-->
                                                 <!--begin::Title-->
                                                 <div>
-                                                    <a href="#"
+                                                    <a href="{{ route('findir.operational-detail', ['uuid' => $npo->uuid]) }}"
                                                         class="fs-6 text-gray-800 text-hover-primary fw-bolder">{{ $npo->token }}</a>
                                                     <div class="fs-7 text-muted fw-bold mt-1">Rp.
                                                         {{ number_format($npo->credit, 0, ',', '.') }}
@@ -625,7 +625,7 @@
                                                 <!--end::Symbol-->
                                                 <!--begin::Title-->
                                                 <div>
-                                                    <a href="#"
+                                                    <a href="{{ route('findir.escrow-detail', ['uuid' => $npe->uuid]) }}"
                                                         class="fs-6 text-gray-800 text-hover-primary fw-bolder">{{ $npe->token }}</a>
                                                     <div class="fs-7 text-muted fw-bold mt-1">Rp.
                                                         {{ number_format($npe->credit, 0, ',', '.') }}
