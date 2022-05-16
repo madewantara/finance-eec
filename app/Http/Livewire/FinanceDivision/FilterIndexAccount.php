@@ -24,6 +24,7 @@ class FilterIndexAccount extends Component
         $this->reset();
         $this->emit('refreshFilterCategory');
         $this->emit('refreshNotification');
+        $this->emit('refreshDropdown');
     }
 
     public function submitfiltercategory()
@@ -50,6 +51,7 @@ class FilterIndexAccount extends Component
         }
         $this->emit('refreshFilterCategory');
         $this->emit('refreshNotification');
+        $this->emit('refreshDropdown');
 
         return view('livewire.finance-division.filter-index-account', ['account' => $account, 'category' => $category, 'allAccount' => $allAccount]);
     }
@@ -78,7 +80,11 @@ class FilterIndexAccount extends Component
                 'category' => 'account-delete',
                 'activity_id' => $uuid['uuid'],
             ]);
-    
+            
+            $this->emit('refreshFilterCategory');
+            $this->emit('refreshNotification');
+            $this->emit('refreshDropdown');
+
             session()->flash('success', 'Financial account successfully deleted');
         }
     }
