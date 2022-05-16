@@ -233,7 +233,11 @@
                                         <div class="modal-dialog modal-lg modal-dialog-centered">
                                             <div class="modal-content">
                                                 <div class="modal-header">
-                                                    <h5 class="modal-title">Export Format</h5>
+                                                    <h5 class="modal-title">Export Format <br> <span
+                                                            class="text-muted fw-bold fs-6"><b
+                                                                class="text-warning">Attention!</b> Only
+                                                            transaction
+                                                            with 'paid' status will be calculated in report.</span></h5>
                                                     <button type="button" class="btn-close" data-bs-dismiss="modal"
                                                         aria-label="Close"></button>
                                                 </div>
@@ -504,7 +508,7 @@
                         </div>
                         <!--end::Input group-->
                         <!--begin::Input group-->
-                        <div class="fv-row row">
+                        <div class="fv-row row mb-5">
                             <!--begin::Col-->
                             <div class="col-md-3 d-flex align-items-center">
                                 <!--begin::Label-->
@@ -524,6 +528,35 @@
                                 </select>
                                 <!--end::Input-->
                                 @error('typeReport')
+                                    <span class="invalid-feedback">{{ $message }}</span>
+                                @enderror
+                            </div>
+                            <!--end::Col-->
+                        </div>
+                        <!--end::Input group-->
+                        <!--begin::Input group-->
+                        <div class="fv-row row">
+                            <!--begin::Col-->
+                            <div class="col-md-3 d-flex align-items-center">
+                                <!--begin::Label-->
+                                <label class="fs-6 fw-bold mb-2"><span class="required">Status</span></label>
+                                <!--end::Label-->
+                            </div>
+                            <!--end::Col-->
+                            <!--begin::Col-->
+                            <div class="col-md-9" wire:ignore>
+                                <!--begin::Input-->
+                                <select
+                                    class="form-control form-select form-control-solid fw-bolder custom-select status-report add @error('statusReport') is-invalid @enderror"
+                                    data-pharaonic="select2" data-component-id="{{ $this->id }}"
+                                    wire:model.defer="statusReport" id="statusReport" name="statusReport"
+                                    style="background-color: #f5f8fa;" required disabled>
+                                    <option value="1" selected>Pending</option>
+                                    <option value="2">Rejected</option>
+                                    <option value="3">Approved</option>
+                                </select>
+                                <!--end::Input-->
+                                @error('statusReport')
                                     <span class="invalid-feedback">{{ $message }}</span>
                                 @enderror
                             </div>
@@ -673,7 +706,7 @@
                         </div>
                         <!--end::Input group-->
                         <!--begin::Input group-->
-                        <div class="fv-row row">
+                        <div class="fv-row row mb-5">
                             <!--begin::Col-->
                             <div class="col-md-3 d-flex align-items-center">
                                 <!--begin::Label-->
@@ -688,13 +721,48 @@
                                     class="form-control form-select form-control-solid fw-bolder custom-select @error('typeReport') is-invalid @enderror"
                                     data-pharaonic="select2" data-component-id="{{ $this->id }}"
                                     wire:model.defer="typeReport" id="typeUpdateReport" name="typeReport" required>
-                                    <option value="1" @if ($this->typeReport == 1) selected @endif>
+                                    <option value="1">
                                         Draft</option>
-                                    <option value="2" @if ($this->typeReport == 1) selected @endif>
+                                    <option value="2">
                                         Posted</option>
                                 </select>
                                 <!--end::Input-->
                                 @error('typeReport')
+                                    <span class="invalid-feedback">{{ $message }}</span>
+                                @enderror
+                            </div>
+                            <!--end::Col-->
+                        </div>
+                        <!--end::Input group-->
+                        <!--begin::Input group-->
+                        <div class="fv-row row">
+                            <!--begin::Col-->
+                            <div class="col-md-3 d-flex align-items-center">
+                                <!--begin::Label-->
+                                <label class="fs-6 fw-bold mb-2"><span class="required">Status</span></label>
+                                <!--end::Label-->
+                            </div>
+                            <!--end::Col-->
+                            <!--begin::Col-->
+                            <div class="col-md-9" wire:ignore>
+                                <!--begin::Input-->
+                                <select
+                                    class="form-control form-select form-control-solid fw-bolder custom-select @error('statusReport') is-invalid @enderror"
+                                    data-pharaonic="select2" data-component-id="{{ $this->id }}"
+                                    wire:model.defer="statusReport" id="statusUpdateReport" name="statusReport"
+                                    style="background-color: #f5f8fa;" required>
+                                    <option value="1">
+                                        Pending
+                                    </option>
+                                    <option value="2" disabled>
+                                        Rejected
+                                    </option>
+                                    <option value="3" disabled>
+                                        Approved
+                                    </option>
+                                </select>
+                                <!--end::Input-->
+                                @error('statusReport')
                                     <span class="invalid-feedback">{{ $message }}</span>
                                 @enderror
                             </div>
@@ -776,6 +844,24 @@
     </script>
     <script>
         $(document).ready(function() {
+            $('#statusReport').select2({
+                placeholder: "Select status",
+                closeOnSelect: true,
+                minimumResultsForSearch: -1,
+            });
+        });
+        document.addEventListener('livewire:load', function(event) {
+            @this.on('refreshDropdown', function() {
+                $('#statusReport').select2({
+                    placeholder: "Select status",
+                    closeOnSelect: true,
+                    minimumResultsForSearch: -1,
+                });
+            });
+        });
+    </script>
+    <script>
+        $(document).ready(function() {
             $('#typeUpdateReport').select2({
                 placeholder: "Select type",
                 closeOnSelect: true,
@@ -786,6 +872,24 @@
             @this.on('refreshDropdown', function() {
                 $('#typeUpdateReport').select2({
                     placeholder: "Select type",
+                    closeOnSelect: true,
+                    minimumResultsForSearch: -1,
+                });
+            });
+        });
+    </script>
+    <script>
+        $(document).ready(function() {
+            $('#statusUpdateReport').select2({
+                placeholder: "Select status",
+                closeOnSelect: true,
+                minimumResultsForSearch: -1,
+            });
+        });
+        document.addEventListener('livewire:load', function(event) {
+            @this.on('refreshDropdown', function() {
+                $('#statusUpdateReport').select2({
+                    placeholder: "Select status",
                     closeOnSelect: true,
                     minimumResultsForSearch: -1,
                 });

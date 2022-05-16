@@ -23,6 +23,7 @@ class FilterIndexReport extends Component
     public $reportCat;
     public $year; 
     public $typeReport = 1; 
+    public $statusReport = 1; 
     public $reportType = 1; 
     public $pagesize = 10; 
     public $updateMode = false;
@@ -31,12 +32,14 @@ class FilterIndexReport extends Component
         'year' => 'required',
         'reportType' => 'required',
         'typeReport' => 'required',
+        'statusReport' => 'required',
     ];
 
     protected $messages = [
         'year.required' => '*Report year is required.',
         'reportType.required' => '*Report type is required.',
         'typeReport.required' => '*Type is required.',
+        'statusReport.required' => '*Status is required.',
     ];
 
     public function updated($propertyName)
@@ -48,6 +51,7 @@ class FilterIndexReport extends Component
     {
         $this->year = Carbon::now()->year;
         $this->typeReport = 1;
+        $this->statusReport = 1;
         $this->reportType = 1;
     }
 
@@ -97,6 +101,7 @@ class FilterIndexReport extends Component
         $report = Report::where('uuid',$uuid)->first();
         $this->year = $report->year;
         $this->typeReport = $report->type;
+        $this->statusReport = $report->status;
         $this->reportType = $report->report_type;
         $this->uuid = $uuid;
 
@@ -116,7 +121,8 @@ class FilterIndexReport extends Component
         $checkReport = Report::where([
                             ['is_active', 1],
                             ['year', $validated['year']],
-                            ['report_type', $validated['reportType']]
+                            ['report_type', $validated['reportType']],
+                            ['status', $validated['statusReport']],
                         ])->first();
 
         if($checkReport){
