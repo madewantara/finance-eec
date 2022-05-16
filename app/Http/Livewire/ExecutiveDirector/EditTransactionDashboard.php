@@ -6,6 +6,7 @@ use Livewire\Component;
 use App\Models\Balance;
 use App\Models\Transaction;
 use App\Models\ActivityLog;
+use App\Models\Report;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 
@@ -53,6 +54,15 @@ class EditTransactionDashboard extends Component
         $this->uuid = $uuid;
 
         $this->emit('openEditEscrowTrans');
+    }
+
+    public function editReport($uuid)
+    {
+        $this->updateMode = true;
+        $this->approveAct = 3;
+        $this->uuid = $uuid;
+
+        $this->emit('openEditReport');
     }
 
     public function approveCashTrans()
@@ -157,11 +167,46 @@ class EditTransactionDashboard extends Component
         $this->emit('refreshNotification');
     }
 
+    public function approveReport()
+    {
+        $validated = $this->validate();
+        
+        Report::where([
+            ['is_active', 1],
+            ['type', 2],
+            ['uuid', $this->uuid],
+        ])->update(['status' => $validated['approveAct']]);
+
+        if($validated['approveAct'] == 3){
+            $log = ActivityLog::create([
+                'user_id' => Auth::id(),
+                'category' => 'report-approved',
+                'activity_id' => $this->uuid,
+            ]);
+
+            session()->flash('success', 'Report status successfully updated to approved');
+        }else{
+            $log = ActivityLog::create([
+                'user_id' => Auth::id(),
+                'category' => 'report-rejected',
+                'activity_id' => $this->uuid,
+            ]);
+
+            session()->flash('success', 'Report status successfully updated to rejected');
+        }
+    
+        $this->resetInputFields();
+        $this->emit('closeReportApproval');
+        $this->emit('refreshNotification');
+    }
+
     public function render()
     {
         $cashBalance = Balance::where([['year', Carbon::now()->year], ['category', 'cash']])->first();
         $optBalance = Balance::where([['year', Carbon::now()->year], ['category', 'operational']])->first();
         $escBalance = Balance::where([['year', Carbon::now()->year], ['category', 'escrow']])->first();
+        $reportBs = Report::where([['is_active', 1], ['type', 2], ['report_type', 1]])->get();
+        $reportPl = Report::where([['is_active', 1], ['type', 2], ['report_type', 2]])->get();
 
         $cashTransPen = Transaction::select('uuid')->where([
                 ['is_active', 1],
@@ -243,6 +288,22 @@ class EditTransactionDashboard extends Component
                 ['type', 2],
                 ['status', 4]
             ])->distinct()->get();
+        
+        $repPen = Report::where([
+                ['is_active', 1],
+                ['type', 2],
+                ['status', 1],
+            ])->get();
+        $repAcc = Report::where([
+                ['is_active', 1],
+                ['type', 2],
+                ['status', 3],
+            ])->get();
+        $repRej = Report::where([
+                ['is_active', 1],
+                ['type', 2],
+                ['status', 2],
+            ])->get();
 
         $needApprovedCash = Transaction::where([
             ['is_active', 1],
@@ -268,6 +329,12 @@ class EditTransactionDashboard extends Component
             ['debit', 0]
         ])->get()->unique('uuid');
 
+        $needApprovedRep = Report::where([
+            ['is_active', 1],
+            ['type', 2],
+            ['status', 1],
+        ])->get();
+
         $this->emit('refreshNotification');
 
         return view('livewire.executive-director.edit-transaction-dashboard',
@@ -275,6 +342,8 @@ class EditTransactionDashboard extends Component
                 'cashBalance' => $cashBalance, 
                 'optBalance' => $optBalance, 
                 'escBalance' => $escBalance, 
+                'reportBs' => $reportBs, 
+                'reportPl' => $reportPl, 
                 'cashTransPen' => $cashTransPen, 
                 'cashTransAcc' => $cashTransAcc, 
                 'cashTransRej' => $cashTransRej, 
@@ -287,9 +356,13 @@ class EditTransactionDashboard extends Component
                 'escTransAcc' => $escTransAcc, 
                 'escTransRej' => $escTransRej, 
                 'escTransPaid' => $escTransPaid, 
+                'repPen' => $repPen, 
+                'repAcc' => $repAcc, 
+                'repRej' => $repRej, 
                 'needApprovedCash' => $needApprovedCash, 
                 'needApprovedOpt' => $needApprovedOpt, 
-                'needApprovedEsc' => $needApprovedEsc
+                'needApprovedEsc' => $needApprovedEsc,
+                'needApprovedRep' => $needApprovedRep,
             ]    
         );
     }
