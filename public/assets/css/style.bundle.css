@@ -49431,6 +49431,10 @@ span.select2-selection.select2-selection--single.form-control.form-control-white
     background-color: #f5f8fa;
 }
 
+span.select2-selection.select2-selection--single.form-control.form-control-white.fw-bolder.pe-5.form-select.pic{
+    background-color: #f5f8fa;
+}
+
 .select2-container--bootstrap5 .select2-selection--single .select2-selection__rendered{
     color: #5e6278;
     font-weight: 500 !important;
@@ -49868,4 +49872,13 @@ span.select2-selection.select2-selection--single.form-control.form-select.form-c
         -webkit-transform: rotate(-130deg);
         transform: rotate(-130deg);
     }
+}
+
+.numberNotif {
+    padding: 1px 7px;
+    background: #009ef7;
+    border: 2px solid #009ef7;
+    color: #fff;
+    text-align: center;
+    border-radius: 20%;
 }
