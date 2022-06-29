@@ -8,7 +8,6 @@ use App\Models\Transaction;
 use App\Models\ActivityLog;
 use App\Models\Report;
 use Carbon\Carbon;
-use Illuminate\Support\Facades\Auth;
 
 class EditTransactionDashboard extends Component
 {
@@ -78,7 +77,7 @@ class EditTransactionDashboard extends Component
 
         if($validated['approveAct'] == 3){
             $log = ActivityLog::create([
-                'user_id' => Auth::id(),
+                'user_id' => session('user')['nip'],
                 'category' => 'cash-approved-excdir',
                 'activity_id' => $this->uuid,
             ]);
@@ -86,7 +85,7 @@ class EditTransactionDashboard extends Component
             session()->flash('success', 'Transaction status successfully updated to approved by executive director');
         }else{
             $log = ActivityLog::create([
-                'user_id' => Auth::id(),
+                'user_id' => session('user')['nip'],
                 'category' => 'cash-rejected',
                 'activity_id' => $this->uuid,
             ]);
@@ -112,7 +111,7 @@ class EditTransactionDashboard extends Component
 
         if($validated['approveAct'] == 3){
             $log = ActivityLog::create([
-                'user_id' => Auth::id(),
+                'user_id' => session('user')['nip'],
                 'category' => 'operational-approved-excdir',
                 'activity_id' => $this->uuid,
             ]);
@@ -120,7 +119,7 @@ class EditTransactionDashboard extends Component
             session()->flash('success', 'Transaction status successfully updated to approved by executive director');
         }else{
             $log = ActivityLog::create([
-                'user_id' => Auth::id(),
+                'user_id' => session('user')['nip'],
                 'category' => 'operational-rejected',
                 'activity_id' => $this->uuid,
             ]);
@@ -146,7 +145,7 @@ class EditTransactionDashboard extends Component
 
         if($validated['approveAct'] == 3){
             $log = ActivityLog::create([
-                'user_id' => Auth::id(),
+                'user_id' => session('user')['nip'],
                 'category' => 'escrow-approved-excdir',
                 'activity_id' => $this->uuid,
             ]);
@@ -154,7 +153,7 @@ class EditTransactionDashboard extends Component
             session()->flash('success', 'Transaction status successfully updated to approved by executive director');
         }else{
             $log = ActivityLog::create([
-                'user_id' => Auth::id(),
+                'user_id' => session('user')['nip'],
                 'category' => 'escrow-rejected',
                 'activity_id' => $this->uuid,
             ]);
@@ -179,7 +178,7 @@ class EditTransactionDashboard extends Component
 
         if($validated['approveAct'] == 3){
             $log = ActivityLog::create([
-                'user_id' => Auth::id(),
+                'user_id' => session('user')['nip'],
                 'category' => 'report-approved',
                 'activity_id' => $this->uuid,
             ]);
@@ -187,7 +186,7 @@ class EditTransactionDashboard extends Component
             session()->flash('success', 'Report status successfully updated to approved');
         }else{
             $log = ActivityLog::create([
-                'user_id' => Auth::id(),
+                'user_id' => session('user')['nip'],
                 'category' => 'report-rejected',
                 'activity_id' => $this->uuid,
             ]);

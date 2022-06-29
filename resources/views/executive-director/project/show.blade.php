@@ -26,7 +26,8 @@
             <div class="position-fixed bottom-0 end-0" style="bottom: 2% !important; right: 1% !important; z-index:2;">
                 <div class="alert alert-success alert-dismissible fade show d-flex align-items-center" role="alert">
                     <span class="svg-icon svg-icon-2hx svg-icon-success me-4">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                            fill="none">
                             <path opacity="0.3"
                                 d="M20.5543 4.37824L12.1798 2.02473C12.0626 1.99176 11.9376 1.99176 11.8203 2.02473L3.44572 4.37824C3.18118 4.45258 3 4.6807 3 4.93945V13.569C3 14.6914 3.48509 15.8404 4.4417 16.984C5.17231 17.8575 6.18314 18.7345 7.446 19.5909C9.56752 21.0295 11.6566 21.912 11.7445 21.9488C11.8258 21.9829 11.9129 22 12.0001 22C12.0872 22 12.1744 21.983 12.2557 21.9488C12.3435 21.912 14.4326 21.0295 16.5541 19.5909C17.8169 18.7345 18.8277 17.8575 19.5584 16.984C20.515 15.8404 21 14.6914 21 13.569V4.93945C21 4.6807 20.8189 4.45258 20.5543 4.37824Z"
                                 fill="currentColor"></path>
@@ -48,12 +49,14 @@
             <div class="position-fixed bottom-0 end-0" style="bottom: 2% !important; right: 1% !important; z-index:2;">
                 <div class="alert alert-danger alert-dismissible fade show d-flex align-items-center" role="alert">
                     <span class="svg-icon svg-icon-2hx svg-icon-danger me-4">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-                            <rect opacity="0.4" x="2" y="2" width="20" height="20" rx="10" fill="currentColor"></rect>
-                            <rect x="11" y="14" width="7" height="2" rx="1" transform="rotate(-90 11 14)"
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                            fill="none">
+                            <rect opacity="0.4" x="2" y="2" width="20" height="20" rx="10"
                                 fill="currentColor"></rect>
-                            <rect x="11" y="17" width="2" height="2" rx="1" transform="rotate(-90 11 17)"
-                                fill="currentColor"></rect>
+                            <rect x="11" y="14" width="7" height="2" rx="1"
+                                transform="rotate(-90 11 14)" fill="currentColor"></rect>
+                            <rect x="11" y="17" width="2" height="2" rx="1"
+                                transform="rotate(-90 11 17)" fill="currentColor"></rect>
                         </svg>
                     </span>
                     <div>
@@ -190,17 +193,17 @@
                                     <!--end::Stat-->
                                     <!--begin::Users-->
                                     <div
-                                        class="border border-gray-300 border-dashed rounded min-w-125px py-3 px-4 me-6 mb-3">
+                                        class="border border-gray-300 border-dashed rounded min-w-200px py-3 px-4 me-6 mb-3">
                                         <!--begin::User-->
-                                        <div class="symbol symbol-35px symbol-circle me-3" data-bs-toggle="tooltip" title=""
-                                            data-bs-original-title={{ $project[0]->project_manager }}"
+                                        <div class="symbol symbol-35px symbol-circle me-3" data-bs-toggle="tooltip"
+                                            title="" data-bs-original-title={{ $projMan['fullname'] }}"
                                             style="float:left;">
-                                            <span
-                                                class="symbol-label bg-warning text-inverse-warning fw-bolder">{{ strtoupper($project[0]->project_manager[0]) }}</span>
+                                            <img class="img img-fluid" src="{{ $projMan['avatar'] }}" alt="image"
+                                                style="max-width: 100%;">
                                         </div>
                                         <!--end::User-->
                                         <div class="d-flex align-items-center">
-                                            <div class="fs-4 fw-bolder counted">{{ $project[0]->project_manager }}</div>
+                                            <div class="fs-4 fw-bolder counted">{{ $projMan['fullname'] }}</div>
                                         </div>
                                         <!--begin::Label-->
                                         <div class="fw-bold fs-7 text-gray-400">Project
@@ -449,7 +452,8 @@
                                                                         {{ $af['name'] }}
                                                                     </h5>
                                                                     <button type="button" class="btn-close"
-                                                                        data-bs-dismiss="modal" aria-label="Close"></button>
+                                                                        data-bs-dismiss="modal"
+                                                                        aria-label="Close"></button>
                                                                 </div>
                                                                 <div class="modal-body text-center">
                                                                     @if (pathinfo($af['name'], PATHINFO_EXTENSION) == 'doc' || pathinfo($af['name'], PATHINFO_EXTENSION) == 'docx')
@@ -598,19 +602,13 @@
                                                 <div class="me-5 position-relative">
                                                     <!--begin::Image-->
                                                     <div class="symbol symbol-35px symbol-circle">
-                                                        @if (explode('-', trim($lpa[1]))[0] == 'cash')
-                                                            <span
-                                                                class="symbol-label bg-success text-inverse-primary fw-bolder">{{ ucfirst($lpa[0][0]) }}</span>
-                                                        @elseif(explode('-', trim($lpa[1]))[0] == 'operational')
-                                                            <span
-                                                                class="symbol-label bg-primary text-inverse-primary fw-bolder">{{ ucfirst($lpa[0][0]) }}</span>
-                                                        @elseif(explode('-', trim($lpa[1]))[0] == 'escrow')
-                                                            <span
-                                                                class="symbol-label bg-danger text-inverse-primary fw-bolder">{{ ucfirst($lpa[0][0]) }}</span>
-                                                        @elseif(explode('-', trim($lpa[1]))[0] == 'project')
-                                                            <span class="symbol-label text-inverse-primary fw-bolder"
-                                                                style="background-color: #f6910d">{{ ucfirst($lpa[0][0]) }}</span>
-                                                        @endif
+                                                        <div class="symbol symbol-35px symbol-circle me-3"
+                                                            data-bs-toggle="tooltip" title="{{ $lpa[0] }}"
+                                                            data-bs-original-title="{{ $lpa[0] }}"
+                                                            style="float:left;">
+                                                            <img class="img img-fluid" src="{{ $lpa[5] }}"
+                                                                alt="image" style="max-width: 100%;">
+                                                        </div>
                                                     </div>
                                                     <!--end::Image-->
                                                 </div>
@@ -1059,8 +1057,8 @@
                             <div class="card-title d-flex align-items-center">
                                 <!--begin::Svg Icon | path: icons/duotune/general/gen014.svg-->
                                 <span class="svg-icon svg-icon-1 svg-icon-primary me-3 lh-0">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-                                        fill="none">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                        viewBox="0 0 24 24" fill="none">
                                         <path opacity="0.3"
                                             d="M21 22H3C2.4 22 2 21.6 2 21V5C2 4.4 2.4 4 3 4H21C21.6 4 22 4.4 22 5V21C22 21.6 21.6 22 21 22Z"
                                             fill="black"></path>
@@ -1109,8 +1107,9 @@
                                                                     <!--begin::Svg Icon | path: assets/media/icons/duotune/general/gen055.svg-->
                                                                     <span
                                                                         class="svg-icon svg-icon-gray-700 svg-icon-2"><svg
-                                                                            xmlns="http://www.w3.org/2000/svg" width="24"
-                                                                            height="24" viewBox="0 0 24 24" fill="none">
+                                                                            xmlns="http://www.w3.org/2000/svg"
+                                                                            width="24" height="24"
+                                                                            viewBox="0 0 24 24" fill="none">
                                                                             <path opacity="0.3" fill-rule="evenodd"
                                                                                 clip-rule="evenodd"
                                                                                 d="M2 4.63158C2 3.1782 3.1782 2 4.63158 2H13.47C14.0155 2 14.278 2.66919 13.8778 3.04006L12.4556 4.35821C11.9009 4.87228 11.1726 5.15789 10.4163 5.15789H7.1579C6.05333 5.15789 5.15789 6.05333 5.15789 7.1579V16.8421C5.15789 17.9467 6.05333 18.8421 7.1579 18.8421H16.8421C17.9467 18.8421 18.8421 17.9467 18.8421 16.8421V13.7518C18.8421 12.927 19.1817 12.1387 19.7809 11.572L20.9878 10.4308C21.3703 10.0691 22 10.3403 22 10.8668V19.3684C22 20.8218 20.8218 22 19.3684 22H4.63158C3.1782 22 2 20.8218 2 19.3684V4.63158Z"
@@ -1129,8 +1128,9 @@
                                                                     <!--begin::Svg Icon | path: assets/media/icons/duotune/general/gen019.svg-->
                                                                     <span
                                                                         class="svg-icon svg-icon-gray-700 svg-icon-2"><svg
-                                                                            xmlns="http://www.w3.org/2000/svg" width="24"
-                                                                            height="24" viewBox="0 0 24 24" fill="none">
+                                                                            xmlns="http://www.w3.org/2000/svg"
+                                                                            width="24" height="24"
+                                                                            viewBox="0 0 24 24" fill="none">
                                                                             <path
                                                                                 d="M17.5 11H6.5C4 11 2 9 2 6.5C2 4 4 2 6.5 2H17.5C20 2 22 4 22 6.5C22 9 20 11 17.5 11ZM15 6.5C15 7.9 16.1 9 17.5 9C18.9 9 20 7.9 20 6.5C20 5.1 18.9 4 17.5 4C16.1 4 15 5.1 15 6.5Z"
                                                                                 fill="currentColor" />
@@ -1145,8 +1145,9 @@
                                                                     <!--begin::Svg Icon | path: assets/media/icons/duotune/general/gen027.svg-->
                                                                     <span
                                                                         class="svg-icon svg-icon-2 svg-icon-gray-700"><svg
-                                                                            xmlns="http://www.w3.org/2000/svg" width="24"
-                                                                            height="24" viewBox="0 0 24 24" fill="none">
+                                                                            xmlns="http://www.w3.org/2000/svg"
+                                                                            width="24" height="24"
+                                                                            viewBox="0 0 24 24" fill="none">
                                                                             <path
                                                                                 d="M5 9C5 8.44772 5.44772 8 6 8H18C18.5523 8 19 8.44772 19 9V18C19 19.6569 17.6569 21 16 21H8C6.34315 21 5 19.6569 5 18V9Z"
                                                                                 fill="currentColor" />
@@ -1163,10 +1164,13 @@
                                                                 <div class="symbol-label bg-success">
                                                                     <!--begin::Svg Icon | path: assets/media/icons/duotune/general/gen043.svg-->
                                                                     <span class="svg-icon svg-icon-white svg-icon-2"><svg
-                                                                            xmlns="http://www.w3.org/2000/svg" width="24"
-                                                                            height="24" viewBox="0 0 24 24" fill="none">
-                                                                            <rect opacity="0.3" x="2" y="2" width="20"
-                                                                                height="20" rx="10" fill="currentColor" />
+                                                                            xmlns="http://www.w3.org/2000/svg"
+                                                                            width="24" height="24"
+                                                                            viewBox="0 0 24 24" fill="none">
+                                                                            <rect opacity="0.3" x="2"
+                                                                                y="2" width="20"
+                                                                                height="20" rx="10"
+                                                                                fill="currentColor" />
                                                                             <path
                                                                                 d="M10.4343 12.4343L8.75 10.75C8.33579 10.3358 7.66421 10.3358 7.25 10.75C6.83579 11.1642 6.83579 11.8358 7.25 12.25L10.2929 15.2929C10.6834 15.6834 11.3166 15.6834 11.7071 15.2929L17.25 9.75C17.6642 9.33579 17.6642 8.66421 17.25 8.25C16.8358 7.83579 16.1642 7.83579 15.75 8.25L11.5657 12.4343C11.2533 12.7467 10.7467 12.7467 10.4343 12.4343Z"
                                                                                 fill="currentColor" />
@@ -1177,8 +1181,9 @@
                                                                 <div class="symbol-label bg-danger">
                                                                     <!--begin::Svg Icon | path: assets/media/icons/duotune/abstract/abs012.svg-->
                                                                     <span class="svg-icon svg-icon-white svg-icon-2"><svg
-                                                                            xmlns="http://www.w3.org/2000/svg" width="24"
-                                                                            height="24" viewBox="0 0 24 24" fill="none">
+                                                                            xmlns="http://www.w3.org/2000/svg"
+                                                                            width="24" height="24"
+                                                                            viewBox="0 0 24 24" fill="none">
                                                                             <path opacity="0.3"
                                                                                 d="M6.7 19.4L5.3 18C4.9 17.6 4.9 17 5.3 16.6L16.6 5.3C17 4.9 17.6 4.9 18 5.3L19.4 6.7C19.8 7.1 19.8 7.7 19.4 8.1L8.1 19.4C7.8 19.8 7.1 19.8 6.7 19.4Z"
                                                                                 fill="currentColor" />
@@ -1192,8 +1197,9 @@
                                                                 <div class="symbol-label bg-primary">
                                                                     <!--begin::Svg Icon | path: assets/media/icons/duotune/finance/fin008.svg-->
                                                                     <span class="svg-icon svg-icon-white svg-icon-2"><svg
-                                                                            xmlns="http://www.w3.org/2000/svg" width="24"
-                                                                            height="24" viewBox="0 0 24 24" fill="none">
+                                                                            xmlns="http://www.w3.org/2000/svg"
+                                                                            width="24" height="24"
+                                                                            viewBox="0 0 24 24" fill="none">
                                                                             <path opacity="0.3"
                                                                                 d="M3.20001 5.91897L16.9 3.01895C17.4 2.91895 18 3.219 18.1 3.819L19.2 9.01895L3.20001 5.91897Z"
                                                                                 fill="currentColor" />
@@ -1238,8 +1244,9 @@
                                                                             data-bs-placement="top"
                                                                             title="{{ $lpa[0] }}"
                                                                             data-bs-original-title="{{ $lpa[0] }}">
-                                                                            <span
-                                                                                class="symbol-label bg-success text-inverse-warning fw-bolder">{{ ucfirst($lpa[0][0]) }}</span>
+                                                                            <img class="img img-fluid"
+                                                                                src="{{ $lpa[5] }}" alt="image"
+                                                                                style="max-width: 100%;">
                                                                         </div>
                                                                         <!--end::User-->
                                                                     </div>
@@ -1269,8 +1276,9 @@
                                                                             data-bs-placement="top"
                                                                             title="{{ $lpa[0] }}"
                                                                             data-bs-original-title="{{ $lpa[0] }}">
-                                                                            <span
-                                                                                class="symbol-label bg-success text-inverse-warning fw-bolder">{{ ucfirst($lpa[0][0]) }}</span>
+                                                                            <img class="img img-fluid"
+                                                                                src="{{ $lpa[5] }}" alt="image"
+                                                                                style="max-width: 100%;">
                                                                         </div>
                                                                         <!--end::User-->
                                                                     </div>
@@ -1299,8 +1307,9 @@
                                                                             data-bs-placement="top"
                                                                             title="{{ $lpa[0] }}"
                                                                             data-bs-original-title="{{ $lpa[0] }}">
-                                                                            <span
-                                                                                class="symbol-label bg-success text-inverse-warning fw-bolder">{{ ucfirst($lpa[0][0]) }}</span>
+                                                                            <img class="img img-fluid"
+                                                                                src="{{ $lpa[5] }}" alt="image"
+                                                                                style="max-width: 100%;">
                                                                         </div>
                                                                         <!--end::User-->
                                                                     </div>
@@ -1330,8 +1339,9 @@
                                                                             data-bs-placement="top"
                                                                             title="{{ $lpa[0] }}"
                                                                             data-bs-original-title="{{ $lpa[0] }}">
-                                                                            <span
-                                                                                class="symbol-label bg-success text-inverse-warning fw-bolder">{{ ucfirst($lpa[0][0]) }}</span>
+                                                                            <img class="img img-fluid"
+                                                                                src="{{ $lpa[5] }}" alt="image"
+                                                                                style="max-width: 100%;">
                                                                         </div>
                                                                         <!--end::User-->
                                                                     </div>
@@ -1361,8 +1371,9 @@
                                                                             data-bs-placement="top"
                                                                             title="{{ $lpa[0] }}"
                                                                             data-bs-original-title="{{ $lpa[0] }}">
-                                                                            <span
-                                                                                class="symbol-label bg-success text-inverse-warning fw-bolder">{{ ucfirst($lpa[0][0]) }}</span>
+                                                                            <img class="img img-fluid"
+                                                                                src="{{ $lpa[5] }}" alt="image"
+                                                                                style="max-width: 100%;">
                                                                         </div>
                                                                         <!--end::User-->
                                                                     </div>
@@ -1392,8 +1403,9 @@
                                                                             data-bs-placement="top"
                                                                             title="{{ $lpa[0] }}"
                                                                             data-bs-original-title="{{ $lpa[0] }}">
-                                                                            <span
-                                                                                class="symbol-label bg-success text-inverse-warning fw-bolder">{{ ucfirst($lpa[0][0]) }}</span>
+                                                                            <img class="img img-fluid"
+                                                                                src="{{ $lpa[5] }}" alt="image"
+                                                                                style="max-width: 100%;">
                                                                         </div>
                                                                         <!--end::User-->
                                                                     </div>
@@ -1423,8 +1435,9 @@
                                                                             data-bs-placement="top"
                                                                             title="{{ $lpa[0] }}"
                                                                             data-bs-original-title="{{ $lpa[0] }}">
-                                                                            <span
-                                                                                class="symbol-label bg-success text-inverse-warning fw-bolder">{{ ucfirst($lpa[0][0]) }}</span>
+                                                                            <img class="img img-fluid"
+                                                                                src="{{ $lpa[5] }}" alt="image"
+                                                                                style="max-width: 100%;">
                                                                         </div>
                                                                         <!--end::User-->
                                                                     </div>
@@ -1454,8 +1467,9 @@
                                                                             data-bs-placement="top"
                                                                             title="{{ $lpa[0] }}"
                                                                             data-bs-original-title="{{ $lpa[0] }}">
-                                                                            <span
-                                                                                class="symbol-label bg-success text-inverse-warning fw-bolder">{{ ucfirst($lpa[0][0]) }}</span>
+                                                                            <img class="img img-fluid"
+                                                                                src="{{ $lpa[5] }}" alt="image"
+                                                                                style="max-width: 100%;">
                                                                         </div>
                                                                         <!--end::User-->
                                                                     </div>
@@ -1485,8 +1499,9 @@
                                                                             data-bs-placement="top"
                                                                             title="{{ $lpa[0] }}"
                                                                             data-bs-original-title="{{ $lpa[0] }}">
-                                                                            <span
-                                                                                class="symbol-label bg-success text-inverse-warning fw-bolder">{{ ucfirst($lpa[0][0]) }}</span>
+                                                                            <img class="img img-fluid"
+                                                                                src="{{ $lpa[5] }}" alt="image"
+                                                                                style="max-width: 100%;">
                                                                         </div>
                                                                         <!--end::User-->
                                                                     </div>
@@ -1515,8 +1530,9 @@
                                                                             data-bs-placement="top"
                                                                             title="{{ $lpa[0] }}"
                                                                             data-bs-original-title="{{ $lpa[0] }}">
-                                                                            <span
-                                                                                class="symbol-label bg-success text-inverse-warning fw-bolder">{{ ucfirst($lpa[0][0]) }}</span>
+                                                                            <img class="img img-fluid"
+                                                                                src="{{ $lpa[5] }}" alt="image"
+                                                                                style="max-width: 100%;">
                                                                         </div>
                                                                         <!--end::User-->
                                                                     </div>
@@ -1546,8 +1562,9 @@
                                                                             data-bs-placement="top"
                                                                             title="{{ $lpa[0] }}"
                                                                             data-bs-original-title="{{ $lpa[0] }}">
-                                                                            <span
-                                                                                class="symbol-label bg-success text-inverse-warning fw-bolder">{{ ucfirst($lpa[0][0]) }}</span>
+                                                                            <img class="img img-fluid"
+                                                                                src="{{ $lpa[5] }}" alt="image"
+                                                                                style="max-width: 100%;">
                                                                         </div>
                                                                         <!--end::User-->
                                                                     </div>
@@ -1577,8 +1594,9 @@
                                                                             data-bs-placement="top"
                                                                             title="{{ $lpa[0] }}"
                                                                             data-bs-original-title="{{ $lpa[0] }}">
-                                                                            <span
-                                                                                class="symbol-label bg-success text-inverse-warning fw-bolder">{{ ucfirst($lpa[0][0]) }}</span>
+                                                                            <img class="img img-fluid"
+                                                                                src="{{ $lpa[5] }}" alt="image"
+                                                                                style="max-width: 100%;">
                                                                         </div>
                                                                         <!--end::User-->
                                                                     </div>
@@ -1608,8 +1626,9 @@
                                                                             data-bs-placement="top"
                                                                             title="{{ $lpa[0] }}"
                                                                             data-bs-original-title="{{ $lpa[0] }}">
-                                                                            <span
-                                                                                class="symbol-label bg-success text-inverse-warning fw-bolder">{{ ucfirst($lpa[0][0]) }}</span>
+                                                                            <img class="img img-fluid"
+                                                                                src="{{ $lpa[5] }}" alt="image"
+                                                                                style="max-width: 100%;">
                                                                         </div>
                                                                         <!--end::User-->
                                                                     </div>
@@ -1639,8 +1658,9 @@
                                                                             data-bs-placement="top"
                                                                             title="{{ $lpa[0] }}"
                                                                             data-bs-original-title="{{ $lpa[0] }}">
-                                                                            <span
-                                                                                class="symbol-label bg-success text-inverse-warning fw-bolder">{{ ucfirst($lpa[0][0]) }}</span>
+                                                                            <img class="img img-fluid"
+                                                                                src="{{ $lpa[5] }}" alt="image"
+                                                                                style="max-width: 100%;">
                                                                         </div>
                                                                         <!--end::User-->
                                                                     </div>
@@ -1670,8 +1690,9 @@
                                                                             data-bs-placement="top"
                                                                             title="{{ $lpa[0] }}"
                                                                             data-bs-original-title="{{ $lpa[0] }}">
-                                                                            <span
-                                                                                class="symbol-label bg-success text-inverse-warning fw-bolder">{{ ucfirst($lpa[0][0]) }}</span>
+                                                                            <img class="img img-fluid"
+                                                                                src="{{ $lpa[5] }}" alt="image"
+                                                                                style="max-width: 100%;">
                                                                         </div>
                                                                         <!--end::User-->
                                                                     </div>
@@ -1701,8 +1722,9 @@
                                                                             data-bs-placement="top"
                                                                             title="{{ $lpa[0] }}"
                                                                             data-bs-original-title="{{ $lpa[0] }}">
-                                                                            <span
-                                                                                class="symbol-label bg-success text-inverse-warning fw-bolder">{{ ucfirst($lpa[0][0]) }}</span>
+                                                                            <img class="img img-fluid"
+                                                                                src="{{ $lpa[5] }}" alt="image"
+                                                                                style="max-width: 100%;">
                                                                         </div>
                                                                         <!--end::User-->
                                                                     </div>
@@ -1731,8 +1753,9 @@
                                                                             data-bs-placement="top"
                                                                             title="{{ $lpa[0] }}"
                                                                             data-bs-original-title="{{ $lpa[0] }}">
-                                                                            <span
-                                                                                class="symbol-label bg-success text-inverse-warning fw-bolder">{{ ucfirst($lpa[0][0]) }}</span>
+                                                                            <img class="img img-fluid"
+                                                                                src="{{ $lpa[5] }}" alt="image"
+                                                                                style="max-width: 100%;">
                                                                         </div>
                                                                         <!--end::User-->
                                                                     </div>
@@ -1762,8 +1785,9 @@
                                                                             data-bs-placement="top"
                                                                             title="{{ $lpa[0] }}"
                                                                             data-bs-original-title="{{ $lpa[0] }}">
-                                                                            <span
-                                                                                class="symbol-label bg-success text-inverse-warning fw-bolder">{{ ucfirst($lpa[0][0]) }}</span>
+                                                                            <img class="img img-fluid"
+                                                                                src="{{ $lpa[5] }}" alt="image"
+                                                                                style="max-width: 100%;">
                                                                         </div>
                                                                         <!--end::User-->
                                                                     </div>
@@ -1793,8 +1817,9 @@
                                                                             data-bs-placement="top"
                                                                             title="{{ $lpa[0] }}"
                                                                             data-bs-original-title="{{ $lpa[0] }}">
-                                                                            <span
-                                                                                class="symbol-label bg-success text-inverse-warning fw-bolder">{{ ucfirst($lpa[0][0]) }}</span>
+                                                                            <img class="img img-fluid"
+                                                                                src="{{ $lpa[5] }}" alt="image"
+                                                                                style="max-width: 100%;">
                                                                         </div>
                                                                         <!--end::User-->
                                                                     </div>
@@ -1824,8 +1849,9 @@
                                                                             data-bs-placement="top"
                                                                             title="{{ $lpa[0] }}"
                                                                             data-bs-original-title="{{ $lpa[0] }}">
-                                                                            <span
-                                                                                class="symbol-label bg-success text-inverse-warning fw-bolder">{{ ucfirst($lpa[0][0]) }}</span>
+                                                                            <img class="img img-fluid"
+                                                                                src="{{ $lpa[5] }}" alt="image"
+                                                                                style="max-width: 100%;">
                                                                         </div>
                                                                         <!--end::User-->
                                                                     </div>
@@ -1855,8 +1881,9 @@
                                                                             data-bs-placement="top"
                                                                             title="{{ $lpa[0] }}"
                                                                             data-bs-original-title="{{ $lpa[0] }}">
-                                                                            <span
-                                                                                class="symbol-label bg-success text-inverse-warning fw-bolder">{{ ucfirst($lpa[0][0]) }}</span>
+                                                                            <img class="img img-fluid"
+                                                                                src="{{ $lpa[5] }}" alt="image"
+                                                                                style="max-width: 100%;">
                                                                         </div>
                                                                         <!--end::User-->
                                                                     </div>
@@ -1883,8 +1910,9 @@
                                                                             data-bs-placement="top"
                                                                             title="{{ $lpa[0] }}"
                                                                             data-bs-original-title="{{ $lpa[0] }}">
-                                                                            <span
-                                                                                class="symbol-label bg-success text-inverse-warning fw-bolder">{{ ucfirst($lpa[0][0]) }}</span>
+                                                                            <img class="img img-fluid"
+                                                                                src="{{ $lpa[5] }}" alt="image"
+                                                                                style="max-width: 100%;">
                                                                         </div>
                                                                         <!--end::User-->
                                                                     </div>
@@ -1911,8 +1939,9 @@
                                                                             data-bs-placement="top"
                                                                             title="{{ $lpa[0] }}"
                                                                             data-bs-original-title="{{ $lpa[0] }}">
-                                                                            <span
-                                                                                class="symbol-label bg-success text-inverse-warning fw-bolder">{{ ucfirst($lpa[0][0]) }}</span>
+                                                                            <img class="img img-fluid"
+                                                                                src="{{ $lpa[5] }}" alt="image"
+                                                                                style="max-width: 100%;">
                                                                         </div>
                                                                         <!--end::User-->
                                                                     </div>
@@ -1939,8 +1968,9 @@
                                                                             data-bs-placement="top"
                                                                             title="{{ $lpa[0] }}"
                                                                             data-bs-original-title="{{ $lpa[0] }}">
-                                                                            <span
-                                                                                class="symbol-label bg-success text-inverse-warning fw-bolder">{{ ucfirst($lpa[0][0]) }}</span>
+                                                                            <img class="img img-fluid"
+                                                                                src="{{ $lpa[5] }}" alt="image"
+                                                                                style="max-width: 100%;">
                                                                         </div>
                                                                         <!--end::User-->
                                                                     </div>
@@ -1978,7 +2008,8 @@
         <!--begin::Svg Icon | path: icons/duotune/arrows/arr066.svg-->
         <span class="svg-icon">
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-                <rect opacity="0.5" x="13" y="6" width="13" height="2" rx="1" transform="rotate(90 13 6)" fill="black">
+                <rect opacity="0.5" x="13" y="6" width="13" height="2" rx="1"
+                    transform="rotate(90 13 6)" fill="black">
                 </rect>
                 <path
                     d="M12.5657 8.56569L16.75 12.75C17.1642 13.1642 17.8358 13.1642 18.25 12.75C18.6642 12.3358 18.6642 11.6642 18.25 11.25L12.7071 5.70711C12.3166 5.31658 11.6834 5.31658 11.2929 5.70711L5.75 11.25C5.33579 11.6642 5.33579 12.3358 5.75 12.75C6.16421 13.1642 6.83579 13.1642 7.25 12.75L11.4343 8.56569C11.7467 8.25327 12.2533 8.25327 12.5657 8.56569Z"

@@ -4,7 +4,8 @@
             <div class="position-fixed bottom-0 end-0" style="bottom: 2% !important; right: 1% !important; z-index:2;">
                 <div class="alert alert-success alert-dismissible fade show d-flex align-items-center" role="alert">
                     <span class="svg-icon svg-icon-2hx svg-icon-success me-4">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                            fill="none">
                             <path opacity="0.3"
                                 d="M20.5543 4.37824L12.1798 2.02473C12.0626 1.99176 11.9376 1.99176 11.8203 2.02473L3.44572 4.37824C3.18118 4.45258 3 4.6807 3 4.93945V13.569C3 14.6914 3.48509 15.8404 4.4417 16.984C5.17231 17.8575 6.18314 18.7345 7.446 19.5909C9.56752 21.0295 11.6566 21.912 11.7445 21.9488C11.8258 21.9829 11.9129 22 12.0001 22C12.0872 22 12.1744 21.983 12.2557 21.9488C12.3435 21.912 14.4326 21.0295 16.5541 19.5909C17.8169 18.7345 18.8277 17.8575 19.5584 16.984C20.515 15.8404 21 14.6914 21 13.569V4.93945C21 4.6807 20.8189 4.45258 20.5543 4.37824Z"
                                 fill="currentColor"></path>
@@ -26,12 +27,14 @@
             <div class="position-fixed bottom-0 end-0" style="bottom: 2% !important; right: 1% !important; z-index:2;">
                 <div class="alert alert-danger alert-dismissible fade show d-flex align-items-center" role="alert">
                     <span class="svg-icon svg-icon-2hx svg-icon-danger me-4">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-                            <rect opacity="0.4" x="2" y="2" width="20" height="20" rx="10" fill="currentColor"></rect>
-                            <rect x="11" y="14" width="7" height="2" rx="1" transform="rotate(-90 11 14)"
-                                fill="currentColor"></rect>
-                            <rect x="11" y="17" width="2" height="2" rx="1" transform="rotate(-90 11 17)"
-                                fill="currentColor"></rect>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                            fill="none">
+                            <rect opacity="0.4" x="2" y="2" width="20" height="20"
+                                rx="10" fill="currentColor"></rect>
+                            <rect x="11" y="14" width="7" height="2" rx="1"
+                                transform="rotate(-90 11 14)" fill="currentColor"></rect>
+                            <rect x="11" y="17" width="2" height="2" rx="1"
+                                transform="rotate(-90 11 17)" fill="currentColor"></rect>
                         </svg>
                     </span>
                     <div>
@@ -43,7 +46,7 @@
             </div>
         </div>
     @endif
-    <div class="row g-6 g-xl-9 mt-1" wire:poll.60000ms>
+    <div class="row g-6 g-xl-9 mt-1">
         <div class="col-lg-12 col-xxl-12">
             <!--begin::Card-->
             <div class="card h-100">
@@ -158,13 +161,13 @@
             <!--begin::Select wrapper-->
             <!--begin::Card toolbar-->
             <div class="m-0 me-3">
-                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addProject"
-                    style="padding: 10px 14px;">
+                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addProject">
                     <!--begin::Svg Icon | path: icons/duotone/Navigation/Plus.svg-->
                     <span class="svg-icon svg-icon-2">
-                        <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px"
-                            height="24px" viewBox="0 0 24 24" version="1.1">
-                            <rect fill="#000000" x="4" y="11" width="16" height="2" rx="1" />
+                        <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+                            width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
+                            <rect fill="#000000" x="4" y="11" width="16" height="2"
+                                rx="1" />
                             <rect fill="#000000" opacity="0.5"
                                 transform="translate(12.000000, 12.000000) rotate(-270.000000) translate(-12.000000, -12.000000)"
                                 x="4" y="11" width="16" height="2" rx="1" />
@@ -206,8 +209,8 @@
             <div class="m-0">
                 <div class="d-flex align-items-center position-relative">
                     <span class="svg-icon svg-icon-1 position-absolute ms-6">
-                        <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px"
-                            height="24px" viewBox="0 0 24 24" version="1.1">
+                        <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+                            width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
                             <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
                                 <rect x="0" y="0" width="24" height="24" />
                                 <path
@@ -230,7 +233,7 @@
 
     <!-- Modal Create-->
     <div wire:ignore.self class="modal fade" id="addProject" tabindex="-1" aria-labelledby="addProject"
-        aria-hidden="true">
+        aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
         <div class="modal-dialog modal-lg modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
@@ -255,8 +258,9 @@
                             <div class="col-md-9">
                                 <input type="text"
                                     class="form-control form-control-solid fw-bold @error('name') is-invalid @enderror"
-                                    placeholder="Project name" name="name" id="name" wire:model="name"
-                                    @error('name') style="border-color: #f1416c;" @enderror required />
+                                    placeholder="Project name" name="name" id="name"
+                                    wire:model.defer="name" @error('name') style="border-color: #f1416c;" @enderror
+                                    required />
                                 @error('name')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
@@ -283,7 +287,7 @@
                                 <select
                                     class="form-control form-select form-control-solid fw-bolder custom-select @error('category') is-invalid border-danger @enderror"
                                     data-pharaonic="select2" data-component-id="{{ $this->id }}"
-                                    wire:model="category" id="category" name="category" required>
+                                    wire:model.defer="category" id="category" name="category" required>
                                     <option></option>
                                     <option value="1">Radar Upgrade</option>
                                     <option value="2">Radar Spare Part</option>
@@ -319,7 +323,7 @@
                                 <input
                                     class="form-control form-control-solid fw-bold @error('period') is-invalid @enderror"
                                     placeholder="Pick a project period" id="period" name="period" type="text"
-                                    wire:model="period" @error('period') style="border-color: #f1416c;" @enderror
+                                    wire:model.defer="period" @error('period') style="border-color: #f1416c;" @enderror
                                     required>
                                 <!--end::Input-->
                                 @error('period')
@@ -347,7 +351,8 @@
                             <div class="col-md-9">
                                 <input type="text"
                                     class="form-control form-control-solid fw-bold @error('location') is-invalid @enderror"
-                                    placeholder="Project location" name="location" id="location" wire:model="location"
+                                    placeholder="Project location" name="location" id="location"
+                                    wire:model.defer="location"
                                     @error('location') style="border-color: #f1416c;" @enderror required />
                                 @error('location')
                                     <div class="invalid-feedback">{{ $message }}</div>
@@ -373,7 +378,7 @@
                             <div class="col-md-9">
                                 <input type="text" type-currency="IDR"
                                     class="form-control form-control-solid @error('contract') is-invalid @enderror"
-                                    placeholder="Project contract" name="contract" wire:model="contract"
+                                    placeholder="Project contract" name="contract" wire:model.defer="contract"
                                     @error('contract') style="border-color: #f1416c;" @enderror required>
                                 @error('contract')
                                     <div class="invalid-feedback">{{ $message }}</div>
@@ -398,11 +403,18 @@
                             <!--end::Col-->
                             <!--begin::Col-->
                             <div class="col-md-9">
-                                <input type="text"
-                                    class="form-control form-control-solid fw-bold @error('projectManager') is-invalid @enderror"
-                                    placeholder="Project manager" name="projectManager" id="projectManager"
-                                    wire:model="projectManager"
-                                    @error('projectManager') style="border-color: #f1416c;" @enderror required />
+                                <select
+                                    class="form-control form-select form-control-solid fw-bolder custom-select @error('projectManager') is-invalid border-danger @enderror"
+                                    data-pharaonic="select2" data-component-id="{{ $this->id }}"
+                                    wire:model.defer="projectManager" id="projectManager" name="projectManager"
+                                    required>
+                                    <option></option>
+                                    @foreach ($dataUser as $du)
+                                        <option value="{{ $du['nip'] }}">{{ $du['fullname'] }} -
+                                            {{ $du['position'] }}</option>
+                                    @endforeach
+                                </select>
+                                <!--end::Input-->
                                 @error('projectManager')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
@@ -429,7 +441,7 @@
                                 <select
                                     class="form-control form-select form-control-solid fw-bolder custom-select @error('statusProj') is-invalid border-danger @enderror"
                                     data-pharaonic="select2" data-component-id="{{ $this->id }}"
-                                    wire:model="statusProj" id="statusProj" name="statusProj" required>
+                                    wire:model.defer="statusProj" id="statusProj" name="statusProj" required>
                                     <option></option>
                                     <option value="1">To Do</option>
                                     <option value="2">On Progress</option>
@@ -646,8 +658,8 @@
                                 title="@if ($p->status == 1) Not started yet @elseif($p->status == 2) On going @else Done @endif"
                                 data-bs-original-title="@if ($p->status == 1) Not started yet @elseif($p->status == 2) On going @else Done @endif">
                                 @if ($p->status == 1)
-                                    <div class="rounded h-4px" role="progressbar" style="width: 0%" aria-valuenow="0"
-                                        aria-valuemin="0" aria-valuemax="100"></div>
+                                    <div class="rounded h-4px" role="progressbar" style="width: 0%"
+                                        aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
                                 @elseif($p->status == 2)
                                     <div class="bg-primary rounded h-4px" role="progressbar" style="width: 50%"
                                         aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
@@ -660,11 +672,14 @@
                             <!--begin::Users-->
                             <div class="symbol-group symbol-hover">
                                 <!--begin::User-->
-                                <div class="symbol symbol-35px symbol-circle" data-bs-toggle="tooltip"
-                                    title="{{ $p->project_manager }}"
-                                    data-bs-original-title="{{ $p->project_manager }}">
-                                    <span
-                                        class="symbol-label bg-primary text-inverse-primary fw-bolder">{{ strtoupper($p->project_manager[0]) }}</span>
+                                <div class="symbol-group symbol-hover">
+                                    <!--begin::User-->
+                                    <div class="symbol symbol-35px symbol-circle" data-bs-toggle="tooltip"
+                                        data-bs-original-title="{{ $projMan[$key]['fullname'] }}">
+                                        <img class="img img-fluid" src="{{ $projMan[$key]['avatar'] }}"
+                                            alt="image" style="max-width: 100%;">
+                                    </div>
+                                    <!--end::User-->
                                 </div>
                                 <!--end::User-->
                             </div>
@@ -676,7 +691,8 @@
                 </div>
                 <!-- Modal Update-->
                 <div wire:ignore.self class="modal fade" id="updateProject" tabindex="-1"
-                    aria-labelledby="updateProject" aria-hidden="true">
+                    aria-labelledby="updateProject" aria-hidden="true" data-bs-backdrop="static"
+                    data-bs-keyboard="false">
                     <div class="modal-dialog modal-lg modal-dialog-centered">
                         <div class="modal-content">
                             <div class="modal-header">
@@ -685,14 +701,14 @@
                                     wire:click.prevent="cancel()"></button>
                             </div>
                             <div class="modal-body">
-                                <form wire:submit.prevent="updateproject" id="editproj" novalidate autocomplete="off">
+                                <form wire:submit.prevent="updateproject" id="editproj" novalidate
+                                    autocomplete="off">
                                     <!--begin::Input group-->
                                     <div class="fv-row row mb-5">
                                         <!--begin::Col-->
                                         <div class="col-md-3 align-items-center">
                                             <!--begin::Label-->
-                                            <label class="fs-6 fw-bold"><span
-                                                    class="required">Name</span></label>
+                                            <label class="fs-6 fw-bold"><span class="required">Name</span></label>
                                             <div class="text-muted fw-bold fst-italic mb-2" style="font-size: 9px;">
                                                 Don't forget to enter the project name.
                                             </div>
@@ -703,7 +719,8 @@
                                         <div class="col-md-9">
                                             <input type="text"
                                                 class="form-control form-control-solid fw-bold @error('name') is-invalid @enderror"
-                                                placeholder="Project name" name="name" id="name" wire:model="name"
+                                                placeholder="Project name" name="name" id="name"
+                                                wire:model.defer="name"
                                                 @error('name') style="border-color: #f1416c;" @enderror required />
                                             @error('name')
                                                 <div class="invalid-feedback">{{ $message }}</div>
@@ -718,8 +735,7 @@
                                         <!--begin::Col-->
                                         <div class="col-md-3 align-items-center">
                                             <!--begin::Label-->
-                                            <label class="fs-6 fw-bold"><span
-                                                    class="required">Category</span></label>
+                                            <label class="fs-6 fw-bold"><span class="required">Category</span></label>
                                             <!--end::Label-->
                                             <div class="text-muted fw-bold fst-italic mb-2" style="font-size: 9px;">
                                                 Project category determine the percentage of tax.
@@ -732,7 +748,8 @@
                                             <select
                                                 class="form-control form-select form-control-solid fw-bolder custom-select @error('category') is-invalid border-danger @enderror"
                                                 data-pharaonic="select2" data-component-id="{{ $this->id }}"
-                                                wire:model="category" id="categoryUpt" name="category" required>
+                                                wire:model.defer="category" id="categoryUpt" name="category"
+                                                required>
                                                 <option></option>
                                                 <option value="1">Radar Upgrade</option>
                                                 <option value="2">Radar Spare Part</option>
@@ -755,8 +772,7 @@
                                         <!--begin::Col-->
                                         <div class="col-md-3 align-items-center">
                                             <!--begin::Label-->
-                                            <label class="fs-6 fw-bold"><span
-                                                    class="required">Period</span></label>
+                                            <label class="fs-6 fw-bold"><span class="required">Period</span></label>
                                             <!--end::Label-->
                                             <div class="text-muted fw-bold fst-italic mb-2" style="font-size: 9px;">
                                                 It will contains start date and end date project.
@@ -769,7 +785,7 @@
                                             <input
                                                 class="form-control form-control-solid fw-bold @error('period') is-invalid @enderror"
                                                 placeholder="Pick a project period" id="period" name="period"
-                                                type="text" wire:model="period"
+                                                type="text" wire:model.defer="period"
                                                 @error('period') style="border-color: #f1416c;" @enderror required>
                                             <!--end::Input-->
                                             @error('period')
@@ -785,8 +801,7 @@
                                         <!--begin::Col-->
                                         <div class="col-md-3 align-items-center">
                                             <!--begin::Label-->
-                                            <label class="fs-6 fw-bold"><span
-                                                    class="required">Location</span></label>
+                                            <label class="fs-6 fw-bold"><span class="required">Location</span></label>
                                             <!--end::Label-->
                                             <div class="text-muted fw-bold fst-italic mb-2" style="font-size: 9px;">
                                                 More detail is better for place accuracy in google maps. (At least
@@ -800,7 +815,7 @@
                                             <input type="text"
                                                 class="form-control form-control-solid fw-bold @error('location') is-invalid @enderror"
                                                 placeholder="Project location" name="location" id="location"
-                                                wire:model="location"
+                                                wire:model.defer="location"
                                                 @error('location') style="border-color: #f1416c;" @enderror required />
                                             @error('location')
                                                 <div class="invalid-feedback">{{ $message }}</div>
@@ -815,8 +830,7 @@
                                         <!--begin::Col-->
                                         <div class="col-md-3 align-items-center">
                                             <!--begin::Label-->
-                                            <label class="fs-6 fw-bold"><span
-                                                    class="required">Contract</span></label>
+                                            <label class="fs-6 fw-bold"><span class="required">Contract</span></label>
                                             <!--end::Label-->
                                             <div class="text-muted fw-bold fst-italic mb-2" style="font-size: 9px;">
                                                 Fill project contract before tax.
@@ -827,7 +841,8 @@
                                         <div class="col-md-9">
                                             <input type="text" type-currency="IDR"
                                                 class="form-control form-control-solid @error('contract') is-invalid @enderror"
-                                                placeholder="Project contract" name="contract" wire:model="contract"
+                                                placeholder="Project contract" name="contract"
+                                                wire:model.defer="contract"
                                                 @error('contract') style="border-color: #f1416c;" @enderror required>
                                             @error('contract')
                                                 <div class="invalid-feedback">{{ $message }}</div>
@@ -852,12 +867,20 @@
                                         <!--end::Col-->
                                         <!--begin::Col-->
                                         <div class="col-md-9">
-                                            <input type="text"
-                                                class="form-control form-control-solid fw-bold @error('projectManager') is-invalid @enderror"
-                                                placeholder="Project manager" name="projectManager" id="projectManager"
-                                                wire:model="projectManager"
-                                                @error('projectManager') style="border-color: #f1416c;" @enderror
-                                                required />
+                                            <select
+                                                class="form-control form-select form-control-solid fw-bolder custom-select @error('projectManager') is-invalid border-danger @enderror"
+                                                data-pharaonic="select2" data-component-id="{{ $this->id }}"
+                                                wire:model.defer="projectManager" id="projectManagerUpt"
+                                                name="projectManager" required>
+                                                <option></option>
+                                                @foreach ($dataUser as $du)
+                                                    <option value="{{ $du['nip'] }}"
+                                                        @if ($du['nip'] == $this->projectManager) selected @endif>
+                                                        {{ $du['fullname'] }} -
+                                                        {{ $du['position'] }}</option>
+                                                @endforeach
+                                            </select>
+                                            <!--end::Input-->
                                             @error('projectManager')
                                                 <div class="invalid-feedback">{{ $message }}</div>
                                             @enderror
@@ -871,8 +894,7 @@
                                         <!--begin::Col-->
                                         <div class="col-md-3 align-items-center">
                                             <!--begin::Label-->
-                                            <label class="fs-6 fw-bold"><span
-                                                    class="required">Status</span></label>
+                                            <label class="fs-6 fw-bold"><span class="required">Status</span></label>
                                             <!--end::Label-->
                                             <div class="text-muted fw-bold fst-italic mb-2" style="font-size: 9px;">
                                                 Don't forget to update project status.
@@ -885,7 +907,8 @@
                                             <select
                                                 class="form-control form-select form-control-solid fw-bolder custom-select @error('statusProj') is-invalid border-danger @enderror"
                                                 data-pharaonic="select2" data-component-id="{{ $this->id }}"
-                                                wire:model="statusProj" id="statusProjUpt" name="statusProj" required>
+                                                wire:model.defer="statusProj" id="statusProjUpt" name="statusProj"
+                                                required>
                                                 <option></option>
                                                 <option value="1">To Do</option>
                                                 <option value="2">On Progress</option>
@@ -1018,6 +1041,26 @@
     </script>
     <script>
         $(document).ready(function() {
+            $('#projectManager').select2({
+                placeholder: "Select Project Manager",
+                closeOnSelect: true,
+                allowClear: true,
+                minimumResultsForSearch: -1,
+            });
+        });
+        document.addEventListener('livewire:load', function(event) {
+            @this.on('refreshDropdown', function() {
+                $('#projectManager').select2({
+                    placeholder: "Select Project Manager",
+                    closeOnSelect: true,
+                    allowClear: true,
+                    minimumResultsForSearch: -1,
+                });
+            });
+        });
+    </script>
+    <script>
+        $(document).ready(function() {
             $('#category').select2({
                 placeholder: "Select category",
                 closeOnSelect: true,
@@ -1049,6 +1092,26 @@
             @this.on('refreshDropdown', function() {
                 $('#statusProjUpt').select2({
                     placeholder: "Select status",
+                    closeOnSelect: true,
+                    allowClear: true,
+                    minimumResultsForSearch: -1,
+                });
+            });
+        });
+    </script>
+    <script>
+        $(document).ready(function() {
+            $('#projectManagerUpt').select2({
+                placeholder: "Select Project Manager",
+                closeOnSelect: true,
+                allowClear: true,
+                minimumResultsForSearch: -1,
+            });
+        });
+        document.addEventListener('livewire:load', function(event) {
+            @this.on('refreshDropdown', function() {
+                $('#projectManagerUpt').select2({
+                    placeholder: "Select Project Manager",
                     closeOnSelect: true,
                     allowClear: true,
                     minimumResultsForSearch: -1,

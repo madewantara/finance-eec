@@ -4,7 +4,8 @@
             <div class="position-fixed bottom-0 end-0" style="bottom: 2% !important; right: 1% !important; z-index:2;">
                 <div class="alert alert-success alert-dismissible fade show d-flex align-items-center" role="alert">
                     <span class="svg-icon svg-icon-2hx svg-icon-success me-4">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                            fill="none">
                             <path opacity="0.3"
                                 d="M20.5543 4.37824L12.1798 2.02473C12.0626 1.99176 11.9376 1.99176 11.8203 2.02473L3.44572 4.37824C3.18118 4.45258 3 4.6807 3 4.93945V13.569C3 14.6914 3.48509 15.8404 4.4417 16.984C5.17231 17.8575 6.18314 18.7345 7.446 19.5909C9.56752 21.0295 11.6566 21.912 11.7445 21.9488C11.8258 21.9829 11.9129 22 12.0001 22C12.0872 22 12.1744 21.983 12.2557 21.9488C12.3435 21.912 14.4326 21.0295 16.5541 19.5909C17.8169 18.7345 18.8277 17.8575 19.5584 16.984C20.515 15.8404 21 14.6914 21 13.569V4.93945C21 4.6807 20.8189 4.45258 20.5543 4.37824Z"
                                 fill="currentColor"></path>
@@ -179,14 +180,14 @@
                                             <!--end::Label-->
                                         </div>
                                         <!--end::Item-->
-                                        <div wire:ignore.self class="modal fade" id="approvalCashTrans"
-                                            tabindex="-1" aria-labelledby="approvalCashTrans" aria-hidden="true">
+                                        <div wire:ignore.self class="modal fade" id="approvalCashTrans" tabindex="-1"
+                                            aria-labelledby="approvalCashTrans" aria-hidden="true">
                                             <div class="modal-dialog modal-lg modal-dialog-centered">
                                                 <div class="modal-content">
                                                     <div class="modal-header">
                                                         <h5 class="modal-title">Approval Cash Transaction</h5>
-                                                        <button type="button" class="btn-close"
-                                                            data-bs-dismiss="modal" aria-label="Close"></button>
+                                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                            aria-label="Close"></button>
                                                     </div>
                                                     <div class="modal-body">
                                                         <form wire:submit.prevent="approveCashTrans"
@@ -202,7 +203,8 @@
                                                                         <input type="radio" class="btn-check"
                                                                             name="approveAct"
                                                                             id="kt_create_report_form_approval_approve_cash"
-                                                                            value="3" wire:model.defer="approveAct"
+                                                                            value="3"
+                                                                            wire:model.defer="approveAct"
                                                                             @if ($this->approveAct == 3) checked="checked" @endif>
                                                                         <label
                                                                             class="btn btn-outline btn-outline-dashed btn-outline-default p-7 d-flex flex-column align-items-center"
@@ -231,7 +233,8 @@
                                                                         <input type="radio" class="btn-check"
                                                                             name="approveAct"
                                                                             id="kt_create_report_form_approval_reject_cash"
-                                                                            value="5" wire:model.defer="approveAct"
+                                                                            value="5"
+                                                                            wire:model.defer="approveAct"
                                                                             @if ($this->approveAct == 5) checked="checked" @endif>
                                                                         <label
                                                                             class="btn btn-outline btn-outline-dashed btn-outline-default p-7 d-flex flex-column align-items-center"
@@ -394,14 +397,16 @@
                                             </div>
                                             <!--end::Section-->
                                             <!--begin::Label-->
-                                            <button type="button" wire:click="editOperational('{{ $npo->uuid }}')"
+                                            <button type="button"
+                                                wire:click="editOperational('{{ $npo->uuid }}')"
                                                 class="btn btn-light-primary menu-link w-10 py-2 justify-content-right text-primary text-hover-white fs-8"
                                                 style="font-weight: 500;">Approval</button>
                                             <!--end::Label-->
                                         </div>
                                         <!--end::Item-->
                                         <div wire:ignore.self class="modal fade" id="approvalOperationalTrans"
-                                            tabindex="-1" aria-labelledby="approvalOperationalTrans" aria-hidden="true">
+                                            tabindex="-1" aria-labelledby="approvalOperationalTrans"
+                                            aria-hidden="true">
                                             <div class="modal-dialog modal-lg modal-dialog-centered">
                                                 <div class="modal-content">
                                                     <div class="modal-header">
@@ -424,7 +429,8 @@
                                                                         <input type="radio" class="btn-check"
                                                                             name="approveAct"
                                                                             id="kt_create_report_form_approval_approve_opt"
-                                                                            value="3" wire:model.defer="approveAct"
+                                                                            value="3"
+                                                                            wire:model.defer="approveAct"
                                                                             @if ($this->approveAct == 3) checked="checked" @endif>
                                                                         <label
                                                                             class="btn btn-outline btn-outline-dashed btn-outline-default p-7 d-flex flex-column align-items-center"
@@ -453,7 +459,8 @@
                                                                         <input type="radio" class="btn-check"
                                                                             name="approveAct"
                                                                             id="kt_create_report_form_approval_reject_opt"
-                                                                            value="5" wire:model.defer="approveAct"
+                                                                            value="5"
+                                                                            wire:model.defer="approveAct"
                                                                             @if ($this->approveAct == 5) checked="checked" @endif>
                                                                         <label
                                                                             class="btn btn-outline btn-outline-dashed btn-outline-default p-7 d-flex flex-column align-items-center"
@@ -545,7 +552,7 @@
                     <div class="text-inverse-primary fw-bolder fs-2 mb-2 mt-5">Report</div>
                     <div class="fw-bold text-inverse-primary fs-6">Balance Sheet : {{ count($reportBs) }} reports
                         &
-                        Profit Ledger : {{ count($reportBs) }}</div>
+                        Profit Ledger : {{ count($reportPl) }}</div>
                 </div>
                 <!--end::Body-->
             </a>
@@ -676,8 +683,8 @@
                                             <div class="modal-content">
                                                 <div class="modal-header">
                                                     <h5 class="modal-title">Approval Mandiri Escrow Transaction</h5>
-                                                    <button type="button" class="btn-close"
-                                                        data-bs-dismiss="modal" aria-label="Close"></button>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                        aria-label="Close"></button>
                                                 </div>
                                                 <div class="modal-body">
                                                     <form wire:submit.prevent="approveEscrowTrans"
@@ -890,8 +897,8 @@
                                             <div class="modal-content">
                                                 <div class="modal-header">
                                                     <h5 class="modal-title">Approval Report</h5>
-                                                    <button type="button" class="btn-close"
-                                                        data-bs-dismiss="modal" aria-label="Close"></button>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                        aria-label="Close"></button>
                                                 </div>
                                                 <div class="modal-body">
                                                     <form wire:submit.prevent="approveReport" id="approveReport"
@@ -965,7 +972,8 @@
                                                 <div class="modal-footer">
                                                     <button type="button" class="btn btn-secondary"
                                                         data-bs-dismiss="modal">Close</button>
-                                                    <button type="submit" class="btn btn-primary" form="approveReport">
+                                                    <button type="submit" class="btn btn-primary"
+                                                        form="approveReport">
                                                         <span class="indicator-label">Submit</span>
                                                         <span class="indicator-progress">Please wait...
                                                             <span

@@ -10,7 +10,6 @@ use App\Models\Transaction;
 use Livewire\WithPagination;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Str;
-use Illuminate\Support\Facades\Auth;
 
 class FilterIndexProject extends Component
 {
@@ -150,7 +149,7 @@ class FilterIndexProject extends Component
             ]);
     
             $log = ActivityLog::create([
-                'user_id' => Auth::id(),
+                'user_id' => session('user')['nip'],
                 'category' => 'project-store',
                 'activity_id' => $projectUuid,
             ]);
@@ -286,7 +285,7 @@ class FilterIndexProject extends Component
             }
 
             $log = ActivityLog::create([
-                'user_id' => Auth::id(),
+                'user_id' => session('user')['nip'],
                 'category' => 'project-update',
                 'activity_id' => $projectUuid,
             ]);
@@ -320,9 +319,46 @@ class FilterIndexProject extends Component
                 ['uuid', $uuid['uuid']],
                 ['is_active', 1],
             ])->update(['is_active' => 0]);
+            
+            $projTrans = Transaction::where([
+                ['project_id', $checkProject[0]->id],
+                ['is_active', 1],
+            ])->get()->unique('token');
+            
+            if(count($projTrans) != 0){
+                foreach($projTrans as $pt){
+                    if($pt->category == 'cash'){
+                        $addLogTrans = ActivityLog::create([
+                            'user_id' => session('user')['nip'],
+                            'category' => 'cash-delete',
+                            'activity_id' => $pt->uuid,
+                        ]);
+                    }
+                    elseif($pt->category == 'operational'){
+                        $addLogTrans = ActivityLog::create([
+                            'user_id' => session('user')['nip'],
+                            'category' => 'operational-delete',
+                            'activity_id' => $pt->uuid,
+                        ]);
+                    }
+                    elseif($pt->category == 'escrow'){
+                        $addLogTrans = ActivityLog::create([
+                            'user_id' => session('user')['nip'],
+                            'category' => 'escrow-delete',
+                            'activity_id' => $pt->uuid,
+                        ]);
+                    }
+                }
+
+                $deleteTrans = Transaction::where([
+                    ['project_id', $checkProject[0]->id],
+                    ['is_active', 1],
+                ])->update(['is_active' => 0]);
+            }
+
     
             $log = ActivityLog::create([
-                'user_id' => Auth::id(),
+                'user_id' => session('user')['nip'],
                 'category' => 'project-delete',
                 'activity_id' => $uuid['uuid'],
             ]);
@@ -340,11 +376,22 @@ class FilterIndexProject extends Component
         $projLow = Project::where([['is_active',1],['status', 1],['priority', 3]])->get();
         $projCategory = Project::where([['is_active',1], ['status', 'like', '%'.$this->status.'%'], ['name', 'like', '%'.$this->search.'%']])->with("projectCategory")->orderBy('created_at', 'desc')->paginate($this->pagesize);
         $arrhighProjectExpanse = $this->arrhighProjectExpanse;
+        $fetchAllUser = Http::withHeaders([
+            'Authorization' => 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjp7ImlkIjoiYjg4YTkxNjUtOTRmZS00MWE0LWI1YmItODY5OTdhYTllMThhIiwiZW1haWwiOiJockBnbWFpbC5jb20iLCJyb2xlcyI6W3siaWQiOjMsInJvbGUiOiJodW1hbiByZXNvdXJjZSJ9LHsiaWQiOjUsInJvbGUiOiJlbXBsb3llZSJ9XX0sImlhdCI6MTY1MDQ2ODY3OH0.1nFrYhiNA7hzf_Hg09PhVmCji1CaFqnyvPUNCQjpXR0'
+        ])->get('https://persona-gateway.herokuapp.com/auth/employee?limit=9999&offset=0&keyword=');
+        $dataUser = $fetchAllUser->json()['data']['data'];
+
+        $projMan = [];
+        foreach($projCategory as $pc){
+            $fetchUserById = Http::get('https://persona-gateway.herokuapp.com/auth/user/get-by-employee-id?id='.$pc->project_manager);
+            $dataUserById = $fetchUserById->json()['data'];
+            array_push($projMan, $dataUserById);
+        }
 
         $this->emit('refreshValidation');
         $this->emit('refreshNotification');
         $this->emit('refreshDropdown');
         
-        return view('livewire.executive-director.filter-index-project', ['projCategory' => $projCategory, 'allProj' => $allProj, 'projHigh' => $projHigh, 'projMed' => $projMed, 'projLow' => $projLow, 'arrhighProjectExpanse' => $arrhighProjectExpanse]);
+        return view('livewire.executive-director.filter-index-project', ['projCategory' => $projCategory, 'allProj' => $allProj, 'projHigh' => $projHigh, 'projMed' => $projMed, 'projLow' => $projLow, 'arrhighProjectExpanse' => $arrhighProjectExpanse, 'dataUser' => $dataUser, 'projMan' => $projMan]);
     }
 }

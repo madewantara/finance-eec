@@ -7,6 +7,7 @@ use App\Models\ActivityLog;
 use App\Models\Transaction;
 use App\Models\Report;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Http;
 
 class ExedirContentServiceProvider extends ServiceProvider
 {
@@ -92,7 +93,9 @@ class ExedirContentServiceProvider extends ServiceProvider
             if(count($tat) != 0){
                 foreach($tat[0] as $t){
                     if($t->status == 2 || $t->status == 4){
-                        array_push($arrActivityTrans, ["uuid" => $t->uuid, "token" => $t->token, "category" => $t->category, "user_id" => $tat[1], "updated_at" => $tat[2], "status" => $t->status]);
+                        $fetchUserTrans = Http::get('https://persona-gateway.herokuapp.com/auth/user/get-by-employee-id?id='.$tat[1]);
+                        $dataUserTrans = $fetchUserTrans->json()['data'];
+                        array_push($arrActivityTrans, ["uuid" => $t->uuid, "token" => $t->token, "category" => $t->category, "user" => $dataUserTrans, "updated_at" => $tat[2], "status" => $t->status]);
                     }
                 }
             }
@@ -103,7 +106,9 @@ class ExedirContentServiceProvider extends ServiceProvider
             if(count($tar) != 0){
                 foreach($tar[0] as $t){
                     if($t->status == 1){
-                        array_push($arrActivityReport, ["uuid" => $t->uuid, "report" => $t->report_type, "status" => $t->status, "user_id" => $tar[1], "updated_at" => $tar[2]]);
+                        $fetchUserReport = Http::get('https://persona-gateway.herokuapp.com/auth/user/get-by-employee-id?id='.$tar[1]);
+                        $dataUserReport = $fetchUserReport->json()['data'];
+                        array_push($arrActivityReport, ["uuid" => $t->uuid, "report" => $t->report_type, "status" => $t->status, "user" => $dataUserReport, "updated_at" => $tar[2]]);
                     }
                 }
             }
@@ -113,7 +118,11 @@ class ExedirContentServiceProvider extends ServiceProvider
         $this->notifReport = $arrActivityReport;
 
         view()->composer('layouts.app-exedir', function($view) {
-            $view->with(['notifTrans' => $this->notifTrans, "notifReport" => $this->notifReport]);
+            $userId = session('user')['nip'];
+            $fetchUserById = Http::get('https://persona-gateway.herokuapp.com/auth/user/get-by-employee-id?id='.$userId);
+            $dataUser = $fetchUserById->json()['data'];
+
+            $view->with(['notifTrans' => $this->notifTrans, "notifReport" => $this->notifReport, "dataUser" => $dataUser]);
         });
     }
 }

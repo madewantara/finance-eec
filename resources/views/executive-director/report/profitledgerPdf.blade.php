@@ -16,14 +16,12 @@
             margin-top: 10px;
             opacity: 0.7;
         }
-
     </style>
 </head>
 
 <body
     style="border: 1px solid black; border-radius: 1rem; font-family:'Times New Roman', Times, serif; orientation: portrait">
-    <footer class="footer"
-        style="margin-left: 0px; margin-right: 80px; bottom: 10px; position:fixed; width:100%;">
+    <footer class="footer" style="margin-left: 0px; margin-right: 80px; bottom: 10px; position:fixed; width:100%;">
         <div style="text-align: center; font-size: 10px; margin-left:25px;">
             <p>Head Office : Eightyeight@Kasablanka Tower A 26D floor. Jl. Raya Casablanca Kav. 88 Jakarta Selatan -
                 12870
@@ -209,11 +207,23 @@
                     <p style="margin-bottom: 00px; margin-top: 5px; text-align:center; font-size: 14px;"><b>PT ERA
                             ELEKTRA CORPORA
                             INDONESIA</b></p>
-                    <img class="stamp" src="{{ public_path('assets/image/logo/stamp.png') }}" alt="stamp"
-                        style="width:70px; text-align:center;">
-                    <p style="margin-bottom: 0px; margin-top: 90px; text-align:center; font-size: 14px;"><b>Dyah
-                            Saraswati</b></p>
-                    <p style="margin-top: 3px; text-align:center; font-size: 14px;">Direktur Utama</p>
+                    @if (count($signatureReport) != 0)
+                        <img class="stamp"
+                            src="{{ public_path('storage/Signature/' . $signatureReport['signature'][0]->image) }}"
+                            alt="stamp" style="width:80px; height: auto; text-align:center;">
+                    @endif
+                    <p style="margin-bottom: 0px; margin-top: 90px; text-align:center; font-size: 14px;">
+                        @if (count($signatureReport) != 0)
+                            <b>{{ $signatureReport['user']['fullname'] }}</b>
+                        @else
+                            ___________________________
+                        @endif
+                    </p>
+                    <p style="margin-top: 3px; text-align:center; font-size: 14px;">
+                        @if (count($signatureReport) != 0)
+                            {{ $signatureReport['user']['Contracts'][0]['Position']['title'] }}
+                        @endif
+                    </p>
                 </div>
             </div>
         </div>

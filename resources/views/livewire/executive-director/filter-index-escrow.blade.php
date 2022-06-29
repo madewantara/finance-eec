@@ -4,7 +4,8 @@
             <div class="position-fixed bottom-0 end-0" style="bottom: 2% !important; right: 1% !important; z-index:2;">
                 <div class="alert alert-success alert-dismissible fade show d-flex align-items-center" role="alert">
                     <span class="svg-icon svg-icon-2hx svg-icon-success me-4">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                            fill="none">
                             <path opacity="0.3"
                                 d="M20.5543 4.37824L12.1798 2.02473C12.0626 1.99176 11.9376 1.99176 11.8203 2.02473L3.44572 4.37824C3.18118 4.45258 3 4.6807 3 4.93945V13.569C3 14.6914 3.48509 15.8404 4.4417 16.984C5.17231 17.8575 6.18314 18.7345 7.446 19.5909C9.56752 21.0295 11.6566 21.912 11.7445 21.9488C11.8258 21.9829 11.9129 22 12.0001 22C12.0872 22 12.1744 21.983 12.2557 21.9488C12.3435 21.912 14.4326 21.0295 16.5541 19.5909C17.8169 18.7345 18.8277 17.8575 19.5584 16.984C20.515 15.8404 21 14.6914 21 13.569V4.93945C21 4.6807 20.8189 4.45258 20.5543 4.37824Z"
                                 fill="currentColor"></path>
@@ -26,12 +27,14 @@
             <div class="position-fixed bottom-0 end-0" style="bottom: 2% !important; right: 1% !important; z-index:2;">
                 <div class="alert alert-danger alert-dismissible fade show d-flex align-items-center" role="alert">
                     <span class="svg-icon svg-icon-2hx svg-icon-danger me-4">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-                            <rect opacity="0.4" x="2" y="2" width="20" height="20" rx="10" fill="currentColor"></rect>
-                            <rect x="11" y="14" width="7" height="2" rx="1" transform="rotate(-90 11 14)"
-                                fill="currentColor"></rect>
-                            <rect x="11" y="17" width="2" height="2" rx="1" transform="rotate(-90 11 17)"
-                                fill="currentColor"></rect>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                            fill="none">
+                            <rect opacity="0.4" x="2" y="2" width="20" height="20"
+                                rx="10" fill="currentColor"></rect>
+                            <rect x="11" y="14" width="7" height="2" rx="1"
+                                transform="rotate(-90 11 14)" fill="currentColor"></rect>
+                            <rect x="11" y="17" width="2" height="2" rx="1"
+                                transform="rotate(-90 11 17)" fill="currentColor"></rect>
                         </svg>
                     </span>
                     <div>
@@ -84,8 +87,8 @@
                 <div class="d-flex align-items-center position-relative my-1">
                     <!--begin::Svg Icon | path: icons/duotone/General/Search.svg-->
                     <span class="svg-icon svg-icon-1 position-absolute ms-6">
-                        <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px"
-                            height="24px" viewBox="0 0 24 24" version="1.1">
+                        <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+                            width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
                             <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
                                 <rect x="0" y="0" width="24" height="24" />
                                 <path
@@ -105,11 +108,15 @@
                 <div class="d-flex align-items-center position-relative my-1 ms-3">
                     <select class="form-control form-select-solid form-select" name="pagesize" id="pagesize"
                         wire:model="pagesize" data-pharaonic="select2" data-component-id="{{ $this->id }}">
-                        <option value="10" class="form-control form-select form-select-solid fw-bolder" selected>10
+                        <option value="10" class="form-control form-select form-select-solid fw-bolder" selected>
+                            10
                         </option>
-                        <option value="25" class="form-control form-select form-select-solid fw-bolder">25</option>
-                        <option value="50" class="form-control form-select form-select-solid fw-bolder">50</option>
-                        <option value="100" class="form-control form-select form-select-solid fw-bolder">100</option>
+                        <option value="25" class="form-control form-select form-select-solid fw-bolder">25
+                        </option>
+                        <option value="50" class="form-control form-select form-select-solid fw-bolder">50
+                        </option>
+                        <option value="100" class="form-control form-select form-select-solid fw-bolder">100
+                        </option>
                     </select>
                 </div>
                 <!--end::Search-->
@@ -190,7 +197,8 @@
                                             <!--begin::Input-->
                                             <select class="form-control form-select pic-multiple"
                                                 data-pharaonic="select2" data-component-id="{{ $this->id }}"
-                                                wire:model.defer="pics" id="pics" name="pics[]" multiple="multiple">
+                                                wire:model.defer="pics" id="pics" name="pics[]"
+                                                multiple="multiple">
                                                 @foreach ($pic as $p)
                                                     <option value="{{ $p->pic }}">
                                                         {{ $p->pic }}</option>
@@ -232,7 +240,21 @@
                                                 @foreach ($project as $p)
                                                     @if (!empty($p->transactionProject))
                                                         <option value="{{ $p->transactionProject->id }}">
-                                                            {{ $p->transactionProject->name }}</option>
+                                                            @if ($p->transactionProject->category_id == 1)
+                                                                Radar Upgrade
+                                                            @elseif($p->transactionProject->category_id == 2)
+                                                                Radar Spare Part
+                                                            @elseif($p->transactionProject->category_id == 3)
+                                                                Radar Reinstallation
+                                                            @elseif($p->transactionProject->category_id == 4)
+                                                                Preventive Maintenance
+                                                            @elseif($p->transactionProject->category_id == 5)
+                                                                New Radar
+                                                            @elseif($p->transactionProject->category_id == 6)
+                                                                Corrective Maintenance
+                                                            @endif
+                                                            - {{ $p->transactionProject->name }}
+                                                        </option>
                                                     @endif
                                                 @endforeach
                                             </select>
@@ -251,7 +273,8 @@
                                                 multiple="multiple">
                                                 <option></option>
                                                 <option value="1" selected>Pending</option>
-                                                <option value="2" selected>Pending (Only approved by Finance Director)
+                                                <option value="2" selected>Pending (Only approved by Finance
+                                                    Director)
                                                 </option>
                                                 <option value="3">Accepted</option>
                                                 <option value="5">Rejected</option>
@@ -297,7 +320,8 @@
                                         fill="#000000" fill-rule="nonzero" opacity="0.3" />
                                     <rect fill="#000000" opacity="0.3"
                                         transform="translate(12.000000, 8.000000) scale(1, -1) rotate(-180.000000) translate(-12.000000, -8.000000)"
-                                        x="11" y="2" width="2" height="12" rx="1" />
+                                        x="11" y="2" width="2" height="12"
+                                        rx="1" />
                                     <path
                                         d="M12,2.58578644 L14.2928932,0.292893219 C14.6834175,-0.0976310729 15.3165825,-0.0976310729 15.7071068,0.292893219 C16.0976311,0.683417511 16.0976311,1.31658249 15.7071068,1.70710678 L12.7071068,4.70710678 C12.3165825,5.09763107 11.6834175,5.09763107 11.2928932,4.70710678 L8.29289322,1.70710678 C7.90236893,1.31658249 7.90236893,0.683417511 8.29289322,0.292893219 C8.68341751,-0.0976310729 9.31658249,-0.0976310729 9.70710678,0.292893219 L12,2.58578644 Z"
                                         fill="#000000" fill-rule="nonzero"
@@ -341,7 +365,8 @@
                 <tbody class="text-gray-600 fw-bold">
                     @if (count($transaction) == 0)
                         <tr>
-                            <td colspan="11" class="text-muted fst-italic mt-5 text-center">There are no mandiri escrow
+                            <td colspan="11" class="text-muted fst-italic mt-5 text-center">There are no mandiri
+                                escrow
                                 transactions
                             </td>
                         </tr>
@@ -389,7 +414,22 @@
                                 @if (empty($trans[0][0]->transactionProject->name))
                                     <td class="text-center">-</td>
                                 @else
-                                    <td class="text-center">{{ $trans[0][0]->transactionProject->name }}</td>
+                                    <td class="text-center">
+                                        @if ($trans[0][0]->transactionProject->category_id == 1)
+                                            Radar Upgrade
+                                        @elseif($trans[0][0]->transactionProject->category_id == 2)
+                                            Radar Spare Part
+                                        @elseif($trans[0][0]->transactionProject->category_id == 3)
+                                            Radar Reinstallation
+                                        @elseif($trans[0][0]->transactionProject->category_id == 4)
+                                            Preventive Maintenance
+                                        @elseif($trans[0][0]->transactionProject->category_id == 5)
+                                            New Radar
+                                        @elseif($trans[0][0]->transactionProject->category_id == 6)
+                                            Corrective Maintenance
+                                        @endif
+                                        - {{ $trans[0][0]->transactionProject->name }}
+                                    </td>
                                 @endif
 
                                 <td class="text-center">{{ $trans[0][0]->paid_to }}</td>
@@ -460,10 +500,9 @@
                                                         <!--begin::Col-->
                                                         <div class="col-lg-6 mb-3">
                                                             <!--begin::Option-->
-                                                            <input type="radio" class="btn-check"
-                                                                name="approveAct"
-                                                                id="kt_create_report_form_approval_approve" value="3"
-                                                                wire:model.defer="approveAct"
+                                                            <input type="radio" class="btn-check" name="approveAct"
+                                                                id="kt_create_report_form_approval_approve"
+                                                                value="3" wire:model.defer="approveAct"
                                                                 @if ($this->approveAct == 3) checked="checked" @endif>
                                                             <label
                                                                 class="btn btn-outline btn-outline-dashed btn-outline-default p-7 d-flex flex-column align-items-center"
@@ -487,10 +526,9 @@
                                                         <!--begin::Col-->
                                                         <div class="col-lg-6">
                                                             <!--begin::Option-->
-                                                            <input type="radio" class="btn-check"
-                                                                name="approveAct"
-                                                                id="kt_create_report_form_approval_reject" value="5"
-                                                                wire:model.defer="approveAct"
+                                                            <input type="radio" class="btn-check" name="approveAct"
+                                                                id="kt_create_report_form_approval_reject"
+                                                                value="5" wire:model.defer="approveAct"
                                                                 @if ($this->approveAct == 5) checked="checked" @endif>
                                                             <label
                                                                 class="btn btn-outline btn-outline-dashed btn-outline-default p-7 d-flex flex-column align-items-center"

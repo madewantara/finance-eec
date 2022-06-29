@@ -7,6 +7,10 @@ use App\Models\Project;
 use Carbon\Carbon;
 use App\Models\Transaction;
 use App\Models\Account;
+use App\Models\Signature;
+use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Str;
 
 class ExedirDashboardController extends Controller
 {
@@ -27,6 +31,11 @@ class ExedirDashboardController extends Controller
      */
     public function index()
     {
+        $userId = session('user')['nip'];
+        $signatureCheck = Signature::where('user_id', $userId)->get();
+        $fetchUserById = Http::get('https://persona-gateway.herokuapp.com/auth/user/get-by-employee-id?id='.$userId);
+        $dataUser = $fetchUserById->json()['data'];
+
         $projLocation = Project::where('is_active', 1)->where(function($query){
             $query->where('status', 1)
             ->orWhere('status', 2);
@@ -36,6 +45,13 @@ class ExedirDashboardController extends Controller
             $query->where('status', 1)
             ->orWhere('status', 2);
         })->with('projectLocation', 'projectCategory')->get();
+
+        $pm = [];
+        foreach($activeProj as $ap){
+            $fetchPmById = Http::get('https://persona-gateway.herokuapp.com/auth/user/get-by-employee-id?id='.$ap->project_manager);
+            $dataPm = $fetchPmById->json()['data'];
+            array_push($pm, $dataPm);
+        }
 
         $allProjLoc = [];
         foreach($projLocation as $pl){
@@ -256,7 +272,7 @@ class ExedirDashboardController extends Controller
         $tempProfit = [$profit4,$profit3,$profit2,$profit1,$profit];
         $profitYear = implode(",", $tempProfit);
 
-        return view('executive-director.dashboard', compact('projLocation','allProjLoc', 'activeProj', 'profitYear', 'tempProfit'));
+        return view('executive-director.dashboard', compact('projLocation','allProjLoc', 'activeProj', 'profitYear', 'tempProfit', 'dataUser', 'pm', 'signatureCheck'));
     }
 
     /**
@@ -323,5 +339,42 @@ class ExedirDashboardController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function storeSign(Request $request)
+    {
+        $validator = Validator::make($request->all(), 
+        [
+            'signature' => 'required|mimes:png,jpg,jpeg',
+        ], 
+        [
+            'signature.required' => '*Signature is required',
+            'signature.mimes' => '*Only formats are allowed: .jpg, .jpeg, .png.',
+        ]);
+ 
+        if ($validator->fails()) {
+            return redirect()->back()->withErrors($validator)->withInput();
+        }
+ 
+        $validated = $validator->validated();
+        
+        $signature = $request->file('signature');
+        if($signature){
+            $signatureExt = $signature->getClientOriginalExtension();
+            $signatureName = Str::random(40).'.'.$signatureExt;
+            $signatureStore = Signature::create([
+                'user_id' => session('user')['nip'],
+                'image' => $signatureName,
+            ]);
+            $signaturePath = $signature->storeAs('public/Signature/', $signatureName);
+        }
+
+        return redirect()->back()->withSuccess('Signature successfully added');
     }
 }

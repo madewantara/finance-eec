@@ -19,6 +19,7 @@ class ExedirAccountController extends Controller
     public function __construct()
     {
         $this->middleware('executive.director');
+        $this->middleware('signature.exedir');
     }
 
     /**

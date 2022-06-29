@@ -6,7 +6,6 @@ use Livewire\Component;
 use Livewire\WithPagination;
 use App\Models\Report;
 use App\Models\ActivityLog;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 
 class FilterIndexReport extends Component
@@ -58,7 +57,7 @@ class FilterIndexReport extends Component
 
         if($validated['approveAct'] == 3){
             $log = ActivityLog::create([
-                'user_id' => Auth::id(),
+                'user_id' => session('user')['nip'],
                 'category' => 'report-approved',
                 'activity_id' => $this->uuid,
             ]);
@@ -66,7 +65,7 @@ class FilterIndexReport extends Component
             session()->flash('success', 'Report status successfully updated to approved');
         }else{
             $log = ActivityLog::create([
-                'user_id' => Auth::id(),
+                'user_id' => session('user')['nip'],
                 'category' => 'report-rejected',
                 'activity_id' => $this->uuid,
             ]);

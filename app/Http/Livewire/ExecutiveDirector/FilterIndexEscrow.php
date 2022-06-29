@@ -87,7 +87,7 @@ class FilterIndexEscrow extends Component
 
         if($validated['approveAct'] == 3){
             $log = ActivityLog::create([
-                'user_id' => Auth::id(),
+                'user_id' => session('user')['nip'],
                 'category' => 'escrow-approved-excdir',
                 'activity_id' => $this->uuid,
             ]);
@@ -95,7 +95,7 @@ class FilterIndexEscrow extends Component
             session()->flash('success', 'Transaction status successfully updated to approved by executive director');
         }else{
             $log = ActivityLog::create([
-                'user_id' => Auth::id(),
+                'user_id' => session('user')['nip'],
                 'category' => 'escrow-rejected',
                 'activity_id' => $this->uuid,
             ]);
@@ -114,7 +114,7 @@ class FilterIndexEscrow extends Component
         $pic = Transaction::select('pic')->where('is_active', 1)->where('type', 2)->where('category', 'escrow')->where('pic', '<>', NULL)->distinct()->get();
         $paidto = Transaction::select('paid_to')->where('is_active', 1)->where('type', 2)->where('category', 'escrow')->where('paid_to', '<>', NULL)->distinct()->get();
         $project = Transaction::select('project_id')->where('is_active', 1)->where('type', 2)->where('category', 'escrow')->where('project_id', '<>', NULL)->with('transactionProject')->distinct()->get();
-        $account = Account::where('is_active', 1)->get();
+        $account = Account::where('is_active', 1)->orderBy('referral', 'asc')->get();
         $distAllTrans = Transaction::select('uuid')->where('is_active', 1)->where('type', 2)->where('category', 'escrow')->distinct()->get();
         $escrowBalance = Balance::where([['category', 'escrow'], ['year', Carbon::now()->year]])->get();
 

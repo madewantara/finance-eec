@@ -8,12 +8,13 @@ use App\Models\Balance;
 use App\Models\Transaction;
 use App\Models\Account;
 use App\Models\ActivityLog;
-use App\Models\User;
 use App\Models\Project;
+use App\Models\Signature;
 use Carbon\Carbon;
 use Barryvdh\DomPDF\Facade\Pdf;
 use App\Exports\ExecutiveDirector\ReportExport;
 use Maatwebsite\Excel\Facades\Excel;
+use Illuminate\Support\Facades\Http;
 
 class ExedirReportController extends Controller
 {
@@ -25,6 +26,7 @@ class ExedirReportController extends Controller
     public function __construct()
     {
         $this->middleware('executive.director');
+        $this->middleware('signature.exedir');
     }
     
     /**
@@ -78,7 +80,9 @@ class ExedirReportController extends Controller
         
         $user = [];
         foreach($log as $l){
-            array_push($user, User::where('id',$l->user_id)->get());
+            $fetchUserById = Http::get('https://persona-gateway.herokuapp.com/auth/user/get-by-employee-id?id='.$l->user_id);
+            $dataUserById = $fetchUserById->json()['data'];
+            array_push($user, $dataUserById);
         }
 
         $activity = [];
@@ -522,6 +526,17 @@ class ExedirReportController extends Controller
             'uuid' => 'required',
         ]);
 
+        $logReport = ActivityLog::where([
+            ['activity_id', $validated['uuid']],
+            ['category', 'report-approved'],
+        ])->orderBy('id', 'desc')->first();
+        $signatureReport = [];
+        if(!empty($logReport)){
+            $fetchUserReport = Http::get('https://persona-gateway.herokuapp.com/auth/user/get-by-employee-id?id='.$logReport->user_id);
+            $dataUserReport = $fetchUserReport->json()['data'];
+            $signatureReport = ["user" => $dataUserReport, "signature" => Signature::where('user_id', $logReport->user_id)->get()];
+        }
+
         $todayDate = Carbon::now()->format('Y-m-d');
         $todayDateInd = Carbon::parse(Carbon::now())->locale('id');
         $todayDateInd->settings(['formatFunction' => 'translatedFormat']);
@@ -833,6 +848,7 @@ class ExedirReportController extends Controller
                     'year' => $year,
                     'todayDate' => $todayDate,
                     'todayDateInd' => $todayDateInd,
+                    'signatureReport' => $signatureReport,
                 ]);
                 $pdf->setPaper('A4', 'landscape');
                 $filename = '('.$todayDate.') Balance Sheet Report '.$year.'.pdf';
@@ -913,6 +929,7 @@ class ExedirReportController extends Controller
                     'pajak' => $pajak,
                     'todayDate' => $todayDate,
                     'todayDateInd' => $todayDateInd,
+                    'signatureReport' => $signatureReport,
                 ]);
                 $pdf->setPaper('A4', 'portrait');
                 $filename = '('.$todayDate.') Profit Ledger Report '.$year.'.pdf';

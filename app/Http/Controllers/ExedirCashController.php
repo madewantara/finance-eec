@@ -8,13 +8,14 @@ use App\Models\TransactionFile;
 use App\Models\Account;
 use App\Models\Balance;
 use App\Models\ActivityLog;
-use App\Models\User;
 use App\Exports\ExecutiveDirector\CashExport;
 use Maatwebsite\Excel\Facades\Excel;
 use Carbon\Carbon;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Arr;
 use Storage;
+use Illuminate\Support\Facades\Http;
+use App\Models\Signature;
 
 class ExedirCashController extends Controller
 {
@@ -26,6 +27,7 @@ class ExedirCashController extends Controller
     public function __construct()
     {
         $this->middleware('executive.director');
+        $this->middleware('signature.exedir');
     }
     
     /**
@@ -38,7 +40,7 @@ class ExedirCashController extends Controller
         $picex = Transaction::select('pic')->where([['category', 'cash'],['is_active', 1],['type',2],['pic', '<>', NULL]])->distinct()->get();
         $paidtoex = Transaction::select('paid_to')->where('is_active', 1)->where('type', 2)->where('category', 'cash')->where('paid_to', '<>', NULL)->distinct()->get();
         $projectex = Transaction::select('project_id')->where([['category', 'cash'],['is_active', 1],['type',2],['project_id', '<>', NULL]])->with('transactionProject')->distinct()->get();
-        $accountex = Account::where('is_active', 1)->get();
+        $accountex = Account::where('is_active', 1)->orderBy('referral', 'asc')->get();
 
         return view('executive-director.cash.index', compact('picex', 'projectex', 'accountex', 'paidtoex'));
     }
@@ -103,7 +105,9 @@ class ExedirCashController extends Controller
         
         $user = [];
         foreach($log as $l){
-            array_push($user, User::where('id',$l->user_id)->get());
+            $fetchUserById = Http::get('https://persona-gateway.herokuapp.com/auth/user/get-by-employee-id?id='.$l->user_id);
+            $dataUser = $fetchUserById->json()['data'];
+            array_push($user, $dataUser);
         }
 
         $activity = [];
@@ -229,7 +233,51 @@ class ExedirCashController extends Controller
         }
         $inWords = $this->inWords($sum);
 
-        $pdf = PDF::loadView('executive-director.cash.pdfDetail', ['transactionDebit' => $transactionDebit, 'sum' => $sum, 'inWords' => $inWords, 'todayDate' => $todayDate]);
+        $logCashStore = ActivityLog::where([
+            ['activity_id', $uuid],
+            ['category', 'cash-store'],
+        ])->orderBy('id', 'desc')->first();
+        $signatureFindivStore = [];
+        if(!empty($logCashStore)){
+            $fetchUserFindivStore = Http::get('https://persona-gateway.herokuapp.com/auth/user/get-by-employee-id?id='.$logCashStore->user_id);
+            $dataUserFindivStore = $fetchUserFindivStore->json()['data'];
+            $signatureFindivStore = ["user" => $dataUserFindivStore, "signature" => Signature::where('user_id', $logCashStore->user_id)->get()];
+        }
+
+        $logCashPaid = ActivityLog::where([
+            ['activity_id', $uuid],
+            ['category', 'cash-paid'],
+        ])->orderBy('id', 'desc')->first();
+        $signatureFindivPaid = [];
+        if(!empty($logCashPaid)){
+            $fetchUserFindivPaid = Http::get('https://persona-gateway.herokuapp.com/auth/user/get-by-employee-id?id='.$logCashPaid->user_id);
+            $dataUserFindivPaid = $fetchUserFindivPaid->json()['data'];
+            $signatureFindivPaid = ["user" => $dataUserFindivPaid, "signature" => Signature::where('user_id', $logCashPaid->user_id)->get()];
+        }
+
+        $logApprovedFindir = ActivityLog::where([
+            ['activity_id', $uuid],
+            ['category', 'cash-approved-findir'],
+        ])->orderBy('id', 'desc')->first();
+        $signatureFindir = [];
+        if(!empty($logApprovedFindir)){
+            $fetchUserFindir = Http::get('https://persona-gateway.herokuapp.com/auth/user/get-by-employee-id?id='.$logApprovedFindir->user_id);
+            $dataUserFindir = $fetchUserFindir->json()['data'];
+            $signatureFindir = ["user" => $dataUserFindir, "signature" => Signature::where('user_id', $logApprovedFindir->user_id)->get()];
+        }
+
+        $logApprovedExedir = ActivityLog::where([
+            ['activity_id', $uuid],
+            ['category', 'cash-approved-excdir'],
+        ])->orderBy('id', 'desc')->first();
+        $signatureExedir = [];
+        if(!empty($logApprovedExedir)){
+            $fetchUserExedir = Http::get('https://persona-gateway.herokuapp.com/auth/user/get-by-employee-id?id='.$logApprovedExedir->user_id);
+            $dataUserExedir = $fetchUserExedir->json()['data'];
+            $signatureExedir = ["user" => $dataUserExedir, "signature" => Signature::where('user_id', $logApprovedExedir->user_id)->get()];
+        }
+
+        $pdf = PDF::loadView('executive-director.cash.pdfDetail', ['transactionDebit' => $transactionDebit, 'sum' => $sum, 'inWords' => $inWords, 'todayDate' => $todayDate, 'signatureFindivStore' => $signatureFindivStore, 'signatureFindivPaid' => $signatureFindivPaid, 'signatureFindir' => $signatureFindir, 'signatureExedir' => $signatureExedir]);
         $pdf->setPaper('A4', 'landscape');
         $filename = $todayDate.' ('.$transactionDebit[0]->token.') Cash Transaction.pdf';
         return $pdf->download($filename);

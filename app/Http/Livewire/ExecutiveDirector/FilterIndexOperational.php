@@ -9,7 +9,6 @@ use App\Models\Account;
 use App\Models\Balance;
 use App\Models\ActivityLog;
 use Illuminate\Pagination\LengthAwarePaginator;
-use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
 
 class FilterIndexOperational extends Component
@@ -86,7 +85,7 @@ class FilterIndexOperational extends Component
 
         if($validated['approveAct'] == 3){
             $log = ActivityLog::create([
-                'user_id' => Auth::id(),
+                'user_id' => session('user')['nip'],
                 'category' => 'operational-approved-excdir',
                 'activity_id' => $this->uuid,
             ]);
@@ -94,7 +93,7 @@ class FilterIndexOperational extends Component
             session()->flash('success', 'Transaction status successfully updated to approved by executive director');
         }else{
             $log = ActivityLog::create([
-                'user_id' => Auth::id(),
+                'user_id' => session('user')['nip'],
                 'category' => 'operational-rejected',
                 'activity_id' => $this->uuid,
             ]);
@@ -113,7 +112,7 @@ class FilterIndexOperational extends Component
         $pic = Transaction::select('pic')->where('is_active', 1)->where('type', 2)->where('category', 'operational')->where('pic', '<>', NULL)->distinct()->get();
         $paidto = Transaction::select('paid_to')->where('is_active', 1)->where('type', 2)->where('category', 'operational')->where('paid_to', '<>', NULL)->distinct()->get();
         $project = Transaction::select('project_id')->where('is_active', 1)->where('type', 2)->where('category', 'operational')->where('project_id', '<>', NULL)->with('transactionProject')->distinct()->get();
-        $account = Account::where('is_active', 1)->get();
+        $account = Account::where('is_active', 1)->orderBy('referral', 'asc')->get();
         $distAllTrans = Transaction::select('uuid')->where('is_active', 1)->where('type', 2)->where('category', 'operational')->distinct()->get();
         $operationalBalance = Balance::where([['category', 'operational'], ['year', Carbon::now()->year]])->get();
 
