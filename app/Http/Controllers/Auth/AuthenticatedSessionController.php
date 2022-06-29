@@ -6,11 +6,9 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\LoginRequest;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use App\Models\Role;
-use App\Models\MapUserRole;
-use App\Models\User;
 use Alert;
+use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Hash;
 
 class AuthenticatedSessionController extends Controller
 {
@@ -33,24 +31,30 @@ class AuthenticatedSessionController extends Controller
     public function store(LoginRequest $request)
     {
         $validated = $request->validated();
-        $user = User::where('email', $request->email)->first();
-        if(!$user){
-            return redirect()->route('login')->withError("Your e-mail address have not been registered");    
+
+        $fetchUserByEmail = Http::get('https://persona-gateway.herokuapp.com/auth/user/get-by-email?email='.$validated['email']);
+
+        if(array_key_exists('error', $fetchUserByEmail->json())){
+            return redirect()->route('login')->withError("Your e-mail address have not been registered");
         }
-
-        if(auth()->attempt($validated)){
-            $users = auth()->user()->userRole()->first()->user_id;
-            $userRole = MapUserRole::where('user_id', $users)->first()->role_id;
-            $role = Role::where('id', $userRole)->first()->role;
-
-            if($role == 'financedivision'){
-                return redirect()->route('findiv.dashboard')->withSuccess('You have successfully logged into finance division portal.');
-            }
-            elseif($role == 'financedirector'){
-                return redirect()->route('findir.dashboard')->withSuccess('You have successfully logged into finance director portal.');
-            }
-            elseif($role == 'executivedirector'){
-                return redirect()->route('exedir.dashboard')->withSuccess('You have successfully logged into executive director portal.');
+        else{
+            $userId = $fetchUserByEmail->json()['data']['profile']['nip'];
+        }
+        
+        $fetchUserById = Http::get('https://persona-gateway.herokuapp.com/auth/user/get-by-employee-id?id='.$userId);
+        if (Hash::check($validated['password'], $fetchUserById->json()['data']['User']['password'])) {
+            $role = $fetchUserById->json()['data']['Contracts'][0]['Position']['title'];
+            session(['user' => ['nip' => $userId,'email' => $fetchUserById->json()['data']['User']['email'], 'password' => $fetchUserById->json()['data']['User']['password'], 'role' => $role]]);
+            if(session('user')){
+                if($role == 'Finance Staff'){
+                    return redirect()->route('findiv.dashboard')->withSuccess('You have successfully logged into finance division portal.');
+                }
+                elseif($role == 'Finance Director'){
+                    return redirect()->route('findir.dashboard')->withSuccess('You have successfully logged into finance director portal.');
+                }
+                elseif($role == 'Executive Director'){
+                    return redirect()->route('exedir.dashboard')->withSuccess('You have successfully logged into executive director portal.');
+                }
             }
         }
         else{
@@ -66,7 +70,7 @@ class AuthenticatedSessionController extends Controller
      */
     public function destroy(Request $request)
     {
-        Auth::guard('web')->logout();
+        $request->session()->flush();
 
         $request->session()->invalidate();
 

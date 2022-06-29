@@ -5,9 +5,6 @@ namespace App\Http\Middleware;
 use App\Providers\RouteServiceProvider;
 use Closure;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use App\Models\MapUserRole;
-use App\Models\Role;
 
 class RedirectIfAuthenticated
 {
@@ -21,17 +18,13 @@ class RedirectIfAuthenticated
      */
     public function handle(Request $request, Closure $next, ...$guards)
     {
-        if(auth()->user()){
-            $user = auth()->user()->userRole()->first()->user_id;
-            $userRole = MapUserRole::where('user_id', $user)->first()->role_id;
-            $role = Role::where('id', $userRole)->first()->role;
-            
-            if(auth()->user() && $role == 'executivedirector'){
+        if(session('user')){            
+            if(session('user') && session('user')['role'] == 'Executive Director'){
                 return redirect()->route('exedir.dashboard')->withSuccess('You have already logged into executive director portal.');
-            }elseif(auth()->user() && $role == 'financedirector'){
+            }elseif(session('user') && session('user')['role'] == 'Finance Director'){
                 return redirect()->route('findir.dashboard')->withSuccess('You have already logged into finance director portal.');
-            }elseif(auth()->user() && $role == 'financedivision'){
-                return redirect()->route('findiv.dashboard')->withSuccess('You have already logged into finance director portal.');
+            }elseif(session('user') && session('user')['role'] == 'Finance Staff'){
+                return redirect()->route('findiv.dashboard')->withSuccess('You have already logged into finance division portal.');
             }
         }
 
