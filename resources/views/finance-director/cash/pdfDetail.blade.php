@@ -117,11 +117,58 @@
                 </thead>
                 <tbody>
                     <tr>
+                        <td style="height: 120px; border: 1px solid black; text-align:center;">
+                            @if (count($signatureFindivStore) != 0)
+                                <img style="width:60%; height:auto; padding: 10px;"
+                                    src="{{ public_path('storage/Signature/' . $signatureFindivStore['signature'][0]->image) }}"
+                                    alt="signature">
+                            @endif
+                        </td>
+                        <td style="height: 120px; border: 1px solid black; text-align:center;">
+                            @if (count($signatureFindir) != 0)
+                                <img style="width:60%; height:auto; padding: 10px;"
+                                    src="{{ public_path('storage/Signature/' . $signatureFindir['signature'][0]->image) }}"
+                                    alt="signature">
+                            @endif
+                        </td>
+                        <td style="height: 120px; border: 1px solid black; text-align:center;">
+                            @if (count($signatureExedir) != 0)
+                                <img style="width:60%; height:auto; padding: 10px;"
+                                    src="{{ public_path('storage/Signature/' . $signatureExedir['signature'][0]->image) }}"
+                                    alt="signature">
+                            @endif
+                        </td>
+                        <td style="height: 120px; border: 1px solid black; text-align:center;">
+                            @if (count($signatureFindivPaid) != 0)
+                                <img style="width:60%; height:auto; padding: 10px;"
+                                    src="{{ public_path('storage/Signature/' . $signatureFindivPaid['signature'][0]->image) }}"
+                                    alt="signature">
+                            @endif
+                        </td>
                         <td style="height: 120px; border: 1px solid black;"></td>
-                        <td style="height: 120px; border: 1px solid black;"></td>
-                        <td style="height: 120px; border: 1px solid black;"></td>
-                        <td style="height: 120px; border: 1px solid black;"></td>
-                        <td style="height: 120px; border: 1px solid black;"></td>
+                    </tr>
+                    <tr>
+                        <td style="border: 1px solid black; text-align: center;">
+                            @if (count($signatureFindivStore) != 0)
+                                <b>{{ $signatureFindivStore['user']['fullname'] }}</b>
+                            @endif
+                        </td>
+                        <td style="border: 1px solid black; text-align: center;">
+                            @if (count($signatureFindir) != 0)
+                                <b>{{ $signatureFindir['user']['fullname'] }}</b>
+                            @endif
+                        </td>
+                        <td style="border: 1px solid black; text-align: center;">
+                            @if (count($signatureExedir) != 0)
+                                <b>{{ $signatureExedir['user']['fullname'] }}</b>
+                            @endif
+                        </td>
+                        <td style="border: 1px solid black; text-align: center;">
+                            @if (count($signatureFindivPaid) != 0)
+                                <b>{{ $signatureFindivPaid['user']['fullname'] }}</b>
+                            @endif
+                        </td>
+                        <td style="border: 1px solid black; text-align: center;"></td>
                     </tr>
                     <tr>
                         <td colspan="4" style="padding: 10px 0"><i>Printed on

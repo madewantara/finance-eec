@@ -10,6 +10,9 @@ use App\Models\Transaction;
 use App\Models\Account;
 use App\Models\Project;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Http;
+use App\Models\ActivityLog;
+use App\Models\Signature;
 
 class ReportExport implements FromView
 {
@@ -20,6 +23,17 @@ class ReportExport implements FromView
 
     public function view(): View
     {
+        $logReport = ActivityLog::where([
+            ['activity_id', $this->validated['uuid']],
+            ['category', 'report-approved'],
+        ])->orderBy('id', 'desc')->first();
+        $signatureReport = [];
+        if(!empty($logReport)){
+            $fetchUserReport = Http::get('https://persona-gateway.herokuapp.com/auth/user/get-by-employee-id?id='.$logReport->user_id);
+            $dataUserReport = $fetchUserReport->json()['data'];
+            $signatureReport = ["user" => $dataUserReport, "signature" => Signature::where('user_id', $logReport->user_id)->get()];
+        }
+
         $todayDate = Carbon::now()->format('Y-m-d');
         $todayDateInd = Carbon::parse(Carbon::now())->locale('id');
         $todayDateInd->settings(['formatFunction' => 'translatedFormat']);
@@ -330,6 +344,7 @@ class ReportExport implements FromView
                 'year' => $year,
                 'todayDate' => $todayDate,
                 'todayDateInd' => $todayDateInd,
+                'signatureReport' => $signatureReport,
             ]);
         }
         else{
@@ -407,6 +422,7 @@ class ReportExport implements FromView
                 'pajak' => $pajak,
                 'todayDate' => $todayDate,
                 'todayDateInd' => $todayDateInd,
+                'signatureReport' => $signatureReport,
             ]);
         }
     }

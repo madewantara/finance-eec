@@ -8,13 +8,14 @@ use App\Models\TransactionFile;
 use App\Models\Account;
 use App\Models\Balance;
 use App\Models\ActivityLog;
-use App\Models\User;
 use App\Exports\FinanceDirector\OperationalExport;
 use Maatwebsite\Excel\Facades\Excel;
 use Carbon\Carbon;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Arr;
 use Storage;
+use Illuminate\Support\Facades\Http;
+use App\Models\Signature;
 
 class FindirOperationalController extends Controller
 {
@@ -26,6 +27,7 @@ class FindirOperationalController extends Controller
     public function __construct()
     {
         $this->middleware('finance.director');
+        $this->middleware('signature.findir');
     }
     
     /**
@@ -38,7 +40,7 @@ class FindirOperationalController extends Controller
         $picex = Transaction::select('pic')->where([['category', 'operational'],['is_active', 1],['type', 2],['pic', '<>', NULL]])->distinct()->get();
         $paidtoex = Transaction::select('paid_to')->where('is_active', 1)->where('type', 2)->where('category', 'operational')->where('paid_to', '<>', NULL)->distinct()->get();
         $projectex = Transaction::select('project_id')->where([['category', 'operational'],['is_active', 1],['type', 2],['project_id', '<>', NULL]])->with('transactionProject')->distinct()->get();
-        $accountex = Account::where('is_active', 1)->get();
+        $accountex = Account::where('is_active', 1)->orderBy('referral', 'asc')->get();
 
         return view('finance-director.operational.index', compact('picex', 'projectex', 'accountex', 'paidtoex'));
     }
@@ -103,7 +105,9 @@ class FindirOperationalController extends Controller
         
         $user = [];
         foreach($log as $l){
-            array_push($user, User::where('id',$l->user_id)->get());
+            $fetchUserById = Http::get('https://persona-gateway.herokuapp.com/auth/user/get-by-employee-id?id='.$l->user_id);
+            $dataUser = $fetchUserById->json()['data'];
+            array_push($user, $dataUser);
         }
 
         $activity = [];
@@ -229,7 +233,51 @@ class FindirOperationalController extends Controller
         }
         $inWords = $this->inWords($sum);
 
-        $pdf = PDF::loadView('finance-director.operational.pdfDetail', ['transactionDebit' => $transactionDebit, 'sum' => $sum, 'inWords' => $inWords, 'todayDate' => $todayDate]);
+        $logOptFindivStore = ActivityLog::where([
+            ['activity_id', $uuid],
+            ['category', 'operational-store'],
+        ])->orderBy('id', 'desc')->first();
+        $signatureFindivStore = [];
+        if(!empty($logOptFindivStore)){
+            $fetchUserFindivStore = Http::get('https://persona-gateway.herokuapp.com/auth/user/get-by-employee-id?id='.$logOptFindivStore->user_id);
+            $dataUserFindivStore = $fetchUserFindivStore->json()['data'];
+            $signatureFindivStore = ["user" => $dataUserFindivStore, "signature" => Signature::where('user_id', $logOptFindivStore->user_id)->get()];
+        }
+
+        $logOptFindivPaid = ActivityLog::where([
+            ['activity_id', $uuid],
+            ['category', 'operational-paid'],
+        ])->orderBy('id', 'desc')->first();
+        $signatureFindivPaid = [];
+        if(!empty($logOptFindivPaid)){
+            $fetchUserFindivPaid = Http::get('https://persona-gateway.herokuapp.com/auth/user/get-by-employee-id?id='.$logOptFindivPaid->user_id);
+            $dataUserFindivPaid = $fetchUserFindivPaid->json()['data'];
+            $signatureFindivPaid = ["user" => $dataUserFindivPaid, "signature" => Signature::where('user_id', $logOptFindivPaid->user_id)->get()];
+        }
+
+        $logApprovedFindir = ActivityLog::where([
+            ['activity_id', $uuid],
+            ['category', 'operational-approved-findir'],
+        ])->orderBy('id', 'desc')->first();
+        $signatureFindir = [];
+        if(!empty($logApprovedFindir)){
+            $fetchUserFindir = Http::get('https://persona-gateway.herokuapp.com/auth/user/get-by-employee-id?id='.$logApprovedFindir->user_id);
+            $dataUserFindir = $fetchUserFindir->json()['data'];
+            $signatureFindir = ["user" => $dataUserFindir, "signature" => Signature::where('user_id', $logApprovedFindir->user_id)->get()];
+        }
+
+        $logApprovedExedir = ActivityLog::where([
+            ['activity_id', $uuid],
+            ['category', 'operational-approved-excdir'],
+        ])->orderBy('id', 'desc')->first();
+        $signatureExedir = [];
+        if(!empty($logApprovedExedir)){
+            $fetchUserExedir = Http::get('https://persona-gateway.herokuapp.com/auth/user/get-by-employee-id?id='.$logApprovedExedir->user_id);
+            $dataUserExedir = $fetchUserExedir->json()['data'];
+            $signatureExedir = ["user" => $dataUserExedir, "signature" => Signature::where('user_id', $logApprovedExedir->user_id)->get()];
+        }
+
+        $pdf = PDF::loadView('finance-director.operational.pdfDetail', ['transactionDebit' => $transactionDebit, 'sum' => $sum, 'inWords' => $inWords, 'todayDate' => $todayDate, 'signatureFindivStore' => $signatureFindivStore, 'signatureFindivPaid' => $signatureFindivPaid, 'signatureFindir' => $signatureFindir, 'signatureExedir' => $signatureExedir]);
         $pdf->setPaper('A4', 'landscape');
         $filename = $todayDate.' ('.$transactionDebit[0]->token.') Mandiri Operational Transaction.pdf';
         return $pdf->download($filename);

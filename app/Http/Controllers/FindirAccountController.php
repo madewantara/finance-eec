@@ -19,6 +19,7 @@ class FindirAccountController extends Controller
     public function __construct()
     {
         $this->middleware('finance.director');
+        $this->middleware('signature.findir');
     }
 
     /**

@@ -276,10 +276,12 @@
                 <td></td>
                 <td></td>
                 <td></td>
-                <td colspan="2" rowspan="4"></td>
+                <td colspan="2" rowspan="2" style="vertical-align: center; text-align: center;">
+                    @if (count($signatureReport) != 0)
+                        <i>(Signed)</i>
+                    @endif
+                </td>
             </tr>
-            <tr></tr>
-            <tr></tr>
             <tr></tr>
             <tr>
                 <td></td>
@@ -287,7 +289,11 @@
                 <td></td>
                 <td></td>
                 <td></td>
-                <td colspan="2" style="text-align: center;vertical-align:center;"><b>Dyah Saraswati</b></td>
+                <td colspan="2" style="text-align: center;vertical-align:center;">
+                    @if (count($signatureReport) != 0)
+                        <b>{{ $signatureReport['user']['fullname'] }}</b>
+                    @endif
+                </td>
             </tr>
             <tr>
                 <td></td>
@@ -295,7 +301,11 @@
                 <td></td>
                 <td></td>
                 <td></td>
-                <td colspan="2" style="text-align: center;vertical-align:center;">Direktur Utama</td>
+                <td colspan="2" style="text-align: center;vertical-align:center;">
+                    @if (count($signatureReport) != 0)
+                        {{ $signatureReport['user']['Contracts'][0]['Position']['title'] }}
+                    @endif
+                </td>
             </tr>
         </tbody>
     </table>

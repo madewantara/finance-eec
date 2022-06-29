@@ -17,7 +17,8 @@
             <div class="position-fixed bottom-0 end-0" style="bottom: 2% !important; right: 1% !important; z-index:2;">
                 <div class="alert alert-success alert-dismissible fade show d-flex align-items-center" role="alert">
                     <span class="svg-icon svg-icon-2hx svg-icon-success me-4">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                            fill="none">
                             <path opacity="0.3"
                                 d="M20.5543 4.37824L12.1798 2.02473C12.0626 1.99176 11.9376 1.99176 11.8203 2.02473L3.44572 4.37824C3.18118 4.45258 3 4.6807 3 4.93945V13.569C3 14.6914 3.48509 15.8404 4.4417 16.984C5.17231 17.8575 6.18314 18.7345 7.446 19.5909C9.56752 21.0295 11.6566 21.912 11.7445 21.9488C11.8258 21.9829 11.9129 22 12.0001 22C12.0872 22 12.1744 21.983 12.2557 21.9488C12.3435 21.912 14.4326 21.0295 16.5541 19.5909C17.8169 18.7345 18.8277 17.8575 19.5584 16.984C20.515 15.8404 21 14.6914 21 13.569V4.93945C21 4.6807 20.8189 4.45258 20.5543 4.37824Z"
                                 fill="currentColor"></path>
@@ -39,12 +40,14 @@
             <div class="position-fixed bottom-0 end-0" style="bottom: 2% !important; right: 1% !important; z-index:2;">
                 <div class="alert alert-danger alert-dismissible fade show d-flex align-items-center" role="alert">
                     <span class="svg-icon svg-icon-2hx svg-icon-danger me-4">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-                            <rect opacity="0.4" x="2" y="2" width="20" height="20" rx="10" fill="currentColor"></rect>
-                            <rect x="11" y="14" width="7" height="2" rx="1" transform="rotate(-90 11 14)"
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                            fill="none">
+                            <rect opacity="0.4" x="2" y="2" width="20" height="20" rx="10"
                                 fill="currentColor"></rect>
-                            <rect x="11" y="17" width="2" height="2" rx="1" transform="rotate(-90 11 17)"
-                                fill="currentColor"></rect>
+                            <rect x="11" y="14" width="7" height="2" rx="1"
+                                transform="rotate(-90 11 14)" fill="currentColor"></rect>
+                            <rect x="11" y="17" width="2" height="2" rx="1"
+                                transform="rotate(-90 11 17)" fill="currentColor"></rect>
                         </svg>
                     </span>
                     <div>
@@ -52,6 +55,49 @@
                     </div>
                     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"
                         style="top:5px;"></button>
+                </div>
+            </div>
+        </div>
+    @endif
+    @if (count($signatureCheck) == 0)
+        <!--Modal Signature-->
+        <div class="modal fade" id="addSignature" tabindex="-1" aria-labelledby="addSignature" aria-hidden="true"
+            data-bs-backdrop="static" data-bs-keyboard="false">
+            <div class="modal-dialog modal-lg modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">Add Signature <br> <span class="text-muted fw-bold fs-7"><b
+                                    class="text-warning">Attention!</b> Please add your signature to access all
+                                pages.</span></h4>
+                    </div>
+                    <div class="modal-body">
+                        <form class="form" id="formSign" action="{{ route('findir.signature-create') }}" novalidate
+                            method="post" onkeydown="return event.key != 'Enter';" autocomplete="off"
+                            enctype="multipart/form-data">
+                            @csrf
+
+                            <div class="fv-row row fv-plugins-icon-container">
+                                <div class="col-md-12 mt-n5 text-center">
+                                    <input type="file" id="file-upload" name="signature" accept="image/*"
+                                        style="display: none" onchange="loadFile(event)"
+                                        class="form-control @error('signature') is-invalid @enderror" required /><br>
+                                    <label class="file-upload-text w-100 text-center" for="file-upload">Upload
+                                        file</label>
+                                    @error('signature')
+                                        <div class="invalid-feedback" style="display: block;">{{ $message }}</div>
+                                    @enderror
+                                    <img id="prevImg" class="img img-fluid mt-3" style="width: 30%; height: auto;">
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary" form="formSign">
+                            <span class="indicator-label">Submit</span>
+                            <span class="indicator-progress">Please wait...
+                                <span class="spinner-border spinner-border-sm align-middle ms-2"></span></span>
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -74,9 +120,9 @@
                                 <h1 class="fw-bolder fs-4 fs-lg-1 text-gray-800">Hi,</h1>
                                 <!--end::Title-->
                                 <h1 class="text-gray-800" style="font-size: 450%; font-weight: 400;">
-                                    Made Dewantara
+                                    {{ $dataUser['fullname'] }}
                                 </h1>
-                                <h2 class="text-muted">Finance Director</h2>
+                                <h2 class="text-muted">{{ $dataUser['Contracts'][0]['Position']['title'] }}</h2>
                             </div>
                             <!--end::Wrapper-->
                             <!--begin::Wrapper-->
@@ -215,7 +261,11 @@
                                             </span>
                                             <!--end::Svg Icon-->
                                         @endif
-                                        {{ number_format((float) (($tempProfit[4] - $tempProfit[3]) / $tempProfit[3]) * 100, 2, '.', '') }}%
+                                        @if ($tempProfit[3] == 0)
+                                            {{ number_format(0, 2, '.', '') }}%
+                                        @else
+                                            {{ number_format((float) (($tempProfit[4] - $tempProfit[3]) / $tempProfit[3]) * 100, 2, '.', '') }}%
+                                        @endif
                                     </span>
                                     <!--end::Label-->
                                 </div>
@@ -265,7 +315,7 @@
                                         </div>
                                     </div>
                                 @else
-                                    @foreach ($activeProj as $ap)
+                                    @foreach ($activeProj as $key => $ap)
                                         <!--begin::Item-->
                                         <div class="row mb-7">
                                             <div class="col-lg-2">
@@ -303,9 +353,9 @@
                                                                 class="fs-5 text-gray-800 text-hover-primary fw-bolder">{{ $ap->name }}</a>
                                                             <span
                                                                 class="text-gray-400 fw-bold fs-7 my-1">{{ $ap->projectCategory->category }}</span>
-                                                            <span class="text-gray-400 fw-bold fs-7">By:
+                                                            <span class="text-gray-400 fw-bold fs-7">PM:
                                                                 <span
-                                                                    class="text-dark fw-bold">{{ $ap->project_manager }}</span>
+                                                                    class="text-dark fw-bold">{{ $pm[$key]['fullname'] }}</span>
                                                         </div>
                                                     </div>
                                                     <!--end::Title-->
@@ -371,7 +421,8 @@
                         <div class="card-header border-0 pt-5">
                             <h3 class="card-title align-items-start flex-column">
                                 <span class="card-label fw-bolder fs-3 mb-1">EEC Indonesia Active Project</span>
-                                <span class="text-muted mt-1 fw-bold fs-7">Total {{ count($allProjLoc) }} Projects</span>
+                                <span class="text-muted mt-1 fw-bold fs-7">Total {{ count($allProjLoc) }}
+                                    Projects</span>
                             </h3>
                         </div>
                         <!--end::Header-->
@@ -395,11 +446,12 @@
     <div id="kt_scrolltop" class="scrolltop" data-kt-scrolltop="true">
         <!--begin::Svg Icon | path: icons/duotone/Navigation/Up-2.svg-->
         <span class="svg-icon">
-            <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px"
-                viewBox="0 0 24 24" version="1.1">
+            <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px"
+                height="24px" viewBox="0 0 24 24" version="1.1">
                 <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
                     <polygon points="0 0 24 0 24 24 0 24" />
-                    <rect fill="#000000" opacity="0.5" x="11" y="10" width="2" height="10" rx="1" />
+                    <rect fill="#000000" opacity="0.5" x="11" y="10" width="2" height="10"
+                        rx="1" />
                     <path
                         d="M6.70710678,12.7071068 C6.31658249,13.0976311 5.68341751,13.0976311 5.29289322,12.7071068 C4.90236893,12.3165825 4.90236893,11.6834175 5.29289322,11.2928932 L11.2928932,5.29289322 C11.6714722,4.91431428 12.2810586,4.90106866 12.6757246,5.26284586 L18.6757246,10.7628459 C19.0828436,11.1360383 19.1103465,11.7686056 18.7371541,12.1757246 C18.3639617,12.5828436 17.7313944,12.6103465 17.3242754,12.2371541 L12.0300757,7.38413782 L6.70710678,12.7071068 Z"
                         fill="#000000" fill-rule="nonzero" />
@@ -421,6 +473,20 @@
                 $(this).remove();
             });
         }, 5000);
+    </script>
+    <script type="text/javascript">
+        $(window).on('load', function() {
+            $('#addSignature').modal('show');
+        });
+    </script>
+    <script>
+        var loadFile = function(event) {
+            var output = document.getElementById('prevImg');
+            output.src = URL.createObjectURL(event.target.files[0]);
+            output.onload = function() {
+                URL.revokeObjectURL(output.src)
+            }
+        };
     </script>
     <script src="http://maps.google.com/maps/api/js?key=AIzaSyDi6oRMzsrth0JpkfYQQzwnv7FCvYfWwKA" type="text/javascript">
     </script>

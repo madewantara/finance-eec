@@ -6,6 +6,7 @@ use Illuminate\Support\ServiceProvider;
 use App\Models\ActivityLog;
 use App\Models\Transaction;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Http;
 
 class FindirContentServiceProvider extends ServiceProvider
 {
@@ -79,7 +80,9 @@ class FindirContentServiceProvider extends ServiceProvider
             if(count($ta) != 0){
                 foreach($ta[0] as $t){
                     if($t->status == 1 || $t->status == 4){
-                        array_push($arrActivity, ["uuid" => $t->uuid, "token" => $t->token, "category" => $t->category, "user_id" => $ta[1], "updated_at" => $ta[2], "status" => $t->status]);
+                        $fetchUserNotif = Http::get('https://persona-gateway.herokuapp.com/auth/user/get-by-employee-id?id='.$ta[1]);
+                        $dataUserNotif = $fetchUserNotif->json()['data'];
+                        array_push($arrActivity, ["uuid" => $t->uuid, "token" => $t->token, "category" => $t->category, "user" => $dataUserNotif, "updated_at" => $ta[2], "status" => $t->status]);
                     }
                 }
             }
@@ -88,7 +91,11 @@ class FindirContentServiceProvider extends ServiceProvider
         $this->notification = $arrActivity;
 
         view()->composer('layouts.app-findir', function($view) {
-            $view->with(['notification' => $this->notification]);
+            $userId = session('user')['nip'];
+            $fetchUserById = Http::get('https://persona-gateway.herokuapp.com/auth/user/get-by-employee-id?id='.$userId);
+            $dataUser = $fetchUserById->json()['data'];
+
+            $view->with(['notification' => $this->notification, "dataUser" => $dataUser]);
         });
     }
 }

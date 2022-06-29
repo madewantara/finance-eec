@@ -6,7 +6,6 @@ use Livewire\Component;
 use Livewire\WithPagination;
 use App\Models\Report;
 use App\Models\ActivityLog;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 
 class FilterIndexReport extends Component
