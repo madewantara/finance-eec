@@ -4,8 +4,9 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
+use App\Models\Signature;
 
-class AuthenticateFinanceDirector
+class CheckSignatureExecutiveDirector
 {
     /**
      * Handle an incoming request.
@@ -16,14 +17,10 @@ class AuthenticateFinanceDirector
      */
     public function handle(Request $request, Closure $next)
     {
-        if(!session('user')){
-            return redirect()->route('login')->withError('Your session has expired! Please login to your account.');
+        $signature = Signature::where('user_id', session('user')['nip'])->get();
+        if(count($signature) == 0){
+            return redirect()->route('exedir.dashboard')->withError('Please add your signature to access all pages');
         }
-
-        if(session('user')['role'] == 'Finance Director'){
-            return $next($request);
-        }
-
-        return redirect()->back()->withError('You do not have finance director access');
+        return $next($request);
     }
 }

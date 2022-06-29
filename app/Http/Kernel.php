@@ -66,5 +66,9 @@ class Kernel extends HttpKernel
         'finance.division' => \App\Http\Middleware\AuthenticateFinanceDivision::class,
         'finance.director' => \App\Http\Middleware\AuthenticateFinanceDirector::class,
         'executive.director' => \App\Http\Middleware\AuthenticateExecutiveDirector::class,
+        'auth.logout' => \App\Http\Middleware\AuthenticateLogout::class,
+        'signature.findiv' => \App\Http\Middleware\CheckSignatureFinanceDivision::class,
+        'signature.findir' => \App\Http\Middleware\CheckSignatureFinanceDirector::class,
+        'signature.exedir' => \App\Http\Middleware\CheckSignatureExecutiveDirector::class,
     ];
 }

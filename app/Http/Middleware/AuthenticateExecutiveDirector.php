@@ -4,8 +4,6 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
-use App\Models\MapUserRole;
-use App\Models\Role;
 
 class AuthenticateExecutiveDirector
 {
@@ -18,15 +16,11 @@ class AuthenticateExecutiveDirector
      */
     public function handle(Request $request, Closure $next)
     {
-        if(empty(auth()->user())){
+        if(!session('user')){
             return redirect()->route('login')->withError('Your session has expired! Please login to your account.');
         }
-        
-        $user = auth()->user()->userRole()->first()->user_id;
-        $userRole = MapUserRole::where('user_id', $user)->first()->role_id;
-        $role = Role::where('id', $userRole)->first()->role;
 
-        if(auth()->user() && $role == 'executivedirector'){
+        if(session('user')['role'] == 'Executive Director'){
             return $next($request);
         }
 
