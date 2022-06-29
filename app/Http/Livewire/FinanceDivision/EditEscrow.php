@@ -9,6 +9,7 @@ use App\Models\Project;
 use App\Models\Transaction;
 use App\Models\TransactionFile;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Http;
 
 class EditEscrow extends Component
 {
@@ -18,6 +19,7 @@ class EditEscrow extends Component
     public $transCredit = [];
     public $allProject;
     public $allReferral;
+    public $allEmployee;
     public $sumDebit = 0;
     public $sumCredit = 0;
     public $currDate;
@@ -82,7 +84,13 @@ class EditEscrow extends Component
         }
 
         $this->allProject = Project::where('is_active', 1)->with(["projectCategory", "projectLocation"])->get();
-        $this->allReferral = Account::where('is_active', 1)->get();
+        $this->allReferral = Account::where('is_active', 1)->orderBy('referral', 'asc')->get();
+        $fetchAllUser = Http::withHeaders([
+            'Authorization' => 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjp7ImlkIjoiYjg4YTkxNjUtOTRmZS00MWE0LWI1YmItODY5OTdhYTllMThhIiwiZW1haWwiOiJockBnbWFpbC5jb20iLCJyb2xlcyI6W3siaWQiOjMsInJvbGUiOiJodW1hbiByZXNvdXJjZSJ9LHsiaWQiOjUsInJvbGUiOiJlbXBsb3llZSJ9XX0sImlhdCI6MTY1MDQ2ODY3OH0.1nFrYhiNA7hzf_Hg09PhVmCji1CaFqnyvPUNCQjpXR0'
+        ])->get('https://persona-gateway.herokuapp.com/auth/employee?limit=9999&offset=0&keyword=');
+        $dataUser = $fetchAllUser->json();
+        $this->allEmployee = $dataUser['data']['data'];
+
         $this->emit('refreshDropdown');
         $this->emit('refreshValidation');
         $this->emit('refreshNotification');

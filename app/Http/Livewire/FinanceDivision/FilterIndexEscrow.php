@@ -10,7 +10,6 @@ use App\Models\Balance;
 use App\Models\ActivityLog;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Pagination\LengthAwarePaginator;
-use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
 
 class FilterIndexEscrow extends Component
@@ -111,7 +110,7 @@ class FilterIndexEscrow extends Component
         Balance::where([['category', 'escrow'], ['year', Carbon::now()->year]])->update(['balance' => $escrowBalance]);
 
         $log = ActivityLog::create([
-            'user_id' => Auth::id(),
+            'user_id' => session('user')['nip'],
             'category' => 'escrow-paid',
             'activity_id' => $uuid['uuid'],
         ]);
@@ -141,7 +140,7 @@ class FilterIndexEscrow extends Component
             ])->update(['is_active' => 0]);
     
             $log = ActivityLog::create([
-                'user_id' => Auth::id(),
+                'user_id' => session('user')['nip'],
                 'category' => 'escrow-delete',
                 'activity_id' => $uuid['uuid'],
             ]);
@@ -155,7 +154,7 @@ class FilterIndexEscrow extends Component
         $pic = Transaction::select('pic')->where('is_active', 1)->where('category', 'escrow')->where('pic', '<>', NULL)->distinct()->get();
         $paidto = Transaction::select('paid_to')->where('is_active', 1)->where('category', 'escrow')->where('paid_to', '<>', NULL)->distinct()->get();
         $project = Transaction::select('project_id')->where('is_active', 1)->where('category', 'escrow')->where('project_id', '<>', NULL)->with('transactionProject')->distinct()->get();
-        $account = Account::where('is_active', 1)->get();
+        $account = Account::where('is_active', 1)->orderBy('referral', 'asc')->get();
         $distAllTrans = Transaction::select('uuid')->where('is_active', 1)->where('category', 'escrow')->distinct()->get();
         $escrowBalance = Balance::where([['category', 'escrow'], ['year', Carbon::now()->year]])->get();
         $this->balance = 'Rp. 0';

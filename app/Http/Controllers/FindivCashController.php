@@ -9,21 +9,22 @@ use App\Models\TransactionFile;
 use App\Models\Account;
 use App\Models\Balance;
 use App\Models\ActivityLog;
-use App\Models\User;
 use App\Exports\FinanceDivision\CashExport;
 use Maatwebsite\Excel\Facades\Excel;
 use Carbon\Carbon;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Str;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Arr;
 use Storage;
+use Illuminate\Support\Facades\Http;
+use App\Models\Signature;
 
 class FindivCashController extends Controller
 {
     public function __construct()
     {
         $this->middleware('finance.division');
+        $this->middleware('signature.findiv');
     }
     
     /**
@@ -36,7 +37,7 @@ class FindivCashController extends Controller
         $picex = Transaction::select('pic')->where([['category', 'cash'],['is_active', 1],['pic', '<>', NULL]])->distinct()->get();
         $paidtoex = Transaction::select('paid_to')->where('is_active', 1)->where('category', 'cash')->where('paid_to', '<>', NULL)->distinct()->get();
         $projectex = Transaction::select('project_id')->where([['category', 'cash'],['is_active', 1],['project_id', '<>', NULL]])->with('transactionProject')->distinct()->get();
-        $accountex = Account::where('is_active', 1)->get();
+        $accountex = Account::where('is_active', 1)->orderBy('referral', 'asc')->get();
 
         return view('finance-division.cash.index', compact('picex', 'projectex', 'accountex', 'paidtoex'));
     }
@@ -154,7 +155,7 @@ class FindivCashController extends Controller
         }
 
         $log = ActivityLog::create([
-            'user_id' => Auth::id(),
+            'user_id' => session('user')['nip'],
             'category' => 'cash-store',
             'activity_id' => $transactionUuid,
         ]);
@@ -200,7 +201,9 @@ class FindivCashController extends Controller
         
         $user = [];
         foreach($log as $l){
-            array_push($user, User::where('id',$l->user_id)->get());
+            $fetchUserById = Http::get('https://persona-gateway.herokuapp.com/auth/user/get-by-employee-id?id='.$l->user_id);
+            $dataUser = $fetchUserById->json()['data'];
+            array_push($user, $dataUser);
         }
 
         $activity = [];
@@ -231,7 +234,9 @@ class FindivCashController extends Controller
         
         $user = [];
         foreach($log as $l){
-            array_push($user, User::where('id',$l->user_id)->get());
+            $fetchUserById = Http::get('https://persona-gateway.herokuapp.com/auth/user/get-by-employee-id?id='.$l->user_id);
+            $dataUser = $fetchUserById->json()['data'];
+            array_push($user, $dataUser);
         }
 
         $activity = [];
@@ -399,32 +404,6 @@ class FindivCashController extends Controller
                 ]);
             }
         }
-        
-        if(Arr::exists($validated, 'status')){
-            if($validated['status'] == '4'){
-                $transubs = Transaction::where([
-                    ['is_active', 1],
-                    ['category', 'cash'],
-                    ['status', 4],
-                    ['uuid', $transUuid],
-                    ['debit', 0],
-                ])->get();
-        
-                $curBalance = Balance::where('category', 'cash')->pluck('balance');
-                $cashBalance = $curBalance[0];
-                foreach($transubs as $ts){
-                    $cashBalance = $cashBalance - $ts->credit;
-                }
-        
-                Balance::where('category', 'cash')->update(['balance' => $cashBalance]);
-
-                $log = ActivityLog::create([
-                    'user_id' => Auth::id(),
-                    'category' => 'cash-paid',
-                    'activity_id' => $transUuid,
-                ]);
-            }
-        }
 
         $report = $request->file('report');
         if(Arr::exists($validated, 'report')){
@@ -536,10 +515,36 @@ class FindivCashController extends Controller
         }
 
         $log = ActivityLog::create([
-            'user_id' => Auth::id(),
+            'user_id' => session('user')['nip'],
             'category' => 'cash-update',
             'activity_id' => $transUuid,
         ]);
+
+        if(Arr::exists($validated, 'status')){
+            if($validated['status'] == '4'){
+                $transubs = Transaction::where([
+                    ['is_active', 1],
+                    ['category', 'cash'],
+                    ['status', 4],
+                    ['uuid', $transUuid],
+                    ['debit', 0],
+                ])->get();
+        
+                $curBalance = Balance::where('category', 'cash')->pluck('balance');
+                $cashBalance = $curBalance[0];
+                foreach($transubs as $ts){
+                    $cashBalance = $cashBalance - $ts->credit;
+                }
+        
+                Balance::where('category', 'cash')->update(['balance' => $cashBalance]);
+
+                $log = ActivityLog::create([
+                    'user_id' => session('user')['nip'],
+                    'category' => 'cash-paid',
+                    'activity_id' => $transUuid,
+                ]);
+            }
+        }
 
         return redirect()->route('findiv.cash-index')->withSuccess('Cash transaction successfully updated');
     }
@@ -635,7 +640,51 @@ class FindivCashController extends Controller
         }
         $inWords = $this->inWords($sum);
 
-        $pdf = PDF::loadView('finance-division.cash.pdfDetail', ['transactionDebit' => $transactionDebit, 'sum' => $sum, 'inWords' => $inWords, 'todayDate' => $todayDate]);
+        $logCashStore = ActivityLog::where([
+            ['activity_id', $uuid],
+            ['category', 'cash-store'],
+        ])->orderBy('id', 'desc')->first();
+        $signatureFindivStore = [];
+        if(!empty($logCashStore)){
+            $fetchUserFindivStore = Http::get('https://persona-gateway.herokuapp.com/auth/user/get-by-employee-id?id='.$logCashStore->user_id);
+            $dataUserFindivStore = $fetchUserFindivStore->json()['data'];
+            $signatureFindivStore = ["user" => $dataUserFindivStore, "signature" => Signature::where('user_id', $logCashStore->user_id)->get()];
+        }
+
+        $logCashPaid = ActivityLog::where([
+            ['activity_id', $uuid],
+            ['category', 'cash-paid'],
+        ])->orderBy('id', 'desc')->first();
+        $signatureFindivPaid = [];
+        if(!empty($logCashPaid)){
+            $fetchUserFindivPaid = Http::get('https://persona-gateway.herokuapp.com/auth/user/get-by-employee-id?id='.$logCashPaid->user_id);
+            $dataUserFindivPaid = $fetchUserFindivPaid->json()['data'];
+            $signatureFindivPaid = ["user" => $dataUserFindivPaid, "signature" => Signature::where('user_id', $logCashPaid->user_id)->get()];
+        }
+
+        $logApprovedFindir = ActivityLog::where([
+            ['activity_id', $uuid],
+            ['category', 'cash-approved-findir'],
+        ])->orderBy('id', 'desc')->first();
+        $signatureFindir = [];
+        if(!empty($logApprovedFindir)){
+            $fetchUserFindir = Http::get('https://persona-gateway.herokuapp.com/auth/user/get-by-employee-id?id='.$logApprovedFindir->user_id);
+            $dataUserFindir = $fetchUserFindir->json()['data'];
+            $signatureFindir = ["user" => $dataUserFindir, "signature" => Signature::where('user_id', $logApprovedFindir->user_id)->get()];
+        }
+
+        $logApprovedExedir = ActivityLog::where([
+            ['activity_id', $uuid],
+            ['category', 'cash-approved-excdir'],
+        ])->orderBy('id', 'desc')->first();
+        $signatureExedir = [];
+        if(!empty($logApprovedExedir)){
+            $fetchUserExedir = Http::get('https://persona-gateway.herokuapp.com/auth/user/get-by-employee-id?id='.$logApprovedExedir->user_id);
+            $dataUserExedir = $fetchUserExedir->json()['data'];
+            $signatureExedir = ["user" => $dataUserExedir, "signature" => Signature::where('user_id', $logApprovedExedir->user_id)->get()];
+        }
+
+        $pdf = PDF::loadView('finance-division.cash.pdfDetail', ['transactionDebit' => $transactionDebit, 'sum' => $sum, 'inWords' => $inWords, 'todayDate' => $todayDate, 'signatureFindivStore' => $signatureFindivStore, 'signatureFindivPaid' => $signatureFindivPaid, 'signatureFindir' => $signatureFindir, 'signatureExedir' => $signatureExedir]);
         $pdf->setPaper('A4', 'landscape');
         $filename = $todayDate.' ('.$transactionDebit[0]->token.') Cash Transaction.pdf';
         return $pdf->download($filename);

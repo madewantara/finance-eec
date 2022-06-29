@@ -7,7 +7,6 @@ use App\Models\Balance;
 use App\Models\Transaction;
 use App\Models\ActivityLog;
 use Carbon\Carbon;
-use Illuminate\Support\Facades\Auth;
 
 class EditTransactionDashboard extends Component
 {
@@ -48,7 +47,7 @@ class EditTransactionDashboard extends Component
         Balance::where([['category', 'cash'], ['year', Carbon::now()->year]])->update(['balance' => $cashBalance]);
 
         $log = ActivityLog::create([
-            'user_id' => Auth::id(),
+            'user_id' => session('user')['nip'],
             'category' => 'cash-paid',
             'activity_id' => $uuid['uuid'],
         ]);
@@ -81,7 +80,7 @@ class EditTransactionDashboard extends Component
         Balance::where([['category', 'operational'], ['year', Carbon::now()->year]])->update(['balance' => $optBalance]);
 
         $log = ActivityLog::create([
-            'user_id' => Auth::id(),
+            'user_id' => session('user')['nip'],
             'category' => 'operational-paid',
             'activity_id' => $uuid['uuid'],
         ]);
@@ -114,7 +113,7 @@ class EditTransactionDashboard extends Component
         Balance::where([['category', 'escrow'], ['year', Carbon::now()->year]])->update(['balance' => $escBalance]);
 
         $log = ActivityLog::create([
-            'user_id' => Auth::id(),
+            'user_id' => session('user')['nip'],
             'category' => 'escrow-paid',
             'activity_id' => $uuid['uuid'],
         ]);

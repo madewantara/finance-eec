@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Account;
-use App\Models\User;
 use App\Models\ActivityLog;
 use Illuminate\Support\Str;
 use App\Http\Requests\AccountRequest;
@@ -13,13 +12,14 @@ use App\Exports\FinanceDivision\AccountExport;
 use Maatwebsite\Excel\Facades\Excel;
 use Carbon\Carbon;
 use Barryvdh\DomPDF\Facade\Pdf;
-use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Http;
 
 class FindivAccountController extends Controller
 {
     public function __construct()
     {
         $this->middleware('finance.division');
+        $this->middleware('signature.findiv');
     }
 
     /**
@@ -92,7 +92,7 @@ class FindivAccountController extends Controller
         ]);
 
         $log = ActivityLog::create([
-            'user_id' => Auth::id(),
+            'user_id' => session('user')['nip'],
             'category' => 'account-store',
             'activity_id' => $accountUuid,
         ]);
@@ -140,7 +140,9 @@ class FindivAccountController extends Controller
                 array_push($user, 'system');
             }
             else{
-                array_push($user, User::where('id',$l->user_id)->get());
+                $fetchUserById = Http::get('https://persona-gateway.herokuapp.com/auth/user/get-by-employee-id?id='.$l->user_id);
+                $dataUser = $fetchUserById->json()['data'];
+                array_push($user, $dataUser);
             }
         }
 
@@ -203,7 +205,7 @@ class FindivAccountController extends Controller
         ]);
 
         $log = ActivityLog::create([
-            'user_id' => Auth::id(),
+            'user_id' => session('user')['nip'],
             'category' => 'account-update',
             'activity_id' => $accountUuid,
         ]);

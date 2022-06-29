@@ -2,9 +2,9 @@
 <div id="kt_aside" class="aside pb-5 pt-5 pt-lg-0" data-kt-drawer="true" data-kt-drawer-name="aside"
     data-kt-drawer-activate="{default: true, lg: false}" data-kt-drawer-overlay="true"
     data-kt-drawer-width="{default:'80px', '300px': '100px'}" data-kt-drawer-direction="start"
-    data-kt-drawer-toggle="#kt_aside_mobile_toggle">
+    data-kt-drawer-toggle="#kt_aside_mobile_toggle" style="background-color: #1b1b28 !important;">
     <!--begin::Brand-->
-    <div class="aside-logo py-8" id="kt_aside_logo">
+    <div class="aside-logo py-8" id="kt_aside_logo" style="background-color: #1b1b28 !important;">
         <!--begin::Logo-->
         <a href="{{ route('findiv.dashboard') }}" class="d-flex align-items-center">
             <img alt="Logo" src="{{ asset('assets/image/logo/logo.png') }}" class="h-80px logo" />
@@ -130,15 +130,24 @@
                 <span class="svg-icon svg-icon-1">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" viewBox="0 0 24 24"
                         version="1.1">
-                        <rect fill="#000000" opacity="0.3" x="4" y="4" width="4" height="4" rx="2" />
-                        <rect fill="#000000" x="4" y="10" width="4" height="4" rx="2" />
-                        <rect fill="#000000" x="10" y="4" width="4" height="4" rx="2" />
-                        <rect fill="#000000" x="10" y="10" width="4" height="4" rx="2" />
-                        <rect fill="#000000" x="16" y="4" width="4" height="4" rx="2" />
-                        <rect fill="#000000" x="16" y="10" width="4" height="4" rx="2" />
-                        <rect fill="#000000" x="4" y="16" width="4" height="4" rx="2" />
-                        <rect fill="#000000" x="10" y="16" width="4" height="4" rx="2" />
-                        <rect fill="#000000" x="16" y="16" width="4" height="4" rx="2" />
+                        <rect fill="#000000" opacity="0.3" x="4" y="4" width="4"
+                            height="4" rx="2" />
+                        <rect fill="#000000" x="4" y="10" width="4" height="4"
+                            rx="2" />
+                        <rect fill="#000000" x="10" y="4" width="4" height="4"
+                            rx="2" />
+                        <rect fill="#000000" x="10" y="10" width="4" height="4"
+                            rx="2" />
+                        <rect fill="#000000" x="16" y="4" width="4" height="4"
+                            rx="2" />
+                        <rect fill="#000000" x="16" y="10" width="4" height="4"
+                            rx="2" />
+                        <rect fill="#000000" x="4" y="16" width="4" height="4"
+                            rx="2" />
+                        <rect fill="#000000" x="10" y="16" width="4" height="4"
+                            rx="2" />
+                        <rect fill="#000000" x="16" y="16" width="4" height="4"
+                            rx="2" />
                     </svg>
                 </span>
                 <!--end::Svg Icon-->
@@ -166,7 +175,8 @@
                 <!--end::Menu item-->
                 <!--begin::Menu item-->
                 <div class="menu-item px-3">
-                    <a href="{{ route('findiv.operational-create') }}" class="menu-link px-3">New Mandiri Operational
+                    <a href="{{ route('findiv.operational-create') }}" class="menu-link px-3">New Mandiri
+                        Operational
                         Transaction</a>
                 </div>
                 <!--end::Menu item-->

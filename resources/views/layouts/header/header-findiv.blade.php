@@ -12,7 +12,8 @@
                         height="24px" viewBox="0 0 24 24" version="1.1">
                         <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
                             <rect x="0" y="0" width="24" height="24" />
-                            <rect fill="#000000" x="4" y="5" width="16" height="3" rx="1.5" />
+                            <rect fill="#000000" x="4" y="5" width="16" height="3"
+                                rx="1.5" />
                             <path
                                 d="M5.5,15 L18.5,15 C19.3284271,15 20,15.6715729 20,16.5 C20,17.3284271 19.3284271,18 18.5,18 L5.5,18 C4.67157288,18 4,17.3284271 4,16.5 C4,15.6715729 4.67157288,15 5.5,15 Z M5.5,10 L18.5,10 C19.3284271,10 20,10.6715729 20,11.5 C20,12.3284271 19.3284271,13 18.5,13 L5.5,13 C4.67157288,13 4,12.3284271 4,11.5 C4,10.6715729 4.67157288,10 5.5,10 Z"
                                 fill="#000000" opacity="0.3" />
@@ -129,8 +130,8 @@
                             <i class=" bi bi-grid fs-2"></i>
                         </div>
                         <!--begin::Menu-->
-                        <div class="menu menu-sub menu-sub-dropdown menu-column w-250px w-lg-325px" data-kt-menu="true"
-                            style="">
+                        <div class="menu menu-sub menu-sub-dropdown menu-column w-250px w-lg-325px"
+                            data-kt-menu="true" style="">
                             <!--begin::Heading-->
                             <div class="d-flex flex-column flex-center bgi-no-repeat rounded-top px-9 py-10"
                                 style="background-image:url('{{ asset('assets/image/random/notification.jpg') }}')">
@@ -199,12 +200,12 @@
                             data-kt-menu-trigger="click" data-kt-menu-attach="parent"
                             data-kt-menu-placement="bottom-end" data-bs-toggle="tooltip" data-bs-trigger="hover"
                             data-bs-placement="bottom" title="Activity Logs">
-                            <i class="bi bi-app-indicator fs-2"></i>
+                            <div class="numberNotif">{{ count($notifTrans) + count($notifReport) }}</div>
                             <span class="pulse-ring w-45px h-45px"></span>
                         </div>
                         <!--begin::Menu-->
-                        <div class="menu menu-sub menu-sub-dropdown menu-column w-350px w-lg-375px" data-kt-menu="true"
-                            style="">
+                        <div class="menu menu-sub menu-sub-dropdown menu-column w-350px w-lg-375px"
+                            data-kt-menu="true" style="">
                             <!--begin::Heading-->
                             <div class="bgi-no-repeat rounded-top"
                                 style="background-image:url('{{ asset('assets/image/random/notification.jpg') }}')">
@@ -230,7 +231,8 @@
                             <!--end::Heading-->
                             <!--begin::Tab content-->
                             <div class="tab-content">
-                                <div class="tab-pane fade active show" id="kt_topbar_notifications_1" role="tabpanel">
+                                <div class="tab-pane fade active show" id="kt_topbar_notifications_1"
+                                    role="tabpanel">
                                     <!--begin::Items-->
                                     <div class="scroll-y mh-325px my-5 px-8">
                                         @if (count($notifTrans) == 0)
@@ -252,12 +254,11 @@
                                                                 <div class="symbol-group symbol-hover me-3">
                                                                     <!--begin::User-->
                                                                     <div class="symbol symbol-35px symbol-circle"
-                                                                        data-bs-toggle="tooltip" title="Name"
-                                                                        data-bs-original-title="Name">
-                                                                        {{-- <span
-                                                                        class="symbol-label bg-primary text-inverse-primary fw-bolder">im</span> --}}
+                                                                        data-bs-toggle="tooltip"
+                                                                        title="{{ $nt['user']['fullname'] }}"
+                                                                        data-bs-original-title="{{ $nt['user']['fullname'] }}">
                                                                         <img class="img img-fluid"
-                                                                            src="{{ asset('assets/image/avatar/150-13.jpg') }}"
+                                                                            src="{{ $nt['user']['avatar'] }}"
                                                                             alt="image"
                                                                             style="max-width: 100%; height:auto;">
                                                                     </div>
@@ -377,12 +378,11 @@
                                                                 <div class="symbol-group symbol-hover me-3">
                                                                     <!--begin::User-->
                                                                     <div class="symbol symbol-35px symbol-circle"
-                                                                        data-bs-toggle="tooltip" title="Name"
-                                                                        data-bs-original-title="Name">
-                                                                        {{-- <span
-                                                                        class="symbol-label bg-primary text-inverse-primary fw-bolder">im</span> --}}
+                                                                        data-bs-toggle="tooltip"
+                                                                        title="{{ $nr['user']['fullname'] }}"
+                                                                        data-bs-original-title="{{ $nr['user']['fullname'] }}">
                                                                         <img class="img img-fluid"
-                                                                            src="{{ asset('assets/image/avatar/150-13.jpg') }}"
+                                                                            src="{{ $nr['user']['avatar'] }}"
                                                                             alt="image"
                                                                             style="max-width: 100%; height:auto;">
                                                                     </div>
@@ -466,8 +466,9 @@
                     <div class="d-flex align-items-center ms-1 ms-lg-3" id="kt_header_user_menu_toggle">
                         <!--begin::Menu wrapper-->
                         <div class="cursor-pointer symbol symbol-30px symbol-md-40px" data-kt-menu-trigger="click"
-                            data-kt-menu-attach="parent" data-kt-menu-placement="bottom-end" data-kt-menu-flip="bottom">
-                            <img src="{{ asset('assets/image/avatar/150-13.jpg') }}" alt="Avatar" />
+                            data-kt-menu-attach="parent" data-kt-menu-placement="bottom-end"
+                            data-kt-menu-flip="bottom">
+                            <img src="{{ $dataUser['avatar'] }}" alt="Avatar" />
                         </div>
                         <!--begin::Menu-->
                         <div class="menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-800 menu-state-bg menu-state-primary fw-bold py-4 fs-6 w-275px"
@@ -477,17 +478,18 @@
                                 <div class="menu-content d-flex align-items-center px-3">
                                     <!--begin::Avatar-->
                                     <div class="symbol symbol-50px me-5">
-                                        <img alt="Avatar" src="{{ asset('assets/image/avatar/150-13.jpg') }}" />
+                                        <img alt="Avatar" src="{{ $dataUser['avatar'] }}" />
                                     </div>
                                     <!--end::Avatar-->
                                     <!--begin::Username-->
                                     <div class="d-flex flex-column">
-                                        <div class="fw-bolder d-flex align-items-center fs-5">Max Smith
+                                        <div class="fw-bolder d-flex align-items-center fs-5">
+                                            {{ $dataUser['nickname'] }}
                                             <span
-                                                class="badge badge-light-success fw-bolder fs-8 px-2 py-1 ms-2">Finance
-                                                Division</span>
+                                                class="badge badge-light-success fw-bolder fs-8 px-2 py-1 ms-2">{{ $dataUser['Contracts'][0]['Position']['title'] }}</span>
                                         </div>
-                                        <a href="#" class="fw-bold text-muted text-hover-primary fs-7">max@kt.com</a>
+                                        <span
+                                            class="fw-bold text-muted text-hover-primary fs-7">{{ $dataUser['User']['email'] }}</span>
                                     </div>
                                     <!--end::Username-->
                                 </div>

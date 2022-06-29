@@ -6,6 +6,7 @@ use Livewire\Component;
 use App\Models\Account;
 use App\Models\Project;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Http;
 
 class CreateOperational extends Component
 {
@@ -13,13 +14,20 @@ class CreateOperational extends Component
     public $transCredit = [];
     public $allProject;
     public $allReferral;
+    public $allEmployee;
     public $sumDebit = 0;
     public $sumCredit = 0;
     public $currDate;
 
     public function mount(){
         $this->allProject = Project::where('is_active', 1)->with(["projectCategory", "projectLocation"])->get();
-        $this->allReferral = Account::where('is_active', 1)->get();
+        $this->allReferral = Account::where('is_active', 1)->orderBy('referral', 'asc')->get();
+
+        $fetchAllUser = Http::withHeaders([
+            'Authorization' => 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjp7ImlkIjoiYjg4YTkxNjUtOTRmZS00MWE0LWI1YmItODY5OTdhYTllMThhIiwiZW1haWwiOiJockBnbWFpbC5jb20iLCJyb2xlcyI6W3siaWQiOjMsInJvbGUiOiJodW1hbiByZXNvdXJjZSJ9LHsiaWQiOjUsInJvbGUiOiJlbXBsb3llZSJ9XX0sImlhdCI6MTY1MDQ2ODY3OH0.1nFrYhiNA7hzf_Hg09PhVmCji1CaFqnyvPUNCQjpXR0'
+        ])->get('https://persona-gateway.herokuapp.com/auth/employee?limit=9999&offset=0&keyword=');
+        $dataUser = $fetchAllUser->json();
+        $this->allEmployee = $dataUser['data']['data'];
         
         if(old('transDebit')){
             foreach(old('transDebit') as $index => $od){
@@ -111,7 +119,7 @@ class CreateOperational extends Component
     {
         $this->reset();
         $this->allProject = Project::where('is_active', 1)->with(["projectCategory", "projectLocation"])->get();
-        $this->allReferral = Account::where('is_active', 1)->get();
+        $this->allReferral = Account::where('is_active', 1)->orderBy('referral', 'asc')->get();
         $this->transDebit[] = ['descriptionDebit' => '', 'referralDebit' => '', 'debit' => ''];
         $this->transCredit[] = ['descriptionCredit' => '', 'referralCredit' => '', 'credit' => ''];
         $this->emit('refreshDropdown');

@@ -7,14 +7,15 @@ use App\Models\Project;
 use App\Models\Transaction;
 use App\Models\CategoryProject;
 use App\Models\ActivityLog;
-use App\Models\User;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Http;
 
 class FindivProjectController extends Controller
 {
     public function __construct()
     {
         $this->middleware('finance.division');
+        $this->middleware('signature.findiv');
     }
 
     /**
@@ -24,20 +25,35 @@ class FindivProjectController extends Controller
      */
     public function index()
     {
-        $project = Project::where('is_active', 1)->with("projectCategory")->orderBy('status', 'asc')->get();
+        $project = Project::where('is_active', 1)->with("projectCategory")->orderBy('created_at', 'desc')->get();
         $status = Project::select('status')->where('is_active', 1)->distinct()->get();
         $totalContract = Project::where('is_active', 1)->sum('contract');
         $avgContract = Project::where('is_active', 1)->avg('contract');
         $minContract = Project::where('is_active', 1)->min('contract');
         $maxContract = Project::where('is_active', 1)->max('contract');
+        
         $projectActive = Project::where('is_active', 1)->where(function($query){
             $query->where('status', 1)
             ->orWhere('status', 2);
         })->with('projectTransaction')->orderBy('id', 'desc')->get();
+        $pm = [];
+        foreach($projectActive as $pa){
+            $fetchUserById = Http::get('https://persona-gateway.herokuapp.com/auth/user/get-by-employee-id?id='.$pa['project_manager']);
+            $dataUser = $fetchUserById->json()['data'];
+            array_push($pm, $dataUser);
+        }
+        
         $projectActiveLim = Project::where('is_active', 1)->where(function($query){
             $query->where('status', 1)
             ->orWhere('status', 2);
         })->orderBy('id', 'desc')->limit(4)->get();
+        $pmLim = [];
+        foreach($projectActiveLim as $pal){
+            $fetchUserById = Http::get('https://persona-gateway.herokuapp.com/auth/user/get-by-employee-id?id='.$pal['project_manager']);
+            $dataUser = $fetchUserById->json()['data'];
+            array_push($pmLim, $dataUser);
+        }
+        
         $projLocation = Project::where('is_active', 1)->where(function($query){
             $query->where('status', 1)
             ->orWhere('status', 2);
@@ -254,7 +270,7 @@ class FindivProjectController extends Controller
         }
         //End K-Means Clustering
 
-        return view('finance-division.project.index', compact('project', 'projPerStat', 'totalContract', 'avgContract', 'maxContract', 'minContract', 'projectActive', 'projectActiveLim', 'highProjectExpanse', 'lowProjectExpanse', 'arrhighProjectExpanse', 'projLocation','allProjLoc'));
+        return view('finance-division.project.index', compact('project', 'projPerStat', 'totalContract', 'avgContract', 'maxContract', 'minContract', 'projectActive', 'pm', 'projectActiveLim', 'pmLim', 'highProjectExpanse', 'lowProjectExpanse', 'arrhighProjectExpanse', 'projLocation','allProjLoc'));
     }
 
     /**
@@ -293,6 +309,9 @@ class FindivProjectController extends Controller
             ['type', 2],
             ['project_id', $project[0]->id],
         ])->orderBy('updated_at', 'desc')->distinct()->get();
+
+        $fetchProjMan = Http::get('https://persona-gateway.herokuapp.com/auth/user/get-by-employee-id?id='.$project[0]->project_manager);
+        $projMan = $fetchProjMan->json()['data'];
 
         $arrLastTrans = [];
         foreach($lastTrans as $lt){
@@ -368,20 +387,30 @@ class FindivProjectController extends Controller
             ])->get(), "token" => $pa->token, "uuid" => $pa->uuid]);
         }
 
-        foreach($projActivity as $pa){
-            array_push($arrProjActivity, ["activity" => ActivityLog::where([['activity_id', $uuid], ['category', 'like', '%project%']])->get(), "token" => "", "uuid" => ""]);
-        }
+        array_push($arrProjActivity, ["activity" => ActivityLog::where([['activity_id', $uuid], ['category', 'like', '%project%']])->get(), "token" => "", "uuid" => ""]);
 
         $lastProjActivity = [];
         foreach($arrProjActivity as $apa){
             foreach($apa['activity'] as $a){
-                $user = User::where('id', $a->user_id)->get();
-                array_push($lastProjActivity, [$user[0]->email, $a->category, $a->updated_at, $apa['token'], $apa['uuid']]);
+                $fetchUserById = Http::get('https://persona-gateway.herokuapp.com/auth/user/get-by-employee-id?id='.$a->user_id);
+                $dataUser = $fetchUserById->json()['data'];
+                array_push($lastProjActivity, [$dataUser['fullname'], $a->category, $a->updated_at, $apa['token'], $apa['uuid'], $dataUser['avatar']]);
+            }
+        }
+
+        for($i=0; $i<=count($lastProjActivity)-2; $i++){
+            for($j=$i+1; $j<=count($lastProjActivity)-1; $j++){
+                if(strtotime($lastProjActivity[$j][2]) < strtotime($lastProjActivity[$i][2])){
+                    $temp = $lastProjActivity[$j];
+                    $lastProjActivity[$j] = $lastProjActivity[$i];
+                    $lastProjActivity[$i] = $temp;
+                    $temp = '';
+                }
             }
         }
         krsort($lastProjActivity);
 
-        return view('finance-division.project.show', compact('project', 'projLocation', 'uuid', 'sumProjectExpanse', 'arrFiles', 'arrLastTrans', 'totalProjTrans', 'lastProjActivity'));
+        return view('finance-division.project.show', compact('project', 'projLocation', 'uuid', 'sumProjectExpanse', 'arrFiles', 'arrLastTrans', 'totalProjTrans', 'lastProjActivity', 'projMan'));
     }
 
     /**

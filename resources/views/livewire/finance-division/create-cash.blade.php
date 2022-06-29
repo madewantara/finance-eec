@@ -4,7 +4,8 @@
             <div class="position-fixed bottom-0 end-0" style="bottom: 2% !important; right: 1% !important; z-index:2;">
                 <div class="alert alert-success alert-dismissible fade show d-flex align-items-center" role="alert">
                     <span class="svg-icon svg-icon-2hx svg-icon-success me-4">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                            fill="none">
                             <path opacity="0.3"
                                 d="M20.5543 4.37824L12.1798 2.02473C12.0626 1.99176 11.9376 1.99176 11.8203 2.02473L3.44572 4.37824C3.18118 4.45258 3 4.6807 3 4.93945V13.569C3 14.6914 3.48509 15.8404 4.4417 16.984C5.17231 17.8575 6.18314 18.7345 7.446 19.5909C9.56752 21.0295 11.6566 21.912 11.7445 21.9488C11.8258 21.9829 11.9129 22 12.0001 22C12.0872 22 12.1744 21.983 12.2557 21.9488C12.3435 21.912 14.4326 21.0295 16.5541 19.5909C17.8169 18.7345 18.8277 17.8575 19.5584 16.984C20.515 15.8404 21 14.6914 21 13.569V4.93945C21 4.6807 20.8189 4.45258 20.5543 4.37824Z"
                                 fill="currentColor"></path>
@@ -26,12 +27,14 @@
             <div class="position-fixed bottom-0 end-0" style="bottom: 2% !important; right: 1% !important; z-index:2;">
                 <div class="alert alert-danger alert-dismissible fade show d-flex align-items-center" role="alert">
                     <span class="svg-icon svg-icon-2hx svg-icon-danger me-4">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-                            <rect opacity="0.4" x="2" y="2" width="20" height="20" rx="10" fill="currentColor"></rect>
-                            <rect x="11" y="14" width="7" height="2" rx="1" transform="rotate(-90 11 14)"
-                                fill="currentColor"></rect>
-                            <rect x="11" y="17" width="2" height="2" rx="1" transform="rotate(-90 11 17)"
-                                fill="currentColor"></rect>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                            fill="none">
+                            <rect opacity="0.4" x="2" y="2" width="20" height="20"
+                                rx="10" fill="currentColor"></rect>
+                            <rect x="11" y="14" width="7" height="2" rx="1"
+                                transform="rotate(-90 11 14)" fill="currentColor"></rect>
+                            <rect x="11" y="17" width="2" height="2" rx="1"
+                                transform="rotate(-90 11 17)" fill="currentColor"></rect>
                         </svg>
                     </span>
                     <div>
@@ -92,8 +95,8 @@
                     <!--begin::select-->
                     <select
                         class="form-control form-control-white fw-bolder custom-select pe-5 form-select type @error('type') is-invalid @enderror"
-                        data-pharaonic="select2" data-component-id="{{ $this->id }}" wire:ignore="type" id="type"
-                        name="type" required>
+                        data-pharaonic="select2" data-component-id="{{ $this->id }}" wire:ignore="type"
+                        id="type" name="type" required>
                         <option></option>
                         <option value="1" {{ old('type') == '1' ? 'selected' : '' }}>Draft</option>
                         <option value="2" {{ old('type') == '2' ? 'selected' : '' }}>Posted</option>
@@ -121,12 +124,27 @@
                         <!--begin::select-->
                         <select
                             class="form-control form-control-white custom-select fw-bolder pe-5 form-select project @error('project') is-invalid @enderror"
-                            data-pharaonic="select2" data-component-id="{{ $this->id }}" id="project" name="project"
-                            wire:ignore="project" style="background-color: #f5f8fa;">
+                            data-pharaonic="select2" data-component-id="{{ $this->id }}" id="project"
+                            name="project" wire:ignore="project" style="background-color: #f5f8fa;">
                             <option></option>
                             @foreach ($allProject as $ap)
-                                <option value="{{ $ap->id }}" {{ old('type') == $ap->id ? 'selected' : '' }}>
-                                    {{ $ap->name }}</option>
+                                <option value="{{ $ap->id }}"
+                                    {{ old('project') == $ap->id ? 'selected' : '' }}>
+                                    @if ($ap->category_id == 1)
+                                        Radar Upgrade
+                                    @elseif($ap->category_id == 2)
+                                        Radar Spare Part
+                                    @elseif($ap->category_id == 3)
+                                        Radar Reinstallation
+                                    @elseif($ap->category_id == 4)
+                                        Preventive Maintenance
+                                    @elseif($ap->category_id == 5)
+                                        New Radar
+                                    @elseif($ap->category_id == 6)
+                                        Corrective Maintenance
+                                    @endif
+                                    - {{ $ap->name }}
+                                </option>
                             @endforeach
                         </select>
                         <!--end::select-->
@@ -139,11 +157,20 @@
                     <!--begin::Input group-->
                     <label class="form-label fs-6 fw-bolder text-gray-700 mb-3">PIC</label>
                     <div class="mb-5">
-                        <div wire:ignore>
-                            <input type="text" name="pic"
-                                class="form-control form-control-solid @error('pic') is-invalid @enderror"
-                                placeholder="PIC" value="{{ old('pic') }}" />
-                        </div>
+                        <!--begin::select-->
+                        <select
+                            class="form-control form-control-white custom-select fw-bolder pe-5 form-select pic @error('pic') is-invalid @enderror"
+                            data-pharaonic="select2" data-component-id="{{ $this->id }}" id="pic"
+                            name="pic" wire:ignore="pic" style="background-color: #f5f8fa;">
+                            <option></option>
+                            @foreach ($allEmployee as $ae)
+                                <option value="{{ $ae['fullname'] }}"
+                                    {{ old('pic') == $ae['fullname'] ? 'selected' : '' }}>
+                                    {{ $ae['fullname'] }} - {{ $ae['position'] }}
+                                </option>
+                            @endforeach
+                        </select>
+                        <!--end::select-->
                     </div>
                     <!--end::Input group-->
                 </div>
@@ -175,8 +202,8 @@
                         <!--begin::select-->
                         <select
                             class="form-control form-control-white custom-select fw-bolder pe-5 form-select status add @error('status') is-invalid @enderror"
-                            data-pharaonic="select2" data-component-id="{{ $this->id }}" id="status" name="status"
-                            wire:ignore="status" style="background-color: #f5f8fa;" required disabled>
+                            data-pharaonic="select2" data-component-id="{{ $this->id }}" id="status"
+                            name="status" wire:ignore="status" style="background-color: #f5f8fa;" required disabled>
                             <option></option>
                             <option value="1" selected>Pending</option>
                             <option value="3">Accepted</option>
@@ -244,7 +271,8 @@
                                     <!--end::select-->
                                 </td>
                                 <td>
-                                    <input type="text" type-currency="IDR" id="transDebit[{{ $indexDebit }}][debit]"
+                                    <input type="text" type-currency="IDR"
+                                        id="transDebit[{{ $indexDebit }}][debit]"
                                         class="form-control form-control-solid @error('transDebit.*.debit') is-invalid @enderror"
                                         name="transDebit[{{ $indexDebit }}][debit]"
                                         value="{{ old('transDebit.' . $indexDebit . '.debit') }}"
@@ -260,10 +288,12 @@
                                         <!--begin::Svg Icon | path: icons/duotone/General/Trash.svg-->
                                         <span class="svg-icon svg-icon-3">
                                             <svg xmlns="http://www.w3.org/2000/svg"
-                                                xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px"
-                                                viewBox="0 0 24 24" version="1.1">
-                                                <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-                                                    <rect x="0" y="0" width="24" height="24" />
+                                                xmlns:xlink="http://www.w3.org/1999/xlink" width="24px"
+                                                height="24px" viewBox="0 0 24 24" version="1.1">
+                                                <g stroke="none" stroke-width="1" fill="none"
+                                                    fill-rule="evenodd">
+                                                    <rect x="0" y="0" width="24"
+                                                        height="24" />
                                                     <path
                                                         d="M6,8 L6,20.5 C6,21.3284271 6.67157288,22 7.5,22 L16.5,22 C17.3284271,22 18,21.3284271 18,20.5 L18,8 L6,8 Z"
                                                         fill="#000000" fill-rule="nonzero" />
@@ -354,8 +384,8 @@
                                         class="form-control form-control-solid @error('transCredit.*.credit') is-invalid @enderror"
                                         name="transCredit[{{ $indexCredit }}][credit]"
                                         value="{{ old('transCredit.' . $indexCredit . '.credit') }}"
-                                        placeholder="Nominal" wire:model.lazy="transCredit.{{ $indexCredit }}.credit"
-                                        required />
+                                        placeholder="Nominal"
+                                        wire:model.lazy="transCredit.{{ $indexCredit }}.credit" required />
                                     <div class="invalid-feedback">*Nominal is required.</div>
                                 </td>
                                 <td class="pt-5 text-end">
@@ -366,10 +396,12 @@
                                         <!--begin::Svg Icon | path: icons/duotone/General/Trash.svg-->
                                         <span class="svg-icon svg-icon-3">
                                             <svg xmlns="http://www.w3.org/2000/svg"
-                                                xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px"
-                                                viewBox="0 0 24 24" version="1.1">
-                                                <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-                                                    <rect x="0" y="0" width="24" height="24" />
+                                                xmlns:xlink="http://www.w3.org/1999/xlink" width="24px"
+                                                height="24px" viewBox="0 0 24 24" version="1.1">
+                                                <g stroke="none" stroke-width="1" fill="none"
+                                                    fill-rule="evenodd">
+                                                    <rect x="0" y="0" width="24"
+                                                        height="24" />
                                                     <path
                                                         d="M6,8 L6,20.5 C6,21.3284271 6.67157288,22 7.5,22 L16.5,22 C17.3284271,22 18,21.3284271 18,20.5 L18,8 L6,8 Z"
                                                         fill="#000000" fill-rule="nonzero" />
@@ -400,7 +432,8 @@
                                 </div>
                             </th>
                             <th colspan="2" class="text-end">Rp.&nbsp;
-                                <span data-kt-element="sub-total">{{ number_format($sumCredit, 0, ',', '.') }}</span>
+                                <span
+                                    data-kt-element="sub-total">{{ number_format($sumCredit, 0, ',', '.') }}</span>
                             </th>
                         </tr>
                     </tfoot>
@@ -509,6 +542,24 @@
             @this.on('refreshDropdown', function() {
                 $('.project').select2({
                     placeholder: "Select project",
+                    closeOnSelect: true,
+                    allowClear: true,
+                });
+            });
+        });
+    </script>
+    <script>
+        $(document).ready(function() {
+            $('.pic').select2({
+                placeholder: "Select PIC",
+                closeOnSelect: true,
+                allowClear: true,
+            });
+        });
+        document.addEventListener('livewire:load', function(event) {
+            @this.on('refreshDropdown', function() {
+                $('.pic').select2({
+                    placeholder: "Select PIC",
                     closeOnSelect: true,
                     allowClear: true,
                 });

@@ -6,7 +6,6 @@ use Livewire\Component;
 use Livewire\WithPagination;
 use App\Models\Report;
 use App\Models\ActivityLog;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 use Carbon\Carbon;
 
@@ -80,7 +79,7 @@ class FilterIndexReport extends Component
             ]);
     
             $log = ActivityLog::create([
-                'user_id' => Auth::id(),
+                'user_id' => session('user')['nip'],
                 'category' => 'report-store',
                 'activity_id' => $reportUuid,
             ]);
@@ -164,7 +163,7 @@ class FilterIndexReport extends Component
             }
 
             $log = ActivityLog::create([
-                'user_id' => Auth::id(),
+                'user_id' => session('user')['nip'],
                 'category' => 'report-update',
                 'activity_id' => $reportUuid,
             ]);
@@ -200,7 +199,7 @@ class FilterIndexReport extends Component
             ])->update(['is_active' => 0]);
     
             $log = ActivityLog::create([
-                'user_id' => Auth::id(),
+                'user_id' => session('user')['nip'],
                 'category' => 'report-delete',
                 'activity_id' => $uuid['uuid'],
             ]);
