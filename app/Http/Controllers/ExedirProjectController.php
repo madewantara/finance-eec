@@ -135,30 +135,94 @@ class ExedirProjectController extends Controller
 
         // Start K-Means Clustering
         $initCluster = array();
-        $projectPriority = Project::where('status', 1)->get();
+        $projectPriority = Project::where([['is_active', 1], ['status', 1]])->get();
         $amountData = count($projectPriority);
         $date = strtotime(Carbon::now()->format('Y-m-d'));
         $itr = 0;
+        
+        $projPoint = [];
+        if($amountData != 0){
+            $point = 0;
+            foreach($projectPriority as $key => $pp){
+                $accStrDate = (strtotime(($pp->start_date)) - $date)/86400;
+                if($accStrDate <= 30){
+                    $point = $point + 3;
+                }
+                elseif($accStrDate > 30 && $accStrDate <= 90){
+                    $point = $point + 2;
+                }
+                elseif($accStrDate > 90){
+                    $point = $point + 1;
+                }
+
+                $accDuration = (abs(strtotime($pp->start_date) - strtotime($pp->end_date)))/86400;
+                if($accDuration <= 15){
+                    $point = $point + 1;
+                }
+                elseif($accDuration > 15 && $accDuration <= 30){
+                    $point = $point + 2;
+                }
+                elseif($accDuration > 30){
+                    $point = $point + 3;
+                }
+
+                if($pp->contract <= 5000000000){
+                    $point = $point + 1;
+                }
+                elseif($pp->contract > 5000000000 && $pp->contract <= 10000000000){
+                    $point = $point + 2;
+                }
+                elseif($pp->contract > 10000000000){
+                    $point = $point + 3;
+                }
+
+                if($pp->category_id <= 2){
+                    $point = $point + 1;
+                }
+                if($pp->category_id > 2 && $pp->category_id <=4){
+                    $point = $point + 2;
+                }
+                if($pp->category_id >4){
+                    $point = $point + 3;
+                }
+                
+                if(array_search($point, array_column($projPoint, 'point')) === false){
+                    array_push($projPoint, ["key" => $key, "point" => $point]);
+                }
+                $point = 0;
+            }
+        }
+
+        for($i=0; $i<=count($projPoint)-2; $i++){
+            for($j=$i+1; $j<=count($projPoint)-1; $j++){
+                if($projPoint[$i]['point'] < $projPoint[$j]['point']){
+                    $temp = $projPoint[$j];
+                    $projPoint[$j] = $projPoint[$i];
+                    $projPoint[$i] = $temp;
+                    $temp = '';
+                }
+            }
+        }
+        
         if($amountData == 0){
             $centroid1[$itr] = array(0,0,0,0);
             $centroid2[$itr] = array(0,0,0,0);
             $centroid3[$itr] = array(0,0,0,0);
         }
         elseif($amountData == 1){
-            $centroid1[$itr] = array((strtotime(($projectPriority[0]->start_date)) - $date)/86400, abs(strtotime($projectPriority[0]->start_date) - strtotime($projectPriority[0]->end_date))/86400, $projectPriority[0]->category_id, $projectPriority[0]->contract);
+            $centroid1[$itr] = array((strtotime(($projectPriority[$projPoint[0]['key']]->start_date)) - $date)/86400, abs(strtotime($projectPriority[$projPoint[0]['key']]->start_date) - strtotime($projectPriority[$projPoint[0]['key']]->end_date))/86400, $projectPriority[$projPoint[0]['key']]->category_id, $projectPriority[$projPoint[0]['key']]->contract);
             $centroid2[$itr] = array(0,0,0,0);
             $centroid3[$itr] = array(0,0,0,0);
         }
         elseif($amountData == 2){
-            $centroid1[$itr] = array((strtotime(($projectPriority[0]->start_date)) - $date)/86400, abs(strtotime($projectPriority[0]->start_date) - strtotime($projectPriority[0]->end_date))/86400, $projectPriority[0]->category_id, $projectPriority[0]->contract);
-            $centroid2[$itr] = array((strtotime(($projectPriority[1]->start_date)) - $date)/86400, abs(strtotime($projectPriority[1]->start_date) - strtotime($projectPriority[1]->end_date))/86400, $projectPriority[1]->category_id, $projectPriority[1]->contract);
+            $centroid1[$itr] = array((strtotime(($projectPriority[$projPoint[0]['key']]->start_date)) - $date)/86400, abs(strtotime($projectPriority[$projPoint[0]['key']]->start_date) - strtotime($projectPriority[$projPoint[0]['key']]->end_date))/86400, $projectPriority[$projPoint[0]['key']]->category_id, $projectPriority[$projPoint[0]['key']]->contract);
+            $centroid2[$itr] = array((strtotime(($projectPriority[$projPoint[1]['key']]->start_date)) - $date)/86400, abs(strtotime($projectPriority[$projPoint[1]['key']]->start_date) - strtotime($projectPriority[$projPoint[1]['key']]->end_date))/86400, $projectPriority[$projPoint[1]['key']]->category_id, $projectPriority[$projPoint[1]['key']]->contract);
             $centroid3[$itr] = array(0,0,0,0);
         }
         else{
-            $indexCen2 = round($amountData/2);
-            $centroid1[$itr] = array((strtotime(($projectPriority[0]->start_date)) - $date)/86400, abs(strtotime($projectPriority[0]->start_date) - strtotime($projectPriority[0]->end_date))/86400, $projectPriority[0]->category_id, $projectPriority[0]->contract);
-            $centroid2[$itr] = array((strtotime(($projectPriority[$indexCen2-1]->start_date)) - $date)/86400, abs(strtotime($projectPriority[$indexCen2-1]->start_date) - strtotime($projectPriority[$indexCen2-1]->end_date))/86400, $projectPriority[$indexCen2-1]->category_id, $projectPriority[$indexCen2-1]->contract);
-            $centroid3[$itr] = array((strtotime(($projectPriority[$amountData-1]->start_date)) - $date)/86400, abs(strtotime($projectPriority[$amountData-1]->start_date) - strtotime($projectPriority[$amountData-1]->end_date))/86400, $projectPriority[$amountData-1]->category_id, $projectPriority[$amountData-1]->contract);
+            $centroid1[$itr] = array((strtotime(($projectPriority[$projPoint[0]['key']]->start_date)) - $date)/86400, abs(strtotime($projectPriority[$projPoint[0]['key']]->start_date) - strtotime($projectPriority[$projPoint[0]['key']]->end_date))/86400, $projectPriority[$projPoint[0]['key']]->category_id, $projectPriority[$projPoint[0]['key']]->contract);
+            $centroid2[$itr] = array((strtotime(($projectPriority[$projPoint[(int) ceil(count($projPoint)/2)]['key']]->start_date)) - $date)/86400, abs(strtotime($projectPriority[$projPoint[(int) ceil(count($projPoint)/2)]['key']]->start_date) - strtotime($projectPriority[$projPoint[(int) ceil(count($projPoint)/2)]['key']]->end_date))/86400, $projectPriority[$projPoint[(int) ceil(count($projPoint)/2)]['key']]->category_id, $projectPriority[$projPoint[(int) ceil(count($projPoint)/2)]['key']]->contract);
+            $centroid3[$itr] = array((strtotime(($projectPriority[$projPoint[count($projPoint)-1]['key']]->start_date)) - $date)/86400, abs(strtotime($projectPriority[$projPoint[count($projPoint)-1]['key']]->start_date) - strtotime($projectPriority[$projPoint[count($projPoint)-1]['key']]->end_date))/86400, $projectPriority[$projPoint[count($projPoint)-1]['key']]->category_id, $projectPriority[$projPoint[count($projPoint)-1]['key']]->contract);
         }
 
         $status = 'false';
