@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateMapUserRolesTable extends Migration
+class CreateSignaturesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,12 +13,10 @@ class CreateMapUserRolesTable extends Migration
      */
     public function up()
     {
-        Schema::create('map_user_roles', function (Blueprint $table) {
+        Schema::create('signatures', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained('users');
-            $table->foreignId('role_id');
-            $table->string('created_by')->nullable();
-            $table->string('updated_by')->nullable();
+            $table->string('user_id');
+            $table->string('image');
             $table->timestamps();
         });
     }
@@ -30,6 +28,6 @@ class CreateMapUserRolesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('map_user_roles');
+        Schema::dropIfExists('signatures');
     }
 }
