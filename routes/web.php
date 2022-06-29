@@ -46,7 +46,13 @@ Route::group([
     'prefix' => 'finance-division',
 ], function ($router) {
     Route::get('/dashboard', [App\Http\Controllers\FindivDashboardController::class, 'index'])->name('findiv.dashboard');
+    Route::post('/signature/post', [App\Http\Controllers\FindivDashboardController::class, 'storeSign'])->name('findiv.signature-create');
+});
 
+Route::group([
+    'middleware' => ['finance.division', 'signature.findiv'],
+    'prefix' => 'finance-division',
+], function ($router) {
     //Account Menu
     Route::get('/account', [App\Http\Controllers\FindivAccountController::class, 'index'])->name('findiv.account-index');
     Route::get('/account/create', [App\Http\Controllers\FindivAccountController::class, 'create'])->name('findiv.account-create');
@@ -96,6 +102,7 @@ Route::group([
     
     //Profile
     Route::get('/profile', [App\Http\Controllers\FindivProfileController::class, 'index'])->name('findiv.profile');
+    Route::post('/profile/update/{userid}', [App\Http\Controllers\FindivProfileController::class, 'updateSign'])->name('findiv.signature-update');
 });
 
 Route::group([
@@ -103,7 +110,13 @@ Route::group([
     'prefix' => 'finance-director',
 ], function ($router) {
     Route::get('/dashboard', [App\Http\Controllers\FindirDashboardController::class, 'index'])->name('findir.dashboard');
+    Route::post('/signature/post', [App\Http\Controllers\FindirDashboardController::class, 'storeSign'])->name('findir.signature-create');
+});
 
+Route::group([
+    'middleware' => ['finance.director', 'signature.findir'],
+    'prefix' => 'finance-director',
+], function ($router) {
     //Account Menu
     Route::get('/account', [App\Http\Controllers\FindirAccountController::class, 'index'])->name('findir.account-index');
     Route::get('/account/export', [App\Http\Controllers\FindirAccountController::class, 'export'])->name('findir.account-export');
@@ -137,6 +150,7 @@ Route::group([
     
     //Profile
     Route::get('/profile', [App\Http\Controllers\FindirProfileController::class, 'index'])->name('findir.profile');
+    Route::post('/profile/update/{userid}', [App\Http\Controllers\FindirProfileController::class, 'updateSign'])->name('findir.signature-update');
 });
 
 Route::group([
@@ -144,7 +158,13 @@ Route::group([
     'prefix' => 'executive-director',
 ], function ($router) {
     Route::get('/dashboard', [App\Http\Controllers\ExedirDashboardController::class, 'index'])->name('exedir.dashboard');
+    Route::post('/signature/post', [App\Http\Controllers\ExedirDashboardController::class, 'storeSign'])->name('exedir.signature-create');
+});
 
+Route::group([
+    'middleware' => ['executive.director', 'signature.exedir'],
+    'prefix' => 'executive-director',
+], function ($router) {
     //Account Menu
     Route::get('/account', [App\Http\Controllers\ExedirAccountController::class, 'index'])->name('exedir.account-index');
     Route::get('/account/export', [App\Http\Controllers\ExedirAccountController::class, 'export'])->name('exedir.account-export');
@@ -178,6 +198,7 @@ Route::group([
     
     //Profile
     Route::get('/profile', [App\Http\Controllers\ExedirProfileController::class, 'index'])->name('exedir.profile');
+    Route::post('/profile/update/{userid}', [App\Http\Controllers\ExedirProfileController::class, 'updateSign'])->name('exedir.signature-update');
 });
 
 require __DIR__.'/auth.php';
