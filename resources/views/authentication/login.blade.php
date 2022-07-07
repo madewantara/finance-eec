@@ -94,7 +94,7 @@
                                         class="required">Password</span></label>
                                 <!--end::Label-->
                                 <!--begin::Link-->
-                                <a href="https://persona-main.herokuapp.com/forgot-password"
+                                <a href="https://persona-main.herokuapp.com/password/forgot"
                                     class="link-primary fs-6 fw-bolder" tabindex="-1">Forgot Password ?</a>
                                 <!--end::Link-->
                             </div>
