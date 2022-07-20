@@ -76,8 +76,7 @@
                             <!-- navbar collapse -->
 
                             <div class="navbar-btn d-none d-sm-inline-block">
-                                <a class="main-btn" data-scroll-nav="0" href="{{ route('login') }}"
-                                    rel="nofollow">
+                                <a class="main-btn" data-scroll-nav="0" href="{{ route('login') }}" rel="nofollow">
                                     Sign-In
                                 </a>
                             </div>
@@ -105,7 +104,7 @@
                             </h2>
                             <p class="text wow fadeInUp" data-wow-duration="1.3s" data-wow-delay="0.8s">
                                 Manage by Executive Director,
-                                Finance Director and Finance Fivision for all financial activity in Era Elektra Copora
+                                Finance Director and Finance Division for all financial activity in Era Elektra Copora
                                 Indonesia.
                             </p>
                             <a href="{{ route('login') }}" class="main-btn wow fadeInUp" data-wow-duration="1.3s"
