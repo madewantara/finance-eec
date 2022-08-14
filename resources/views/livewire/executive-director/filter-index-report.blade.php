@@ -4,7 +4,8 @@
             <div class="position-fixed bottom-0 end-0" style="bottom: 2% !important; right: 1% !important; z-index:2;">
                 <div class="alert alert-success alert-dismissible fade show d-flex align-items-center" role="alert">
                     <span class="svg-icon svg-icon-2hx svg-icon-success me-4">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                            fill="none">
                             <path opacity="0.3"
                                 d="M20.5543 4.37824L12.1798 2.02473C12.0626 1.99176 11.9376 1.99176 11.8203 2.02473L3.44572 4.37824C3.18118 4.45258 3 4.6807 3 4.93945V13.569C3 14.6914 3.48509 15.8404 4.4417 16.984C5.17231 17.8575 6.18314 18.7345 7.446 19.5909C9.56752 21.0295 11.6566 21.912 11.7445 21.9488C11.8258 21.9829 11.9129 22 12.0001 22C12.0872 22 12.1744 21.983 12.2557 21.9488C12.3435 21.912 14.4326 21.0295 16.5541 19.5909C17.8169 18.7345 18.8277 17.8575 19.5584 16.984C20.515 15.8404 21 14.6914 21 13.569V4.93945C21 4.6807 20.8189 4.45258 20.5543 4.37824Z"
                                 fill="currentColor"></path>
@@ -26,12 +27,14 @@
             <div class="position-fixed bottom-0 end-0" style="bottom: 2% !important; right: 1% !important; z-index:2;">
                 <div class="alert alert-danger alert-dismissible fade show d-flex align-items-center" role="alert">
                     <span class="svg-icon svg-icon-2hx svg-icon-danger me-4">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-                            <rect opacity="0.4" x="2" y="2" width="20" height="20" rx="10" fill="currentColor"></rect>
-                            <rect x="11" y="14" width="7" height="2" rx="1" transform="rotate(-90 11 14)"
-                                fill="currentColor"></rect>
-                            <rect x="11" y="17" width="2" height="2" rx="1" transform="rotate(-90 11 17)"
-                                fill="currentColor"></rect>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                            fill="none">
+                            <rect opacity="0.4" x="2" y="2" width="20" height="20"
+                                rx="10" fill="currentColor"></rect>
+                            <rect x="11" y="14" width="7" height="2" rx="1"
+                                transform="rotate(-90 11 14)" fill="currentColor"></rect>
+                            <rect x="11" y="17" width="2" height="2" rx="1"
+                                transform="rotate(-90 11 17)" fill="currentColor"></rect>
                         </svg>
                     </span>
                     <div>
@@ -95,13 +98,14 @@
                                 <th class="min-w-100px sorting" tabindex="0" rowspan="1" colspan="1"
                                     style="width: 20%;">
                                     Report Year</th>
-                                <th class="min-w-100px sorting" tabindex="0" rowspan="1" colspan="1" style="width: 25%">
+                                <th class="min-w-100px sorting" tabindex="0" rowspan="1" colspan="1"
+                                    style="width: 25%">
                                     Report Type</th>
                                 <th class="min-w-100px sorting" tabindex="0" rowspan="1" colspan="1"
                                     style="width: 15%;">
                                     Status</th>
-                                <th class="text-end min-w-100px sorting" tabindex="0" rowspan="1" colspan="1"
-                                    style="width: 5%;"></th>
+                                <th class="text-end min-w-100px sorting" tabindex="0" rowspan="1"
+                                    colspan="1" style="width: 5%;"></th>
                             </tr>
                             <!--end::Table row-->
                         </thead>
@@ -111,7 +115,8 @@
                             <!--end::Table row-->
                             @if (count($report) == 0)
                                 <tr>
-                                    <td colspan="4" class="text-muted fst-italic mt-5 text-center">There are no reports
+                                    <td colspan="4" class="text-muted fst-italic mt-5 text-center">There are no
+                                        reports
                                     </td>
                                 </tr>
                             @else
@@ -183,7 +188,7 @@
                                         <div class="modal-dialog modal-lg modal-dialog-centered">
                                             <div class="modal-content">
                                                 <div class="modal-header">
-                                                    <h5 class="modal-title">Approval Transaction</h5>
+                                                    <h5 class="modal-title">Approval Report</h5>
                                                     <button type="button" class="btn-close" data-bs-dismiss="modal"
                                                         aria-label="Close"></button>
                                                 </div>
@@ -291,7 +296,8 @@
                                                         onkeydown="return event.key != 'Enter';" autocomplete="off">
                                                         @csrf
 
-                                                        <input type="hidden" name="uuid" value="{{ $r->uuid }}">
+                                                        <input type="hidden" name="uuid"
+                                                            value="{{ $r->uuid }}">
                                                         <div class="fv-row row fv-plugins-icon-container">
                                                             <div class="col-md-12">
                                                                 <!--begin::Options-->
@@ -327,9 +333,9 @@
                                                                         <!--begin:Input-->
                                                                         <span
                                                                             class="form-check form-check-custom form-check-solid">
-                                                                            <input class="form-check-input" type="radio"
-                                                                                checked="checked" name="export_format"
-                                                                                value="pdf">
+                                                                            <input class="form-check-input"
+                                                                                type="radio" checked="checked"
+                                                                                name="export_format" value="pdf">
                                                                         </span>
                                                                         <!--end:Input-->
                                                                     </label>

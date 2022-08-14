@@ -42,9 +42,15 @@ class AuthenticatedSessionController extends Controller
         }
         
         $fetchUserById = Http::get('https://persona-gateway.herokuapp.com/auth/user/get-by-employee-id?id='.$userId);
+        $fetchAllUser = Http::withHeaders([
+            'Authorization' => 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjp7ImlkIjoiYjg4YTkxNjUtOTRmZS00MWE0LWI1YmItODY5OTdhYTllMThhIiwiZW1haWwiOiJockBnbWFpbC5jb20iLCJyb2xlcyI6W3siaWQiOjMsInJvbGUiOiJodW1hbiByZXNvdXJjZSJ9LHsiaWQiOjUsInJvbGUiOiJlbXBsb3llZSJ9XX0sImlhdCI6MTY1MDQ2ODY3OH0.1nFrYhiNA7hzf_Hg09PhVmCji1CaFqnyvPUNCQjpXR0'
+        ])->get('https://persona-gateway.herokuapp.com/auth/employee?limit=9999&offset=0&keyword=');
+        $dataUser = $fetchAllUser->json();
+        
         if (Hash::check($validated['password'], $fetchUserById->json()['data']['User']['password'])) {
             $role = $fetchUserById->json()['data']['Contracts'][0]['Position']['title'];
-            session(['user' => ['nip' => $userId,'email' => $fetchUserById->json()['data']['User']['email'], 'password' => $fetchUserById->json()['data']['User']['password'], 'role' => $role]]);
+            session(['user' => ['nip' => $userId,'email' => $fetchUserById->json()['data']['User']['email'], 'password' => $fetchUserById->json()['data']['User']['password'], 'role' => $role, 'data' => $fetchUserById->json()['data']]]);
+            session(['allUser' => ['data' => $dataUser]]);
             if(session('user')){
                 if($role == 'Finance Staff'){
                     return redirect()->route('findiv.dashboard')->withSuccess('You have successfully logged into finance division portal.');

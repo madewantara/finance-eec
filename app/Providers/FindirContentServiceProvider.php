@@ -91,10 +91,7 @@ class FindirContentServiceProvider extends ServiceProvider
         $this->notification = $arrActivity;
 
         view()->composer('layouts.app-findir', function($view) {
-            $userId = session('user')['nip'];
-            $fetchUserById = Http::get('https://persona-gateway.herokuapp.com/auth/user/get-by-employee-id?id='.$userId);
-            $dataUser = $fetchUserById->json()['data'];
-
+            $dataUser = session('user')['data'];
             $view->with(['notification' => $this->notification, "dataUser" => $dataUser]);
         });
     }

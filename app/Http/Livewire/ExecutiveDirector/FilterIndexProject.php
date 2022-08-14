@@ -376,16 +376,15 @@ class FilterIndexProject extends Component
         $projLow = Project::where([['is_active',1],['status', 1],['priority', 3]])->get();
         $projCategory = Project::where([['is_active',1], ['status', 'like', '%'.$this->status.'%'], ['name', 'like', '%'.$this->search.'%']])->with("projectCategory")->orderBy('created_at', 'desc')->paginate($this->pagesize);
         $arrhighProjectExpanse = $this->arrhighProjectExpanse;
-        $fetchAllUser = Http::withHeaders([
-            'Authorization' => 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjp7ImlkIjoiYjg4YTkxNjUtOTRmZS00MWE0LWI1YmItODY5OTdhYTllMThhIiwiZW1haWwiOiJockBnbWFpbC5jb20iLCJyb2xlcyI6W3siaWQiOjMsInJvbGUiOiJodW1hbiByZXNvdXJjZSJ9LHsiaWQiOjUsInJvbGUiOiJlbXBsb3llZSJ9XX0sImlhdCI6MTY1MDQ2ODY3OH0.1nFrYhiNA7hzf_Hg09PhVmCji1CaFqnyvPUNCQjpXR0'
-        ])->get('https://persona-gateway.herokuapp.com/auth/employee?limit=9999&offset=0&keyword=');
-        $dataUser = $fetchAllUser->json()['data']['data'];
+        $dataUser = session('allUser')['data']['data']['data'];
 
         $projMan = [];
         foreach($projCategory as $pc){
-            $fetchUserById = Http::get('https://persona-gateway.herokuapp.com/auth/user/get-by-employee-id?id='.$pc->project_manager);
-            $dataUserById = $fetchUserById->json()['data'];
-            array_push($projMan, $dataUserById);
+            foreach($dataUser as $du){
+                if($pc->project_manager == $du['nip']){
+                    array_push($projMan, $du);
+                }
+            }
         }
 
         $this->emit('refreshValidation');

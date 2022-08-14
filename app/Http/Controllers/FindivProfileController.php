@@ -24,11 +24,8 @@ class FindivProfileController extends Controller
      */
     public function index()
     {
-        $userId = session('user')['nip'];
-        $fetchUserById = Http::get('https://persona-gateway.herokuapp.com/auth/user/get-by-employee-id?id='.$userId);
-        $dataUser = $fetchUserById->json()['data'];
-
-        $signature = Signature::where('user_id', $userId)->get();
+        $dataUser = session('user')['data'];
+        $signature = Signature::where('user_id', session('user')['nip'])->get();
 
         return view('finance-division.profile', compact('dataUser', 'signature'));
     }

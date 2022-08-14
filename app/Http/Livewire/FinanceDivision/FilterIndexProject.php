@@ -26,12 +26,15 @@ class FilterIndexProject extends Component
         $projLow = Project::where([['is_active',1],['status', 1],['priority', 3]])->get();
         $projCategory = Project::where([['is_active',1], ['status', 'like', '%'.$this->status.'%'], ['name', 'like', '%'.$this->search.'%']])->with("projectCategory")->orderBy('created_at', 'desc')->paginate($this->pagesize);
         $arrhighProjectExpanse = $this->arrhighProjectExpanse;
+        $dataUser = session('allUser')['data']['data']['data'];
 
         $projMan = [];
         foreach($projCategory as $pc){
-            $fetchUserById = Http::get('https://persona-gateway.herokuapp.com/auth/user/get-by-employee-id?id='.$pc->project_manager);
-            $dataUserById = $fetchUserById->json()['data'];
-            array_push($projMan, $dataUserById);
+            foreach($dataUser as $du){
+                if($pc->project_manager == $du['nip']){
+                    array_push($projMan, $du);
+                }
+            }
         }
 
         $this->emit('refreshDropdown');

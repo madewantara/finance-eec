@@ -117,10 +117,7 @@ class FindivContentServiceProvider extends ServiceProvider
         $this->notifReport = $arrActivityReport;
 
         view()->composer('layouts.app-findiv', function($view) {
-            $userId = session('user')['nip'];
-            $fetchUserById = Http::get('https://persona-gateway.herokuapp.com/auth/user/get-by-employee-id?id='.$userId);
-            $dataUser = $fetchUserById->json()['data'];
-
+            $dataUser = session('user')['data'];
             $view->with(['notifTrans' => $this->notifTrans, "notifReport" => $this->notifReport, "dataUser" => $dataUser]);
         });
     }

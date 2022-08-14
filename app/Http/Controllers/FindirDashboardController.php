@@ -33,8 +33,7 @@ class FindirDashboardController extends Controller
     {
         $userId = session('user')['nip'];
         $signatureCheck = Signature::where('user_id', $userId)->get();
-        $fetchUserById = Http::get('https://persona-gateway.herokuapp.com/auth/user/get-by-employee-id?id='.$userId);
-        $dataUser = $fetchUserById->json()['data'];
+        $dataUser = session('user')['data'];
 
         $projLocation = Project::where('is_active', 1)->where(function($query){
             $query->where('status', 1)

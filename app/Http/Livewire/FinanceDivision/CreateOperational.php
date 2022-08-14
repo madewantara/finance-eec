@@ -6,7 +6,6 @@ use Livewire\Component;
 use App\Models\Account;
 use App\Models\Project;
 use Carbon\Carbon;
-use Illuminate\Support\Facades\Http;
 
 class CreateOperational extends Component
 {
@@ -23,11 +22,7 @@ class CreateOperational extends Component
         $this->allProject = Project::where('is_active', 1)->with(["projectCategory", "projectLocation"])->get();
         $this->allReferral = Account::where('is_active', 1)->orderBy('referral', 'asc')->get();
 
-        $fetchAllUser = Http::withHeaders([
-            'Authorization' => 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjp7ImlkIjoiYjg4YTkxNjUtOTRmZS00MWE0LWI1YmItODY5OTdhYTllMThhIiwiZW1haWwiOiJockBnbWFpbC5jb20iLCJyb2xlcyI6W3siaWQiOjMsInJvbGUiOiJodW1hbiByZXNvdXJjZSJ9LHsiaWQiOjUsInJvbGUiOiJlbXBsb3llZSJ9XX0sImlhdCI6MTY1MDQ2ODY3OH0.1nFrYhiNA7hzf_Hg09PhVmCji1CaFqnyvPUNCQjpXR0'
-        ])->get('https://persona-gateway.herokuapp.com/auth/employee?limit=9999&offset=0&keyword=');
-        $dataUser = $fetchAllUser->json();
-        $this->allEmployee = $dataUser['data']['data'];
+        $this->allEmployee = session('allUser')['data']['data']['data'];
         
         if(old('transDebit')){
             foreach(old('transDebit') as $index => $od){
